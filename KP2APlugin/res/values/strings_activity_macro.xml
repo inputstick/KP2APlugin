@@ -29,13 +29,16 @@
     <string name="deleted_toast">Deleted</string>
     <string name="add_macro_title">Add macro</string>
     <string name="edit_macro_title">Edit macro</string>
+    <string name="add_template_title">Add template</string>
+    <string name="edit_template_title">Edit template</string>    
     <string name="macro_help">Macro allows to create a custom, automatic login procedure for each account:\n\nExample 1: type user name, press ENTER, type password, press ENTER\n\nExample 2: type user name, press TAB, type password, press ENTER\n\nMacro can be executed manually (you must confirm each step) or automatically in background (be careful when using this option!).\n\nUse templates to assign the same type of macro to several KP2A entries.\n\nValues of fields are substituted at runtime and never saved by the plugin.</string>
     
     <string name="use_as_template">Use as template:</string>
     <string name="save_as">Save as</string>
     <string name="load_from">Load from</string>
     <string name="empty">Template is empty!</string>    
-    <string name="template_name">Template name:</string>    
+    <string name="template_name">Template name:</string>
+    <string name="template_not_saved">Do you want to save changes in the template?</string>        
     
     <string name="execution">Macro execution:</string>    
     <string name="execution_background">In background, auto (careful!)</string>    
