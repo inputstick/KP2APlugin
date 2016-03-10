@@ -19,6 +19,12 @@
     </style>
   </head>
   <body>
+$ 1.01
+  % Version 1.01
+  	_ <a href="http://blog.inputstick.com/2016/03/kp2a-plugin-v101.html">(More info)</a>  
+  	* Added notification when typing from clipboard is active. Can be used to disable or extend time
+  	* Added option to run any saved template as a macro for current entry (Settings -> Entry actions -> Execute template)
+  	* Added option to manage templates in a more direct way (Settings -> General actions -> Manage templates)
 $ 1.00
   % Version 1.00
     _ <a href="http://blog.inputstick.com/2016/01/kp2a-plugin-migration.html">(Important announcement!)</a>  
