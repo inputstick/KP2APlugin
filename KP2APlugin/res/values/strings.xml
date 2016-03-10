@@ -5,16 +5,20 @@
     <string name="kp2aplugin_title">InputStick Plugin</string>
     <string name="kp2aplugin_shortdesc">Allows to send text from KP2A via InputStick to your PC.</string>
     <string name="kp2aplugin_author">Philipp Crocoll and Jakub Zawadzki</string>
+    
     <string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_show_full">more&#8230;</string>
+    
     <string name="title_activity_init">Plugin Init</string>
     <string name="title_activity_all_actions">Select action:</string>
     <string name="text_locked">Locked after 3 minutes of inactivity. Open again from Keepass2Android application.</string>
     <string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator is NOT installed!</string>
     <string name="text_connection_failed">InputStick plugin: connection failed!</string>
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
+    <string name="text_clipboard_notification_info">Clipboard typing active</string>
     <string name="text_clipboard_copy_now">InputStick plugin: Copy code to clipboard (30 seconds remaining)</string>
+    
     <string name="action_type">Type</string>
     <string name="action_type_slow">Type (slow)</string>
     <string name="action_type_tab">Tab</string>
@@ -28,8 +32,11 @@
     <string name="action_open_mac_setup">OSX setup</string>
     <string name="action_masked_password">Masked Password</string>
     <string name="action_macro_run">Execute Macro</string>
+    <string name="action_template_run">Execute Template</string>    
     <string name="action_macro_add_edit">Add/Edit macro</string>
+    <string name="action_template_manage">Manage templates</string>    
     <string name="action_clipboard">Clipboard/Authenticator</string>
+    
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -42,12 +49,11 @@
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="save">Save</string>
+    <string name="disable">Disable</string>
     <string name="important_title">Important!</string>
     <string name="configuration_title">Configuration</string>
-    <string name="hello_world">Hello world!</string>
     
     <string name="title_activity_about">About application</string>
-    <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
-    
+    <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>        
 
 </resources>
