@@ -1,9 +1,13 @@
 package com.inputstick.apps.kp2aplugin;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -34,9 +38,15 @@ public class MacroActivity extends Activity {
 	private Spinner spinnerDelay;
 	private Button buttonDelete;
 	private Button buttonSave;
+	private Button buttonAddFromField;
 	private RadioButton radioButtonBackground;
 	private RadioButton radioButtonShowControls;
 	
+	private boolean templateMode;
+	private int templateId;
+	private String savedTemplate;
+	
+	private ValueAnimator va;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +134,9 @@ public class MacroActivity extends Activity {
 			}
 		});
 		
-		button = (Button)findViewById(R.id.buttonAddFromField);		
-		button.setOnClickListener(new OnClickListener() {			
-			public void onClick(View v) {
+		buttonAddFromField = (Button)findViewById(R.id.buttonAddFromField);		
+		buttonAddFromField.setOnClickListener(new OnClickListener() {			
+			public void onClick(View v) {							
 				CharSequence options[] = new CharSequence[] {MacroActivity.this.getString(R.string.user_name), 
 															MacroActivity.this.getString(R.string.password), 
 															MacroActivity.this.getString(R.string.url),
@@ -261,37 +271,13 @@ public class MacroActivity extends Activity {
 		button = (Button) findViewById(R.id.buttonTemplateSave);
 		button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(MacroActivity.this);
-				builder.setTitle(R.string.save_as);
-				builder.setItems(getTemplateNames(), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						getSaveTemplateDialog(which).show();
-					}
-				});
-				builder.show();
+				showSaveTemplateDialog();
 			}
 		});
 		button = (Button)findViewById(R.id.buttonTemplateLoad);		
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(MacroActivity.this);
-				builder.setTitle(R.string.load_from);
-				builder.setItems(getTemplateNames(), new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						String tmp = prefs.getString(Const.TEMPLATE_PREF_PREFIX + which, "");						
-						if ((tmp != null) && ( !tmp.equals(""))) {						
-							editTextMacro.setText(tmp);
-							macro = tmp;
-							manageUI();
-							saveMacro();
-						} else {
-							Toast.makeText(MacroActivity.this, R.string.empty, Toast.LENGTH_SHORT).show();
-						}
-					}
-				});
-				builder.show();
+				showLoadTemplateDialog();
 			}
 		});
 		
@@ -304,6 +290,15 @@ public class MacroActivity extends Activity {
 			Toast.makeText(MacroActivity.this, R.string.no_macro_create_new, Toast.LENGTH_LONG).show();
 		}
 		
+		templateMode = b.getBoolean(Const.EXTRA_MACRO_TEMPLATE_MODE, false);
+		if (templateMode) {
+			templateId = b.getInt(Const.EXTRA_TEMPLATE_ID, -1);
+			macro = TemplateHelper.loadTemplate(prefs, templateId); //is never null!
+			savedTemplate = macro;			
+			buttonSave.setVisibility(View.INVISIBLE);
+			buttonDelete.setVisibility(View.INVISIBLE);
+		}
+		
 		if (macro == null) {
 			macro = "";
 			setTitle(R.string.add_macro_title);
@@ -313,8 +308,43 @@ public class MacroActivity extends Activity {
 			setTitle(R.string.edit_macro_title);
 			editTextMacro.setText(macro);	
 		}
+		
+		//overwrite title
+		if (templateMode) {
+			if (macro.equals("")) {
+				setTitle(R.string.add_template_title);
+			} else {
+				setTitle(R.string.edit_template_title);
+			}
+		}
+		
 		manageUI();
 	}
+	
+	@Override
+	public void onPause() {
+		if (va != null) {
+			va.end();
+		}		
+	    super.onPause(); 	    
+	}	
+	
+	@Override
+	public void onResume() {
+	    super.onResume(); 	  	    
+        if (editTextMacro.getText().length() < 1) {   
+	        int end = Color.rgb(0x00, 0x00, 0x00);
+	        int start = Color.rgb(0x00, 128, 255);
+	        va = ObjectAnimator.ofInt(findViewById(R.id.buttonAddFromField), "textColor", start, end);
+	        va.setDuration(750);
+	        va.setEvaluator(new ArgbEvaluator());
+	        va.setRepeatCount(ValueAnimator.INFINITE);
+	        va.setRepeatMode(ValueAnimator.REVERSE);
+	        va.start();  
+        } else {
+        	buttonAddFromField.setTextColor(0xFF000000);           	 
+        }
+	}	
 	
 	private void manageUI() {
 		if (macro != null) {
@@ -322,6 +352,38 @@ public class MacroActivity extends Activity {
 				radioButtonBackground.setChecked(true);
 			}		
 		}
+	}
+	
+	private void showSaveTemplateDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MacroActivity.this);
+		builder.setTitle(R.string.save_as);
+		builder.setItems(TemplateHelper.getTemplateNames(prefs), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				getSaveTemplateDialog(which).show();
+			}
+		});
+		builder.show();		
+	}
+	
+	private void showLoadTemplateDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MacroActivity.this);
+		builder.setTitle(R.string.load_from);
+		builder.setItems(TemplateHelper.getTemplateNames(prefs), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String tmp = TemplateHelper.loadTemplate(prefs, which);				
+				if ((tmp != null) && ( !tmp.equals(""))) {						
+					editTextMacro.setText(tmp);
+					macro = tmp;
+					manageUI();
+					saveMacro();
+				} else {
+					Toast.makeText(MacroActivity.this, R.string.empty, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		builder.show();		
 	}
 	
 	private void setExecutionMode(boolean isBackground) {
@@ -353,6 +415,10 @@ public class MacroActivity extends Activity {
 		}
 		
 		editTextMacro.setText(m);
+		
+		if (va != null) {
+			va.end();
+		}	
 	}
 	
 	private void saveMacro() {
@@ -380,41 +446,47 @@ public class MacroActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		if ( !editTextMacro.getText().toString().equals(macro)) {		
-			AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
-			alert.setTitle(R.string.save_title);
-			alert.setMessage(R.string.save_message);
-			alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					saveMacro();
-					finish();			
-				}
-			});
-			alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					finish();
-				}
-			});		
-			alert.setNeutralButton(R.string.cancel, null);
-			alert.show();	
-		} else {
-			super.onBackPressed();
+		if (templateMode) {			
+			if ( !editTextMacro.getText().toString().equals(savedTemplate)) {		
+				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
+				alert.setTitle(R.string.save_title);
+				alert.setMessage(R.string.template_not_saved);
+				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						getSaveTemplateDialog(templateId).show();
+					}
+				});
+				alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						finish();
+					}
+				});		
+				alert.show();					
+			} else {
+				super.onBackPressed();
+			}
+		} else {		
+			if ( !editTextMacro.getText().toString().equals(macro)) {		
+				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
+				alert.setTitle(R.string.save_title);
+				alert.setMessage(R.string.save_message);
+				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						saveMacro();
+						finish();			
+					}
+				});
+				alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						finish();
+					}
+				});		
+				alert.setNeutralButton(R.string.cancel, null);
+				alert.show();	
+			} else {
+				super.onBackPressed();
+			}
 		}
-	}
-	
-	
-	
-	
-	public CharSequence[] getTemplateNames() {
-		return new CharSequence[] {getTemplateName(0), getTemplateName(1), getTemplateName(2), getTemplateName(3), getTemplateName(4)};
-	}
-	
-	public String getTemplateName(int id) {
-		return prefs.getString(Const.TEMPLATE_NAME_PREF_PREFIX + id, getTemplateDefaultName(id));
-	}
-	
-	public String getTemplateDefaultName(int id) {
-		return Const.TEMPLATE_DEFAULT_NAME_PREF_PREFIX + id;
 	}
 	
 	public AlertDialog getSaveTemplateDialog(final int id) {
@@ -424,7 +496,7 @@ public class MacroActivity extends Activity {
 		final EditText editTextName = new EditText(this);
 		//display current name if exists, if not, leave empty
 		if (prefs.contains(Const.TEMPLATE_NAME_PREF_PREFIX + id)) {
-			editTextName.setText(getTemplateName(id));
+			editTextName.setText(TemplateHelper.getTemplateName(prefs, id));
 		} 
 		final LinearLayout lin= new LinearLayout(this);
 		lin.setOrientation(LinearLayout.VERTICAL);
@@ -436,12 +508,11 @@ public class MacroActivity extends Activity {
 				String name = editTextName.getText().toString();
 				//use default name if no name was provided
 				if ("".equals(name)) {
-					name = getTemplateDefaultName(id);
-				}				
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString(Const.TEMPLATE_NAME_PREF_PREFIX + id, name);
-				editor.putString(Const.TEMPLATE_PREF_PREFIX + id, editTextMacro.getText().toString());
-				editor.apply();		
+					name = TemplateHelper.getTemplateDefaultName(id);
+				}	
+				templateId = id; //just in case it is manually changed
+				savedTemplate = editTextMacro.getText().toString();
+				TemplateHelper.saveTemplate(prefs, id, name, savedTemplate);
 				Toast.makeText(MacroActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();				
 			}
 		});
