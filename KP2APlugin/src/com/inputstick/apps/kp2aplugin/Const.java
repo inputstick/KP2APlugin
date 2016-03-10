@@ -32,8 +32,15 @@ public class Const {
 	public static final String EXTRA_LAUNCHED_FROM_KP2A = "kp2a_launch";
 	public static final String EXTRA_MACRO_RUN_BUT_EMPTY = "macro_run_empty";	
 	public static final String EXTRA_MACRO_ACTIONS = "macro_actions";		
+	public static final String EXTRA_MACRO_TEMPLATE_MODE = "macro_template_mode";
+	public static final String EXTRA_TEMPLATE_ID = "template_id";
+	public static final String EXTRA_TEMPLATE_MANAGE = "template_manage";	
+			
 	
-	public static final String EXTRA_MAX_TIME = "max_time";		
+	
+	public static final String EXTRA_MAX_TIME = "max_time";
+	
+	public static final String EXTRA_NOTIFICATION_ACTION = "notification_action";
 	
 	
 	public static final String EXTRA_TYPE_SLOW = "params";

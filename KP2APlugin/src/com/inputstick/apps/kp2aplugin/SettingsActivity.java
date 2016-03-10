@@ -41,7 +41,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static final String ITEM_CONNECTION = "con_disc";
 	public static final String ITEM_MAC_SETUP = "osx";
 	public static final String ITEM_TAB_ENTER = "tab_enter";
-	public static final String ITEM_MACRO = "macro";	
+	public static final String ITEM_MACRO = "macro";
+	public static final String ITEM_RUN_TEMPLATE = "run_template";
+	public static final String ITEM_TEMPLATE_MANAGE = "manage_template";
+	
+	
 	//entry
 	public static final String ITEM_USER_PASSWORD = "username_and_password";
 	public static final String ITEM_USER_PASSWORD_ENTER = "username_password_enter";
@@ -82,7 +86,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
 		ChangeLog cl = new ChangeLog(this);
 		setupCompleted = sharedPref.getBoolean("setup_completed", false);		
-		if (!setupCompleted) {
+		if ( !setupCompleted) {
 			if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
 				Intent intent = new Intent(this, SetupWizardActivity.class);
 				startActivity(intent);

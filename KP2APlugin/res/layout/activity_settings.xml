@@ -136,7 +136,7 @@
             android:title="@string/items_general_title" />
         
         <com.inputstick.apps.kp2aplugin.MultiSelectListPreference
-            android:defaultValue="username_and_password|username_password_enter|masked_password|macro|clipboard"
+            android:defaultValue="username_and_password|username_password_enter|masked_password|macro|run_template|clipboard"
             android:dialogTitle="@string/items_entry_primary_title"
             android:entries="@array/entryItemsDisplayList"
             android:entryValues="@array/entryItemsReturnList"

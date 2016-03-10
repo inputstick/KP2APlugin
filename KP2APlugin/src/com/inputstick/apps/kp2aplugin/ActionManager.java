@@ -88,6 +88,15 @@ public class ActionManager {
 		ctx.getApplicationContext().startActivity(i);			
 	}
 	
+	public static void startSelectTemplateActivity(String layoutName, boolean manage) {
+		Intent i = new Intent(ctx.getApplicationContext(), SelectTemplateActivity.class);	
+		i.putExtra(Const.EXTRA_LAYOUT, layoutName);
+		i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
+		i.putExtra(Const.EXTRA_TEMPLATE_MANAGE, manage);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		ctx.getApplicationContext().startActivity(i);		
+	}	
+	
 	
 
 	
@@ -160,9 +169,16 @@ public class ActionManager {
 	}
 	
 	
+	public static void runMacro(String layoutName) {	
+		String macro = userPrefs.getMacro();	
+		if ((macro != null) && (macro.length() > 0)) {
+			runMacro(layoutName, macro);
+		} else {
+			addEditMacro(true, false, 0);
+		}
+	}
 	
-	public static void runMacro(String layoutName) {		
-		String macro = userPrefs.getMacro();				
+	public static void runMacro(String layoutName, String macro) {		
 		if ((macro != null) && (macro.length() > 0)) {
 			boolean runInBackground = macro.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING);
 			String actions[] = macro.split("%");
@@ -179,10 +195,10 @@ public class ActionManager {
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				ctx.getApplicationContext().startActivity(i);	
 			}			
-		} else {
-			addEditMacro(true);
 		}
 	}
+	
+	
 	
 	
 	@SuppressLint("DefaultLocale")
@@ -238,13 +254,17 @@ public class ActionManager {
 	}
 	
 	
-	public static void addEditMacro(boolean showEmptyMacroError) {
+	public static void addEditMacro(boolean showEmptyMacroError, boolean templateMode, int templateId) {
 		Intent i = new Intent(ctx.getApplicationContext(), MacroActivity.class);
 		i.putExtra(Const.EXTRA_MACRO, userPrefs.getMacro());
 		i.putExtra(Const.EXTRA_ENTRY_ID, userPrefs.getEntryId());		
 		if (showEmptyMacroError) {
-			i.putExtra(Const.EXTRA_MACRO_RUN_BUT_EMPTY, showEmptyMacroError);		
+			i.putExtra(Const.EXTRA_MACRO_RUN_BUT_EMPTY, true);		
 		}
+		if (templateMode) {
+			i.putExtra(Const.EXTRA_MACRO_TEMPLATE_MODE, true);		
+			i.putExtra(Const.EXTRA_TEMPLATE_ID, templateId);					
+		}		
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.getApplicationContext().startActivity(i);			
 	}

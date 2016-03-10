@@ -2,7 +2,9 @@ package com.inputstick.apps.kp2aplugin;
 
 import keepass2android.pluginsdk.PluginAccessException;
 import keepass2android.pluginsdk.Strings;
+import sheetrock.panda.changelog.ChangeLog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.inputstick.api.hid.HIDKeycodes;
@@ -27,6 +29,8 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	private static final String ACTION_MACRO_ADDEDIT = "com.inputstick.apps.kp2aplugin.macro_addedit";	
 	private static final String ACTION_CLIPBOARD = "com.inputstick.apps.kp2aplugin.clipboard";	
 	private static final String ACTION_MACRO_RUN = "com.inputstick.apps.kp2aplugin.macro_run";
+	private static final String ACTION_TEMPLATE_RUN = "com.inputstick.apps.kp2aplugin.template_run";
+	private static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";	
 	
 	private static final String ACTION_FIELD_TYPE_PRIMARY = "com.inputstick.apps.kp2aplugin.type";
 	private static final String ACTION_FIELD_TYPE_SLOW_PRIMARY = "com.inputstick.apps.kp2aplugin.type_slow";
@@ -84,7 +88,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			}
 			if (userPrefs.isShowMacroAddEdit()) {
 				addEntryAction(oe, R.string.action_macro_add_edit, ACTION_MACRO_ADDEDIT, LAYOUT_NONE);		
-			}		
+			}
+			if (userPrefs.isShowTemplateManage()) {
+				addEntryAction(oe, R.string.action_template_manage, ACTION_TEMPLATE_MANAGE, LAYOUT_NONE);		
+			}				
 
 			//entry items, primary layout 
 			if (userPrefs.isShowUserPass(true)) {
@@ -99,6 +106,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			if (userPrefs.isShowMacro(true)) {
 				addEntryAction(oe, R.string.action_macro_run, ACTION_MACRO_RUN, LAYOUT_PRIMARY);		
 			}
+			if (userPrefs.isShowRunTemplate(true)) {
+				addEntryAction(oe, R.string.action_template_run, ACTION_TEMPLATE_RUN, LAYOUT_PRIMARY);		
+			} 
+			
 			if (userPrefs.isShowClipboard(true)) {
 				addEntryAction(oe, R.string.action_clipboard, ACTION_CLIPBOARD, LAYOUT_PRIMARY);		
 			}				
@@ -116,6 +127,9 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			if (userPrefs.isShowMacro(false)) {
 				addEntryAction(oe, R.string.action_macro_run, ACTION_MACRO_RUN, LAYOUT_SECONDARY);
 			}	
+			if (userPrefs.isShowRunTemplate(false)) {
+				addEntryAction(oe, R.string.action_template_run, ACTION_TEMPLATE_RUN, LAYOUT_SECONDARY);
+			}			
 			if (userPrefs.isShowClipboard(false)) {
 				addEntryAction(oe, R.string.action_clipboard, ACTION_CLIPBOARD, LAYOUT_SECONDARY);
 			}			
@@ -131,14 +145,13 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			} 
 		}	
 
-		//uncomment when version code >1
-		/*ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
+		ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
 		if (cl.firstRun()) {
 			Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
 			i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			ctx.getApplicationContext().startActivity(i);			
-	    }*/
+	    }
 	}	
 	
 
@@ -210,7 +223,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			} else if (ACTION_MAC_SETUP.equals(text)) {
 				ActionManager.startMacSetupActivity();
 			} else if (ACTION_MACRO_ADDEDIT.equals(text)) {	
-				ActionManager.addEditMacro(false);
+				ActionManager.addEditMacro(false, false, 0);
 			} else if (ACTION_CLIPBOARD.equals(text)) {	
 				ActionManager.clipboardTyping(layoutName);
 			} else if (ACTION_MACRO_RUN.equals(text)) {
@@ -221,9 +234,14 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 			} else if (ACTION_CONNECT.equals(text)) {
 				ActionManager.connect();
-			} 	else if (ACTION_DISCONNECT.equals(text)) {
+			} else if (ACTION_DISCONNECT.equals(text)) {
 				ActionManager.disconnect();
-			} 				
+			} else if (ACTION_TEMPLATE_RUN.equals(text)) {
+				ActionManager.startSelectTemplateActivity(layoutName, false);
+			} else if (ACTION_TEMPLATE_MANAGE.equals(text)) {
+				ActionManager.startSelectTemplateActivity(layoutName, true);
+			} 
+			
 		} else {
 			//field actions: type/type slow
 			boolean typeSlow = actionSelected.getActionData().getBoolean(Const.EXTRA_TYPE_SLOW, false);

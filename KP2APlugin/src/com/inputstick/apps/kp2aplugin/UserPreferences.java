@@ -33,16 +33,19 @@ public class UserPreferences {
 	private boolean showMacSetup;
 	private boolean showTabEnter;
 	private boolean showMacroAddEdit;	
+	private boolean showTemplateManage;
 	//entry
 	private boolean showUserPass;
 	private boolean showUserPassEnter;
 	private boolean showMasked;
 	private boolean showMacro;
+	private boolean showRunTemplate;
 	private boolean showClipboard;
 	private boolean showUserPassSec;
 	private boolean showUserPassEnterSec;
 	private boolean showMaskedSec;
 	private boolean showMacroSec;
+	private boolean showRunTemplateSec;
 	private boolean showClipboardSec;
 	//item
 	private boolean showType;
@@ -94,15 +97,15 @@ public class UserPreferences {
 		showMacSetup = tmp.contains(SettingsActivity.ITEM_MAC_SETUP);
 		showTabEnter = tmp.contains(SettingsActivity.ITEM_TAB_ENTER);	
 		showMacroAddEdit = tmp.contains(SettingsActivity.ITEM_MACRO);		
-		
-		
+		showTemplateManage = tmp.contains(SettingsActivity.ITEM_TEMPLATE_MANAGE);				
 		
 				
-		tmp = prefs.getString(SettingsActivity.ITEMS_ENTRY_PRIMARY, "username_and_password|username_password_enter|masked_password|macro|clipboard");
+		tmp = prefs.getString(SettingsActivity.ITEMS_ENTRY_PRIMARY, "username_and_password|username_password_enter|masked_password|macro|run_template|clipboard");
 		showUserPass = tmp.contains(SettingsActivity.ITEM_USER_PASSWORD);
 		showUserPassEnter = tmp.contains(SettingsActivity.ITEM_USER_PASSWORD_ENTER);
 		showMasked = tmp.contains(SettingsActivity.ITEM_MASKED);
 		showMacro = tmp.contains(SettingsActivity.ITEM_MACRO);	
+		showRunTemplate = tmp.contains(SettingsActivity.ITEM_RUN_TEMPLATE);			
 		showClipboard = tmp.contains(SettingsActivity.ITEM_CLIPBOARD);	
 		
 		if (showSecondary) {
@@ -111,6 +114,7 @@ public class UserPreferences {
 			showUserPassEnterSec = tmp.contains(SettingsActivity.ITEM_USER_PASSWORD_ENTER);
 			showMaskedSec = tmp.contains(SettingsActivity.ITEM_MASKED);
 			showMacroSec = tmp.contains(SettingsActivity.ITEM_MACRO);
+			showRunTemplateSec = tmp.contains(SettingsActivity.ITEM_RUN_TEMPLATE);			
 			showClipboardSec = tmp.contains(SettingsActivity.ITEM_CLIPBOARD);	
 		}
 				
@@ -192,6 +196,10 @@ public class UserPreferences {
 	public boolean isShowMacroAddEdit() {
 		return showMacroAddEdit;
 	}
+	public boolean isShowTemplateManage() {
+		return showTemplateManage;
+	}	
+	
 	
 	public boolean isShowClipboard(boolean isPrimary) {
 		if (isPrimary) {
@@ -248,6 +256,16 @@ public class UserPreferences {
 			return showMacroSec;
 		}
 	}
+	
+	public boolean isShowRunTemplate(boolean isPrimary) {
+		if (isPrimary) {
+			return showRunTemplate;
+		} else {
+			return showRunTemplateSec;
+		}
+	}
+	
+	
 	
 	public String getMacro() {
 		macro = prefs.getString(Const.MACRO_PREF_PREFIX + entryId, null);

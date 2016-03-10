@@ -151,6 +151,7 @@
         <item>Connect/Disconnect</item>
         <item>OSX Setup shortcut</item>
         <item>Add/Edit macro</item>        
+        <item>Manage templates</item>        
         <item>Tab and Enter actions</item>        
     </string-array>
     <string-array name="generalItemsReturnList">
@@ -158,6 +159,7 @@
 		<item>con_disc</item>     
         <item>osx</item>
         <item>macro</item>        
+        <item>manage_template</item>                
         <item>tab_enter</item>        
     </string-array>
     
@@ -165,7 +167,8 @@
         <item>Username/Password</item>
         <item>Username/Password/Enter</item>
         <item>Masked Password</item>
-        <item>Execute macro</item>      
+        <item>Execute macro</item>
+        <item>Execute template</item>            
         <item>Clipboard/Authenticator</item>  
     </string-array>
     <string-array name="entryItemsReturnList">
@@ -173,6 +176,7 @@
         <item>username_password_enter</item>
         <item>masked_password</item>
         <item>macro</item> 
+        <item>run_template</item> 
         <item>clipboard</item>       
     </string-array>    
     

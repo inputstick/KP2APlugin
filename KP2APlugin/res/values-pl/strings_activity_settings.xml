@@ -112,6 +112,7 @@
         <item>Połącz/Rozłącz</item>  
         <item>Konfiguracja OSX</item>
         <item>Dodaj/Edytuj makro</item>
+		<item>Zarządzaj szablonami</item>              
         <item>Klawisze Tab i Enter</item>        
     </string-array>
     <string-array name="entryItemsDisplayList">
@@ -119,6 +120,7 @@
         <item>Login/Hasło/Enter</item>
         <item>Maskowane hasło</item>
         <item>Uruchom makro</item>
+        <item>Uruchom szablon</item>
 		<item>Schowek/Authenticator</item>        
     </string-array>
     <string-array name="fieldItemsDisplayList">

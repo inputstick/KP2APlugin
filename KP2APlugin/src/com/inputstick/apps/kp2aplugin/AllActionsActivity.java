@@ -39,11 +39,13 @@ public class AllActionsActivity extends Activity {
 		listAdapter.add(ActionManager.getActionString(R.string.action_type_tab, false));
 		listAdapter.add(ActionManager.getActionString(R.string.action_type_enter, false));
 		listAdapter.add(ActionManager.getActionString(R.string.action_macro_add_edit, false));
+		listAdapter.add(ActionManager.getActionString(R.string.action_template_manage, false));
 		
 		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_type_user_tab_pass, false));
 		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_type_user_tab_pass_enter, false));
 		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_masked_password, false));
 		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_macro_run, false));
+		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_template_run, false));
 		listAdapter.add(ActionManager.getActionStringForPrimaryLayout(R.string.action_clipboard, false));
 		
 		if (userPrefs.isShowSecondary()) {
@@ -51,6 +53,7 @@ public class AllActionsActivity extends Activity {
 			listAdapter.add(ActionManager.getActionStringForSecondaryLayout(R.string.action_type_user_tab_pass_enter, false));
 			listAdapter.add(ActionManager.getActionStringForSecondaryLayout(R.string.action_masked_password, false));
 			listAdapter.add(ActionManager.getActionStringForSecondaryLayout(R.string.action_macro_run, false));
+			listAdapter.add(ActionManager.getActionStringForSecondaryLayout(R.string.action_template_run, false));
 			listAdapter.add(ActionManager.getActionStringForSecondaryLayout(R.string.action_clipboard, false));
 		}
 		
@@ -86,38 +89,47 @@ public class AllActionsActivity extends Activity {
 							ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 							break;
 						case 6:
-							ActionManager.addEditMacro(false);
+							ActionManager.addEditMacro(false, false, 0);
 							break;
-						//entry, primary layout
 						case 7:
+							ActionManager.startSelectTemplateActivity(userPrefs.getLayoutPrimary(), true);
+							break;							
+						//entry, primary layout
+						case 8:
 							ActionManager.typeUsernameAndPassword(userPrefs.getLayoutPrimary(), false);
 							break;				
-						case 8:
+						case 9:
 							ActionManager.typeUsernameAndPassword(userPrefs.getLayoutPrimary(), true);
 							break;	
-						case 9:
+						case 10:
 							ActionManager.openMaskedPassword(userPrefs.getLayoutPrimary(), true);
 							break;		
-						case 10:
+						case 11:
 							ActionManager.runMacro(userPrefs.getLayoutPrimary());
 							break;	
-						case 11:
+						case 12:
+							ActionManager.startSelectTemplateActivity(userPrefs.getLayoutPrimary(), false);
+							break;															
+						case 13:
 							ActionManager.clipboardTyping(userPrefs.getLayoutPrimary());
 							break;
 						//entry, secondary layout
-						case 12:
+						case 14:
 							ActionManager.typeUsernameAndPassword(userPrefs.getLayoutSecondary(), false);
 							break;				
-						case 13:
+						case 15:
 							ActionManager.typeUsernameAndPassword(userPrefs.getLayoutSecondary(), true);
 							break;	
-						case 14:
+						case 16:
 							ActionManager.openMaskedPassword(userPrefs.getLayoutSecondary(), true);
 							break;		
-						case 15:
+						case 17:
 							ActionManager.runMacro(userPrefs.getLayoutSecondary());
-							break;	
-						case 16:
+							break;
+						case 18:
+							ActionManager.startSelectTemplateActivity(userPrefs.getLayoutSecondary(), false);
+							break;								
+						case 19:
 							ActionManager.clipboardTyping(userPrefs.getLayoutSecondary());
 							break;							
 					}
