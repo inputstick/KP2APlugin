@@ -19,6 +19,15 @@
     </style>
   </head>
   <body>
+$ 1.02
+  % Version 1.02
+  	_ <b>Manual for the plugin (pdf) is now available</b>   	  
+  	_ <a href="http://blog.inputstick.com/2016/03/kp2a-plugin-v102.html">(More info)</a>   
+  	* Warning message will be displayed when CapsLock is on
+  	* Text length is checked before typing from clipboard (Settings -> Check length)
+  	* Fixed potential security issue on "Masked Password" screen
+  	* Save as and Load from buttons are no longer displayed when editing a template
+  	* New keyboard layouts: pt-PT and fr-CA
 $ 1.01
   % Version 1.01
   	_ <a href="http://blog.inputstick.com/2016/03/kp2a-plugin-v101.html">(More info)</a>  
