@@ -8,9 +8,11 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class ClipboardService extends Service {
 	
 	private static final int MAX_ALLOWED_TIME = 900; //max allowed duration
 	private static final int MAX_EXTEND_TIME = 180; //duration can be extended by this period
+	private static final int MAX_TEXT_LENGTH = 64;
 	
 	private int remainingTime;;
 	
@@ -99,14 +102,19 @@ public class ClipboardService extends Service {
 	        if (clipData.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 	           String text = clipData.getItemAt(0).getText().toString();
 	           if (text != null) {
+	        	   SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ClipboardService.this);
 	        	   UserPreferences userPrefs = ActionManager.getUserPrefs();
-	        	   ActionManager.queueText(text, layout);
-	        	   if (userPrefs.isClipboardAutoEnter()) {
-	        		   ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
-	        	   }
-	        	   if (userPrefs.isClipboardAutoDisable()) {
-	        		   delayhandler.removeCallbacksAndMessages(null);
-	        		   stopSelf();
+	        	   if ((text.length() > MAX_TEXT_LENGTH) && (prefs.getBoolean("clipboard_check_length", true))) {
+	        		   Toast.makeText(ClipboardService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
+	        	   } else {
+		        	   ActionManager.queueText(text, layout);
+		        	   if (userPrefs.isClipboardAutoEnter()) {
+		        		   ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+		        	   }
+		        	   if (userPrefs.isClipboardAutoDisable()) {
+		        		   delayhandler.removeCallbacksAndMessages(null);
+		        		   stopSelf();
+		        	   }
 	        	   }
 	           }
 	    	}
