@@ -39,14 +39,14 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	
 	private static final int IC = R.drawable.ic_launcher;
 
-	private static Context ctx;
 	private static UserPreferences userPrefs;
 
 	
 	@Override
 	protected void openEntry(OpenEntryAction oe) {
+		Context ctx = null;
 		try {			
-			ctx = oe.getContext();			
+			ctx = oe.getContext();
 			ActionManager.init(ctx, oe.getEntryId(), oe.getEntryFields());
 			userPrefs = ActionManager.getUserPrefs();
 			
@@ -135,23 +135,26 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			}			
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
-		}
-				
-		if (userPrefs.isAutoConnect()) {
-			ActionManager.connect();
-		} else {			
-			if ((ActionManager.getLastActivityTime() != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < ActionManager.getLastActivityTime())) {
-				ActionManager.connect();
-			} 
-		}	
+		}				
 
-		ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
-		if (cl.firstRun()) {
-			Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
-			i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-			ctx.getApplicationContext().startActivity(i);			
-	    }
+		if (ctx != null) {
+			if ((userPrefs != null) && (userPrefs.isAutoConnect())) {
+				ActionManager.connect();
+			} else {			
+				if ((ActionManager.getLastActivityTime() != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < ActionManager.getLastActivityTime())) {
+					ActionManager.connect();
+				} 
+			}				
+			
+			
+			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
+			if (cl.firstRun()) {
+				Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
+				i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				ctx.getApplicationContext().startActivity(i);			
+		    }
+		}
 	}	
 	
 
@@ -206,6 +209,8 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	
 	@Override
 	protected void actionSelected(ActionSelectedAction actionSelected) {
+		ActionManager.update(actionSelected.getContext(), actionSelected.getEntryId(), actionSelected.getEntryFields());
+		
 		String layoutName = actionSelected.getActionData().getString(Const.EXTRA_LAYOUT, "en-US");		
 		if (actionSelected.isEntryAction()) {
 			String text = actionSelected.getActionData().getString(Const.SELECTED_UI_ACTION);

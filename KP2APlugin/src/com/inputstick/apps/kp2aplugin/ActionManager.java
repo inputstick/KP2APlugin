@@ -31,6 +31,14 @@ public class ActionManager {
 		lastActivityTime = 0;
 	}
 	
+	public static void update(Context ctx, String entryId, HashMap<String, String> entryFields) {
+		if (ActionManager.ctx == null) {
+			init(ctx, entryId, entryFields);
+		}
+		lastActivityTime = 0;
+	}
+
+	
 	public static void reloadPreferences() {
 		if (userPrefs != null) {
 			userPrefs.reload();
