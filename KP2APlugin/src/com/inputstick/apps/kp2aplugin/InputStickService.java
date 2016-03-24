@@ -129,9 +129,11 @@ public class InputStickService extends Service implements InputStickStateListene
 				break;		
 			default:
 				break;
-		}	
-		
+		}			
 	}
+	
+	
+	
 	
 	private void executeQueue() {
 		dummyKeyPresses(15);
@@ -153,7 +155,30 @@ public class InputStickService extends Service implements InputStickStateListene
 		InputStickHID.addKeyboardTransaction(t);
 	}
 	
+	/*private String reverseCase(String input) {
+		if (input != null) {			
+			char c;
+			char[] reversed = new char[input.length()];
+			for (int i = 0; i < input.length(); i++) {
+				c = input.charAt(i);
+				if (Character.isLetter(c)) {
+					if (Character.isUpperCase(c)) {
+						reversed[i] = Character.toLowerCase(c);
+					} else if (Character.isLowerCase(c)) {
+						reversed[i] = Character.toUpperCase(c);
+					}				
+				} else {
+					reversed[i] = c;
+				}
+			}
+			return new String(reversed);
+		} else {
+			return null;
+		}		
+	}*/
 	
+	private long lastCapsLockWatningTime;
+	private static final long CAPSLOCK_WATNING_TIMEOUT = 10000;
 	
 	private class ItemToExecute {
 		public Bundle mBundle;
@@ -169,6 +194,13 @@ public class InputStickService extends Service implements InputStickStateListene
 				if (Const.ACTION_TYPE.equals(action)) {
 					String text = mBundle.getString(Const.EXTRA_TEXT);
 					String layout = mBundle.getString(Const.EXTRA_LAYOUT);
+					if (InputStickKeyboard.isCapsLock()) {
+						long now = System.currentTimeMillis();
+						if (now > lastCapsLockWatningTime + CAPSLOCK_WATNING_TIMEOUT) {
+							lastCapsLockWatningTime = now;
+							Toast.makeText(InputStickService.this, R.string.text_capslock_warning, Toast.LENGTH_LONG).show();
+						}
+					}
 					InputStickKeyboard.type(text, layout);							
 				} else if (Const.ACTION_KEY_PRESS.equals(action)) {
 					byte modifier = mBundle.getByte(Const.EXTRA_MODIFIER);
@@ -184,5 +216,6 @@ public class InputStickService extends Service implements InputStickStateListene
 			}
 		}
 	}
+
 
 }
