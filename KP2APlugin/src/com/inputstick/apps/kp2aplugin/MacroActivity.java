@@ -41,6 +41,9 @@ public class MacroActivity extends Activity {
 	private Button buttonAddFromField;
 	private RadioButton radioButtonBackground;
 	private RadioButton radioButtonShowControls;
+	private TextView textViewTemplate;		
+	private Button buttonTemplateSave;
+	private Button buttonTemplateLoad;		
 	
 	private boolean templateMode;
 	private int templateId;
@@ -59,6 +62,7 @@ public class MacroActivity extends Activity {
 		editTextString = (EditText)findViewById(R.id.editTextString);
 		spinnerDelay = (Spinner)findViewById(R.id.spinnerDelay);		
 		
+		textViewTemplate = (TextView)findViewById(R.id.textViewTemplate);		
 		
 		radioButtonBackground = (RadioButton)findViewById(R.id.radioButtonBackground);
 		radioButtonBackground.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -268,14 +272,14 @@ public class MacroActivity extends Activity {
 			}
 		});		
 		
-		button = (Button) findViewById(R.id.buttonTemplateSave);
-		button.setOnClickListener(new OnClickListener() {
+		buttonTemplateSave = (Button) findViewById(R.id.buttonTemplateSave);
+		buttonTemplateSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showSaveTemplateDialog();
 			}
 		});
-		button = (Button)findViewById(R.id.buttonTemplateLoad);		
-		button.setOnClickListener(new OnClickListener() {			
+		buttonTemplateLoad = (Button)findViewById(R.id.buttonTemplateLoad);		
+		buttonTemplateLoad.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				showLoadTemplateDialog();
 			}
@@ -296,7 +300,10 @@ public class MacroActivity extends Activity {
 			macro = TemplateHelper.loadTemplate(prefs, templateId); //is never null!
 			savedTemplate = macro;			
 			buttonSave.setVisibility(View.INVISIBLE);
-			buttonDelete.setVisibility(View.INVISIBLE);
+			buttonDelete.setVisibility(View.INVISIBLE);			
+			textViewTemplate.setVisibility(View.INVISIBLE);
+			buttonTemplateSave.setVisibility(View.INVISIBLE);
+			buttonTemplateLoad.setVisibility(View.INVISIBLE);			
 		}
 		
 		if (macro == null) {
