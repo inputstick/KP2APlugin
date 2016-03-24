@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -71,6 +72,8 @@ public class MaskedPasswordActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,  WindowManager.LayoutParams.FLAG_SECURE);
+
 		setContentView(R.layout.activity_masked_password);		
 		
 		timeLeftMessage = getString(R.string.time_left);
