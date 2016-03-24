@@ -57,6 +57,9 @@
 	<string name="clipboard_auto_disable_title">Deaktywuj po wpisywaniu</string>
 	<string name="clipboard_auto_disable_summary_on">Deaktywuj pisanie ze schowka po pierwszym wpisaniu tekstu</string>
 	<string name="clipboard_auto_disable_summary_off">Opcja zawsze aktywna przez 30 sekund od uruchomienia</string>
+	<string name="clipboard_check_length_title">Sprawdzaj długość</string>
+	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
+	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>	
     
 	<string-array name="autoconnect_timeout_names">
         <item>Brak</item>
@@ -80,15 +83,17 @@
         <item>Angielski (UK)</item>
         <item>Fiński</item>
         <item>Francuski</item>
-        <item>Francuski (Swiss)</item>
+		<item>Francuski (Kanada)</item>        
+        <item>Francuski (Szwajcaria)</item>
         <item>Niemiecki</item>
         <item>Niemiecki (Mac)</item>
-        <item>Niemiecki (Swiss)</item>
+        <item>Niemiecki (Szwajcaria)</item>
         <item>Hebrajski</item>
         <item>Włoski</item>
         <item>Norweski</item>
         <item>Polski</item>
-        <item>Portugalski (BR)</item>
+		<item>Portugalski</item>         
+        <item>Portugalski (Brazylia)</item>
         <item>Rosyjski</item>
         <item>Słowacki</item>
         <item>Hiszpański</item>

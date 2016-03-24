@@ -40,8 +40,8 @@
     <string name="template_name">Template name:</string>
     <string name="template_not_saved">Do you want to save changes in the template?</string>        
     
-    <string name="execution">Macro execution:</string>    
-    <string name="execution_background">In background, auto (careful!)</string>    
+    <string name="execution">Execution mode:</string>    
+    <string name="execution_background">Background, auto (careful!)</string>    
     <string name="execution_show_controls">Step-by-step, manual</string>        
     
     <string name="title_activity_macro_execute">Macro (manual execution)</string>

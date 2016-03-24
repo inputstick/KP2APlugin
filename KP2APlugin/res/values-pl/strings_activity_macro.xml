@@ -40,7 +40,7 @@
 	<string name="template_name">Nazwa szablonu:</string>  
 	<string name="template_not_saved">Czy chcesz zapisać zmiany w szablonie?</string>	           
     
-    <string name="execution">Wykonanie makra:</string>    
+    <string name="execution">Tryb wykonania:</string>    
     <string name="execution_background">W tle ,automatycznie (ostrożnie!)</string>    
     <string name="execution_show_controls">Krok po kroku, ręcznie</string>        
         

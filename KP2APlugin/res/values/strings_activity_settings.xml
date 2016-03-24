@@ -14,7 +14,7 @@
   	<string name="show_help_webpage_title">Open help webpage</string>
   	<string name="show_about_app_title">About app</string>  	  	
     
-    <string name="typing_settings_title">USB host keyboard layout settings</string>
+    <string name="typing_settings_title">Typing settings</string>
     <string name="connection_settings_title">InputStick connection settings</string>    
 
     <string name="layout_title">Host keyboard layout (primary)</string>    
@@ -34,18 +34,18 @@
     
     <string name="autoconnect_timeout_title">Timeout</string>
         
-    <string name="typing_speed_title">Typing speed</string>   
+    <string name="typing_speed_title">Typing speed</string>    
     
     <string name="do_not_disconnect_title">Stay connected</string>   
     <string name="do_not_disconnect_summary_on">Connection will NOT be closed after closing entry. You must disconnect manually or set timeout in InputStickUtility application</string>           
     <string name="do_not_disconnect_summary_off">Connection will be closed after closing entry.</string>
 
     <string name="entry_reload_message">UI changes will be visible after entry is reloaded or new entry is opened</string>
-    
-	
+    	
 	<string name="uninstall_title">Uninstall</string>  
 	<string name="uninstall_message">Uninstall previous release of the plugin now?\n\nRemember to configure current release: \"Configure as plugin\", set keyboard layout, etc.\n\n\"Open help webpage\" to learn about new features.</string>  
-	<string name="uninstall_toast">Uninstall old release of the plugin</string>  
+	<string name="uninstall_toast">Uninstall old release of the plugin</string>	
+	
         
 	<string-array name="autoconnect_timeout_names">
         <item>Disabled</item>
@@ -69,15 +69,17 @@
         <item>English (UK)</item>
         <item>Finnish</item>
         <item>French</item>
-        <item>French (Swiss)</item>
+        <item>French (Canada)</item>
+        <item>French (Switzerland)</item>
         <item>German</item>
         <item>German (Mac)</item>
-        <item>German (Swiss)</item>
+        <item>German (Switzerland)</item>
         <item>Hebrew</item>
         <item>Italian</item>
         <item>Norwegian</item>
         <item>Polish</item>
-        <item>Portuguese (BR)</item>
+		<item>Portuguese</item>        
+        <item>Portuguese (Brazil)</item>
         <item>Russian</item>
         <item>Slovak</item>
         <item>Spanish</item>
@@ -107,6 +109,7 @@
         <item>en-GB</item>
         <item>fi-FI</item>
         <item>fr-FR</item>
+        <item>fr-CA</item>
         <item>fr-CH</item>
         <item>de-DE</item>
         <item>de-DE-mac</item>
@@ -115,6 +118,7 @@
         <item>it-IT</item>
         <item>nb-NO</item>
         <item>pl-PL</item>
+        <item>pt-PT</item>
         <item>pt-BR</item>
         <item>ru-RU</item>
         <item>sk-SK</item>
@@ -143,7 +147,10 @@
 	<string name="clipboard_auto_enter_summary_off">Do nothing after typing</string>
 	<string name="clipboard_auto_disable_title">Disable after typing</string>
 	<string name="clipboard_auto_disable_summary_on">Disable clipboard typing after first item is typed</string>
-	<string name="clipboard_auto_disable_summary_off">Keep active for 30 seconds since activation</string>
+	<string name="clipboard_auto_disable_summary_off">Keep active for 30 seconds since activation</string>	
+	<string name="clipboard_check_length_title">Check length</string>
+	<string name="clipboard_check_length_summary_on">Do not type if text in clipboard is longer than 64 characters</string>
+	<string name="clipboard_check_length_summary_off">Always type, even long text</string>
 		
 	  
     <string-array name="generalItemsDisplayList">

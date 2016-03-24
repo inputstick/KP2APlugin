@@ -18,6 +18,8 @@
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
     <string name="text_clipboard_notification_info">Clipboard typing active</string>
     <string name="text_clipboard_copy_now">InputStick plugin: Copy code to clipboard (30 seconds remaining)</string>
+    <string name="text_clipboard_too_long">Text is too long. See Check Length option in settings</string>	
+	<string name="text_capslock_warning">Warning: CapsLock IS ON!</string>
     
     <string name="action_type">Type</string>
     <string name="action_type_slow">Type (slow)</string>

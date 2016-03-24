@@ -62,7 +62,7 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/typing_speed_title" />        
-        
+                
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/connection_settings_title" >
@@ -113,7 +113,14 @@
             android:key="clipboard_auto_disable"
             android:summaryOn="@string/clipboard_auto_disable_summary_on"
             android:summaryOff="@string/clipboard_auto_disable_summary_off"
-            android:title="@string/clipboard_auto_disable_title" />                                   
+            android:title="@string/clipboard_auto_disable_title" />      
+            
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="clipboard_check_length"
+            android:summaryOn="@string/clipboard_check_length_summary_on"
+            android:summaryOff="@string/clipboard_check_length_summary_off"
+            android:title="@string/clipboard_check_length_title" />          
         
     </PreferenceCategory>    
     
