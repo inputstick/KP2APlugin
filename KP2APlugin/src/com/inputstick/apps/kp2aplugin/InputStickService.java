@@ -31,66 +31,62 @@ public class InputStickService extends Service implements InputStickStateListene
 	}	
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		
-		if (intent != null)
-			Log.d(_TAG, "starting with "+intent.getAction());
-		else
-			Log.d(_TAG, "starting with null intent");
-
-		if (Const.SERVICE_DISCONNECT.equals(intent.getAction())) {
-			Log.d(_TAG, "disconnecting");
-			try {
-				int state = InputStickHID.getState();
+	public int onStartCommand(Intent intent, int flags, int startId) {		
+		if (intent != null) {
+			String action = intent.getAction();
+			if (Const.SERVICE_DISCONNECT.equals(action)) {
+				Log.d(_TAG, "disconnecting");
+				try {
+					int state = InputStickHID.getState();
+					switch (state) {
+						case ConnectionManager.STATE_CONNECTED:
+						case ConnectionManager.STATE_CONNECTING:
+						case ConnectionManager.STATE_READY:
+							InputStickHID.disconnect();	
+							break;
+						case ConnectionManager.STATE_DISCONNECTED:
+						case ConnectionManager.STATE_FAILURE:	
+							break;
+						default:
+							InputStickHID.disconnect();	
+					}
+				} catch (NullPointerException e) {
+					Log.d(_TAG, "couldn't disconnect. Probably we never connected.");
+				}
+				stopSelf();
+				return Service.START_NOT_STICKY;
+			} else if (Const.SERVICE_CONNECT.equals(action)) {
+				if ( !InputStickHID.isConnected()) {
+					InputStickHID.connect(getApplication());
+				}			
+			} else if (Const.SERVICE_EXEC.equals(action)) {
+				int state = InputStickHID.getState();		
+				Bundle b = intent.getExtras();
+				//Log.d(_TAG, "type params: "+params);			
 				switch (state) {
 					case ConnectionManager.STATE_CONNECTED:
 					case ConnectionManager.STATE_CONNECTING:
+						synchronized (items) {
+							items.add(new ItemToExecute(b));
+						}						
+						break;
 					case ConnectionManager.STATE_READY:
-						InputStickHID.disconnect();	
+						new ItemToExecute(b).execute();
 						break;
 					case ConnectionManager.STATE_DISCONNECTED:
 					case ConnectionManager.STATE_FAILURE:	
-						break;
-					default:
-						InputStickHID.disconnect();	
-				}
-			} catch (NullPointerException e) {
-				Log.d(_TAG, "couldn't disconnect. Probably we never connected.");
+						synchronized (items) {
+							items.add(new ItemToExecute(b));
+						}										
+						Log.d(_TAG, "trigger connect");
+						InputStickHID.connect(getApplication());					
+						break;											
+				}				
+			} else {
+				//unknown action
 			}
-			stopSelf();
-			return Service.START_NOT_STICKY;
-		} else if (Const.SERVICE_CONNECT.equals(intent.getAction())) {
-			if ( !InputStickHID.isConnected()) {
-				InputStickHID.connect(getApplication());
-			}			
-		} else if (Const.SERVICE_EXEC.equals(intent.getAction())) {
-			int state = InputStickHID.getState();		
-			Bundle b = intent.getExtras();
-			//Log.d(_TAG, "type params: "+params);			
-			switch (state) {
-				case ConnectionManager.STATE_CONNECTED:
-				case ConnectionManager.STATE_CONNECTING:
-					synchronized (items) {
-						items.add(new ItemToExecute(b));
-					}						
-					break;
-				case ConnectionManager.STATE_READY:
-					new ItemToExecute(b).execute();
-					break;
-				case ConnectionManager.STATE_DISCONNECTED:
-				case ConnectionManager.STATE_FAILURE:	
-					synchronized (items) {
-						items.add(new ItemToExecute(b));
-					}										
-					Log.d(_TAG, "trigger connect");
-					InputStickHID.connect(getApplication());					
-					break;											
-			}				
-		} else {
-			//unknown action
-		}
+		}		
 		return Service.START_NOT_STICKY;
-
 	}
 	
 	@Override
@@ -131,9 +127,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				break;
 		}			
 	}
-	
-	
-	
+			
 	
 	private void executeQueue() {
 		dummyKeyPresses(15);
