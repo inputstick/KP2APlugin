@@ -68,7 +68,7 @@
     <PreferenceCategory android:title="@string/connection_settings_title" >
         
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="autoconnect"
             android:summaryOn="@string/autoconnect_summary_on"
             android:summaryOff="@string/autoconnect_summary_off"
