@@ -117,7 +117,8 @@ public class InputStickService extends Service implements InputStickStateListene
 				AlertDialog ad = InputStickHID.getDownloadDialog(this); 
 				if (ad != null) {
 					//InputStickUtility application not installed
-					ad.show();
+					//ad.show(); context - badtoken TODO launch separate activity to display download dialog
+					Toast.makeText(this, R.string.text_missing_utility_app, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(this, R.string.text_connection_failed, Toast.LENGTH_LONG).show();
 				}

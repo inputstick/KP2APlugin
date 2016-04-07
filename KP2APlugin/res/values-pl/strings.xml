@@ -20,6 +20,7 @@
 	<string name="text_clipboard_copy_now">InputStick plugin: Skopiuj kod do schowka (pozostało 30 sekund)</string>  		
     <string name="text_clipboard_too_long">Tekst zbyt długi. Zobacz opcję: Sprawdzaj długość w ustawieniach</string>	
 	<string name="text_capslock_warning">Uwaga: CapsLock JEST WŁĄCZONY!</string>
+	<string name="text_missing_utility_app">Musisz pobrać aplikację InputStickUtility</string>
 	
     <string name="action_type">Wpisz</string>
     <string name="action_type_slow">Wpisz (powoli)</string>
