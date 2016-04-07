@@ -2,8 +2,6 @@ package com.inputstick.apps.kp2aplugin;
 
 import java.util.HashMap;
 
-import com.inputstick.api.hid.HIDKeycodes;
-
 import keepass2android.pluginsdk.KeepassDefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,96 +11,143 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.inputstick.api.hid.HIDKeycodes;
+
 public class ActionManager {
 	
+	private static ActionManager instance;
 	
-	private static UserPreferences userPrefs;
-	private static SharedPreferences prefs;
-	private static Context ctx;
+	private static UserPreferences mUserPrefs;
+	private static Context mCtx;
 	
-	private static HashMap<String, String> entryFields;
-	private static long lastActivityTime;
+	private static HashMap<String, String> mEntryFields;
+	private static String mEntryId;
+	private static long mLastActivityTime;
 	
-	public static void init(Context ctx, String entryId, HashMap<String, String> entryFields) {
-		ActionManager.ctx = ctx;
-		ActionManager.entryFields = entryFields;
-		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		userPrefs = new UserPreferences(prefs, entryId);
-		lastActivityTime = 0;
+    private ActionManager() {
+    }
+    
+    public static ActionManager getInstance(Context ctx) {
+    	return getInstance(ctx, null, null);
+    }
+	
+	public static ActionManager getInstance(Context ctx, String entryId, HashMap<String, String> entryFields) {
+		if (instance == null) {
+			instance = new ActionManager();
+		}		
+		
+		mCtx = ctx;		
+		if (mUserPrefs == null) {
+			mUserPrefs = new UserPreferences(PreferenceManager.getDefaultSharedPreferences(ctx));
+		}		
+		
+		if (entryFields != null) {
+			mEntryFields = entryFields;
+		} else {
+			if (mEntryFields == null) {
+				mEntryFields = new HashMap<String, String>();
+			}
+		}
+		
+		if (entryId != null) {
+			mEntryId = entryId;
+		} else {
+			if (mEntryId == null) {
+				mEntryId = "";
+			}
+		}
+		
+		return instance;
 	}
 	
-	public static void update(Context ctx, String entryId, HashMap<String, String> entryFields) {
-		if (ActionManager.ctx == null) {
-			init(ctx, entryId, entryFields);
-		}
-		lastActivityTime = 0;
+	public static void test() {
+		//TODO
+		//mCtx = null;
+		//mUserPrefs = null;
+		//mEntryFields = null;
+		//mEntryId = null;
 	}
 
 	
-	public static void reloadPreferences() {
-		if (userPrefs != null) {
-			userPrefs.reload();
+	public void reloadPreferences(SharedPreferences prefs) {
+		if (mUserPrefs != null) {
+			mUserPrefs.reload(prefs);
+		} else {
+			mUserPrefs = new UserPreferences(prefs);
 		}
 	}
 	
-	public static UserPreferences getUserPrefs() {
-		return userPrefs;
+	public UserPreferences getUserPrefs() {
+		return mUserPrefs;
+	}
+	
+	private String getMacro() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
+		return prefs.getString(Const.MACRO_PREF_PREFIX + mEntryId, null);
 	}
 	
 	
-	public static String getActionStringForPrimaryLayout(int id, boolean allowInputStickText) {
-		return getActionString(id, userPrefs.getLayoutPrimaryDisplayCode(), allowInputStickText);
+	public String getActionStringForPrimaryLayout(int id, boolean allowInputStickText) {
+		return getActionString(id, mUserPrefs.getLayoutPrimaryDisplayCode(), allowInputStickText);
 	}
-	public static String getActionStringForSecondaryLayout(int id, boolean allowInputStickText) {
-		return getActionString(id, userPrefs.getLayoutSecondaryDisplayCode(), allowInputStickText);
+	public String getActionStringForSecondaryLayout(int id, boolean allowInputStickText) {
+		return getActionString(id, mUserPrefs.getLayoutSecondaryDisplayCode(), allowInputStickText);
 	}
-	public static String getActionString(int id, boolean allowInputStickText) {
+	public String getActionString(int id, boolean allowInputStickText) {
 		return getActionString(id, null, allowInputStickText);
 	}	
 	
-	private static String getActionString(int id, String layoutCode, boolean allowInputStickText) {
-		String s = ctx.getString(id);
+	private String getActionString(int id, String layoutCode, boolean allowInputStickText) {
+		String s = mCtx.getString(id);
 		if (layoutCode != null) {
 			s += " (" + layoutCode + ")";
 		}
-		if ((allowInputStickText) && (userPrefs.isDisplayInputStickText())) {
+		if ((allowInputStickText) && (mUserPrefs.isDisplayInputStickText())) {
 			s += " (IS)";
 		}
 		return s;
 	}
 	
-	public static long getLastActivityTime() {
-		return lastActivityTime;
+	public long getPreviousEntryOpenTime() {
+		return mLastActivityTime;
 	}
 	
+	public void onEntryOpened() {
+		mLastActivityTime = System.currentTimeMillis();
+	}
 	
+	public void onEntryClosed() {
+		mEntryFields = null;
+		mEntryId = null;
+	}
+		
 	
-	public static void startSettingsActivity() {
-		Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
+	public void startSettingsActivity() {
+		Intent i = new Intent(mCtx.getApplicationContext(), SettingsActivity.class);
 		i.putExtra(Const.EXTRA_LAUNCHED_FROM_KP2A, true);				
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		ctx.getApplicationContext().startActivity(i);			
+		mCtx.getApplicationContext().startActivity(i);			
 	}
-	public static void startShowAllActivity() {
-		Intent i = new Intent(ctx.getApplicationContext(), AllActionsActivity.class);		
+	public void startShowAllActivity() {
+		Intent i = new Intent(mCtx.getApplicationContext(), AllActionsActivity.class);		
 		i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		ctx.getApplicationContext().startActivity(i);		
+		mCtx.getApplicationContext().startActivity(i);		
 	}
-	public static void startMacSetupActivity() {
+	public void startMacSetupActivity() {
 		connect();
-		Intent i = new Intent(ctx.getApplicationContext(), MacSetupActivity.class);
+		Intent i = new Intent(mCtx.getApplicationContext(), MacSetupActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		ctx.getApplicationContext().startActivity(i);			
+		mCtx.getApplicationContext().startActivity(i);			
 	}
 	
-	public static void startSelectTemplateActivity(String layoutName, boolean manage) {
-		Intent i = new Intent(ctx.getApplicationContext(), SelectTemplateActivity.class);	
+	public void startSelectTemplateActivity(String layoutName, boolean manage) {
+		Intent i = new Intent(mCtx.getApplicationContext(), SelectTemplateActivity.class);	
 		i.putExtra(Const.EXTRA_LAYOUT, layoutName);
 		i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 		i.putExtra(Const.EXTRA_TEMPLATE_MANAGE, manage);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		ctx.getApplicationContext().startActivity(i);		
+		mCtx.getApplicationContext().startActivity(i);		
 	}	
 	
 	
@@ -110,20 +155,20 @@ public class ActionManager {
 	
 	
 	
-	public static void connect() {
-		Intent serviceIntent = new Intent(ctx, InputStickService.class);
+	public void connect() {
+		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_CONNECT);
-		ctx.startService(serviceIntent);
+		mCtx.startService(serviceIntent);
 	}
 	
-	public static void disconnect() {
-		Intent serviceIntent = new Intent(ctx, InputStickService.class);
+	public void disconnect() {
+		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_DISCONNECT);
-		ctx.startService(serviceIntent);
+		mCtx.startService(serviceIntent);
 	}
 	
 	
-	public static void queueText(String text, String layout, int reportMultiplier) {
+	public void queueText(String text, String layout, int reportMultiplier) {
 		Bundle b = new Bundle();
 		b.putString(Const.EXTRA_ACTION, Const.ACTION_TYPE);		
 		b.putString(Const.EXTRA_TEXT, text);
@@ -132,44 +177,44 @@ public class ActionManager {
 		sendToService(b);	
 	}
 
-	public static void queueText(String text, String layout) {
-		queueText(text, layout, userPrefs.getReportMultiplier());
+	public void queueText(String text, String layout) {
+		queueText(text, layout, mUserPrefs.getReportMultiplier());
 	}
 	
-	public static void queueDelay(int value) {	
+	public void queueDelay(int value) {	
 		Bundle b = new Bundle();
 		b.putString(Const.EXTRA_ACTION, Const.ACTION_DELAY);		
 		b.putInt(Const.EXTRA_DELAY, value);
 		sendToService(b);
 	}
 	
-	public static void queueKey(byte modifier, byte key) {
+	public void queueKey(byte modifier, byte key) {
 		Bundle b = new Bundle();
 		b.putString(Const.EXTRA_ACTION, Const.ACTION_KEY_PRESS);		
 		b.putByte(Const.EXTRA_MODIFIER, modifier);
 		b.putByte(Const.EXTRA_KEY, key);
-		b.putInt(Const.EXTRA_REPORT_MULTIPLIER, userPrefs.getReportMultiplier());	
+		b.putInt(Const.EXTRA_REPORT_MULTIPLIER, mUserPrefs.getReportMultiplier());	
 		sendToService(b);		
 	}
 	
-	public static void sendToService(Bundle b) {
-		lastActivityTime = System.currentTimeMillis();
-		Intent serviceIntent = new Intent(ctx, InputStickService.class);
+	public void sendToService(Bundle b) {
+		mLastActivityTime = System.currentTimeMillis();
+		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_EXEC);
 		serviceIntent.putExtras(b);
-		ctx.startService(serviceIntent);
+		mCtx.startService(serviceIntent);
 	}
 
 	
 	
 	
 	
-	public static void typeUsernameAndPassword(String layoutName, boolean addEnter) {
-		queueText(entryFields.get(KeepassDefs.UserNameField), layoutName);
+	public void typeUsernameAndPassword(String layoutName, boolean addEnter) {
+		queueText(mEntryFields.get(KeepassDefs.UserNameField), layoutName);
 		queueDelay(5);
 		queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB);
 		queueDelay(5);
-		queueText(entryFields.get(KeepassDefs.PasswordField), layoutName);
+		queueText(mEntryFields.get(KeepassDefs.PasswordField), layoutName);
 		if (addEnter) {
 			queueDelay(5);
 			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
@@ -177,8 +222,8 @@ public class ActionManager {
 	}
 	
 	
-	public static void runMacro(String layoutName) {	
-		String macro = userPrefs.getMacro();	
+	public void runMacro(String layoutName) {	
+		String macro = getMacro();	
 		if ((macro != null) && (macro.length() > 0)) {
 			runMacro(layoutName, macro);
 		} else {
@@ -186,7 +231,7 @@ public class ActionManager {
 		}
 	}
 	
-	public static void runMacro(String layoutName, String macro) {		
+	public void runMacro(String layoutName, String macro) {		
 		if ((macro != null) && (macro.length() > 0)) {
 			boolean runInBackground = macro.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING);
 			String actions[] = macro.split("%");
@@ -196,12 +241,12 @@ public class ActionManager {
 					runMacroAction(layoutName, s);
 				}								
 			} else {
-				Intent i = new Intent(ctx.getApplicationContext(), MacroExecuteActivity.class);
+				Intent i = new Intent(mCtx.getApplicationContext(), MacroExecuteActivity.class);
 				i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 				i.putExtra(Const.EXTRA_MACRO_ACTIONS, actions);
 				i.putExtra(Const.EXTRA_LAYOUT, layoutName);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				ctx.getApplicationContext().startActivity(i);	
+				mCtx.getApplicationContext().startActivity(i);	
 			}			
 		}
 	}
@@ -210,17 +255,17 @@ public class ActionManager {
 	
 	
 	@SuppressLint("DefaultLocale")
-	public static void runMacroAction(String layoutName, String s) {
+	public void runMacroAction(String layoutName, String s) {
 		String tmp, param;
 		if ((s != null) && (s.length() > 0)) {
 			tmp = s.toLowerCase();
 			//no parameter
 			if (tmp.startsWith(MacroHelper.MACRO_ACTION_PASSWORD)) {
-				queueText(entryFields.get(KeepassDefs.PasswordField), layoutName);
+				queueText(mEntryFields.get(KeepassDefs.PasswordField), layoutName);
 			} else if (tmp.startsWith(MacroHelper.MACRO_ACTION_USER_NAME)) {
-				queueText(entryFields.get(KeepassDefs.UserNameField), layoutName);
+				queueText(mEntryFields.get(KeepassDefs.UserNameField), layoutName);
 			} else if (tmp.startsWith(MacroHelper.MACRO_ACTION_URL)) {
-				queueText(entryFields.get(KeepassDefs.UrlField), layoutName);
+				queueText(mEntryFields.get(KeepassDefs.UrlField), layoutName);
 			} else if (tmp.startsWith(MacroHelper.MACRO_ACTION_PASSWORD_MASKED)) {
 				openMaskedPassword(layoutName, false);
 			} else if (tmp.startsWith(MacroHelper.MACRO_ACTION_CLIPBOARD)) {
@@ -245,27 +290,27 @@ public class ActionManager {
 	
 	
 	
-	public static void clipboardTyping(String layoutName) {
+	public void clipboardTyping(String layoutName) {
 		connect(); //in case not connected already
-		if (userPrefs.isClipboardLaunchAuthenticator()) {
-			Intent launchIntent = ctx.getPackageManager().getLaunchIntentForPackage("com.google.android.apps.authenticator2");
+		if (mUserPrefs.isClipboardLaunchAuthenticator()) {
+			Intent launchIntent = mCtx.getPackageManager().getLaunchIntentForPackage("com.google.android.apps.authenticator2");
 			if (launchIntent != null) {
-				ctx.getApplicationContext().startActivity(launchIntent);
+				mCtx.getApplicationContext().startActivity(launchIntent);
 			} else {
-				Toast.makeText(ctx, R.string.text_authenticator_app_not_found, Toast.LENGTH_LONG).show();
+				Toast.makeText(mCtx, R.string.text_authenticator_app_not_found, Toast.LENGTH_LONG).show();
 			}						
 		}
 		
-		Intent i = new Intent(ctx, ClipboardService.class);
+		Intent i = new Intent(mCtx, ClipboardService.class);
 		i.putExtra(Const.EXTRA_LAYOUT, layoutName);
-		ctx.startService(i);
+		mCtx.startService(i);
 	}
 	
 	
-	public static void addEditMacro(boolean showEmptyMacroError, boolean templateMode, int templateId) {
-		Intent i = new Intent(ctx.getApplicationContext(), MacroActivity.class);
-		i.putExtra(Const.EXTRA_MACRO, userPrefs.getMacro());
-		i.putExtra(Const.EXTRA_ENTRY_ID, userPrefs.getEntryId());		
+	public void addEditMacro(boolean showEmptyMacroError, boolean templateMode, int templateId) {
+		Intent i = new Intent(mCtx.getApplicationContext(), MacroActivity.class);
+		i.putExtra(Const.EXTRA_MACRO, getMacro());
+		i.putExtra(Const.EXTRA_ENTRY_ID, mEntryId);		
 		if (showEmptyMacroError) {
 			i.putExtra(Const.EXTRA_MACRO_RUN_BUT_EMPTY, true);		
 		}
@@ -274,19 +319,19 @@ public class ActionManager {
 			i.putExtra(Const.EXTRA_TEMPLATE_ID, templateId);					
 		}		
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		ctx.getApplicationContext().startActivity(i);			
+		mCtx.getApplicationContext().startActivity(i);			
 	}
 	
-	public static void openMaskedPassword(String layoutName, boolean addClearFlags) {
+	public void openMaskedPassword(String layoutName, boolean addClearFlags) {
 		connect(); //in case not connected already
-		Intent i = new Intent(ctx.getApplicationContext(), MaskedPasswordActivity.class);
-		i.putExtra(Const.EXTRA_TEXT, entryFields.get(KeepassDefs.PasswordField));
+		Intent i = new Intent(mCtx.getApplicationContext(), MaskedPasswordActivity.class);
+		i.putExtra(Const.EXTRA_TEXT, mEntryFields.get(KeepassDefs.PasswordField));
 		i.putExtra(Const.EXTRA_LAYOUT, layoutName);
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (addClearFlags) {
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		}
-		ctx.getApplicationContext().startActivity(i);		
+		mCtx.getApplicationContext().startActivity(i);		
 	}	
 	
 }

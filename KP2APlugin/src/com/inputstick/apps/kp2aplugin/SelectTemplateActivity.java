@@ -26,6 +26,7 @@ public class SelectTemplateActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_select_template);
 		
+		final ActionManager actionManager = ActionManager.getInstance(this);
 		final String layoutName = getIntent().getStringExtra(Const.EXTRA_LAYOUT);		
 		final boolean manageMode = getIntent().getBooleanExtra(Const.EXTRA_TEMPLATE_MANAGE, false);
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -49,12 +50,12 @@ public class SelectTemplateActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View view, final int pos, long arg3) {
 				if (checkTime()) {
 					if (manageMode) {
-						ActionManager.addEditMacro(false, true, pos);
+						actionManager.addEditMacro(false, true, pos);
 						finish();
 					} else {					
 						String macro = TemplateHelper.loadTemplate(prefs, pos); 										
 						if ((macro != null) && (macro.length() > 0)) {
-							ActionManager.runMacro(layoutName, macro);
+							actionManager.runMacro(layoutName, macro);
 							finish();
 						} else {
 							AlertDialog.Builder alert = new AlertDialog.Builder(SelectTemplateActivity.this);
@@ -62,7 +63,7 @@ public class SelectTemplateActivity extends Activity {
 							alert.setMessage(R.string.template_empty_message);
 							alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int whichButton) {
-									ActionManager.addEditMacro(false, true, pos);
+									actionManager.addEditMacro(false, true, pos);
 								}
 							});
 							alert.setNegativeButton(R.string.cancel, null);

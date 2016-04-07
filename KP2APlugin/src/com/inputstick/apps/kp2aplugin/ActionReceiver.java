@@ -39,16 +39,19 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	
 	private static final int IC = R.drawable.ic_launcher;
 
-	private static UserPreferences userPrefs;
-
+	private static ActionManager actionManager;
 	
 	@Override
 	protected void openEntry(OpenEntryAction oe) {
 		Context ctx = null;
+		UserPreferences userPrefs = null;
+		long previousEntryOpenTime = 0;
 		try {			
 			ctx = oe.getContext();
-			ActionManager.init(ctx, oe.getEntryId(), oe.getEntryFields());
-			userPrefs = ActionManager.getUserPrefs();
+			actionManager = ActionManager.getInstance(ctx, oe.getEntryId(), oe.getEntryFields());
+			userPrefs = actionManager.getUserPrefs();
+			previousEntryOpenTime = actionManager.getPreviousEntryOpenTime();
+			actionManager.onEntryOpened();
 			
 			for (String field: oe.getEntryFields().keySet()) {
 				//primary layout
@@ -138,13 +141,15 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		}				
 
 		if (ctx != null) {
-			if ((userPrefs != null) && (userPrefs.isAutoConnect())) {
-				ActionManager.connect();
-			} else {			
-				if ((ActionManager.getLastActivityTime() != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < ActionManager.getLastActivityTime())) {
-					ActionManager.connect();
-				} 
-			}				
+			if (userPrefs != null) {
+				if (userPrefs.isAutoConnect()) {
+					actionManager.connect();
+				} else {	
+					if ((previousEntryOpenTime != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < previousEntryOpenTime)) {
+						actionManager.connect();
+					} 
+				}				
+			}
 			
 			
 			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
@@ -155,27 +160,36 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				ctx.getApplicationContext().startActivity(i);			
 		    }
 		}
+		
+		ActionManager.test();
 	}	
 	
 
 	
 	private void addEntryAction(OpenEntryAction oe, int nameResId, String action, int layoutType) throws PluginAccessException {
+		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
+		UserPreferences userPrefs = actionManager.getUserPrefs();
+		
 		Bundle b = new Bundle();
 		b.putString(Const.SELECTED_UI_ACTION, action);		
 		String displayText;
 		if (layoutType == LAYOUT_PRIMARY) {
 			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
-			displayText = ActionManager.getActionStringForPrimaryLayout(nameResId, true);
+			displayText = actionManager.getActionStringForPrimaryLayout(nameResId, true);
 		} else if (layoutType == LAYOUT_SECONDARY) {
 			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
-			displayText = ActionManager.getActionStringForSecondaryLayout(nameResId, true);
+			displayText = actionManager.getActionStringForSecondaryLayout(nameResId, true);
 		} else {
-			displayText = ActionManager.getActionString(nameResId, true);
+			displayText = actionManager.getActionString(nameResId, true);
 		}
 		oe.addEntryAction(displayText, IC, b);	
+		ActionManager.test();
 	}
 	
 	private void addEntryFieldTypeAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType) throws PluginAccessException {
+		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
+		UserPreferences userPrefs = actionManager.getUserPrefs();		
+		
 		int nameResId;		
 		Bundle b = new Bundle();	
 		if (slowTyping) {
@@ -187,64 +201,70 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		String displayText;
 		if (layoutType == LAYOUT_SECONDARY) {
 			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
-			displayText = ActionManager.getActionStringForSecondaryLayout(nameResId, true);
+			displayText = actionManager.getActionStringForSecondaryLayout(nameResId, true);
 		} else {
 			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
-			displayText = ActionManager.getActionStringForPrimaryLayout(nameResId, true);
+			displayText = actionManager.getActionStringForPrimaryLayout(nameResId, true);
 		}
 		oe.addEntryFieldAction(actionId, fieldId, displayText, IC, b);
+		ActionManager.test();
 	}
 	
 	
 	
 	@Override 
 	protected void closeEntryView(CloseEntryViewAction closeEntryView) {
+		actionManager = ActionManager.getInstance(closeEntryView.getContext());
 		try {
+			UserPreferences userPrefs = actionManager.getUserPrefs();		
 			if ((userPrefs != null) && (userPrefs.isDisconnectOnClose())) {		
-				ActionManager.disconnect();
+				actionManager.disconnect();
 			}	
 		} catch (Exception e) {			
 		}
+		actionManager.onEntryClosed();
+		ActionManager.test();
 	};
 	
 	@Override
 	protected void actionSelected(ActionSelectedAction actionSelected) {
-		ActionManager.update(actionSelected.getContext(), actionSelected.getEntryId(), actionSelected.getEntryFields());
+		actionManager = ActionManager.getInstance(actionSelected.getContext(), actionSelected.getEntryId(), actionSelected.getEntryFields());
+		UserPreferences userPrefs = actionManager.getUserPrefs();
 		
 		String layoutName = actionSelected.getActionData().getString(Const.EXTRA_LAYOUT, "en-US");		
 		if (actionSelected.isEntryAction()) {
 			String text = actionSelected.getActionData().getString(Const.SELECTED_UI_ACTION);
 						
 			if (ACTION_MASKED_PASSWORD.equals(text)) {
-				ActionManager.openMaskedPassword(layoutName, true);
+				actionManager.openMaskedPassword(layoutName, true);
 			} else if (ACTION_SETTINGS.equals(text)) {
-				ActionManager.startSettingsActivity();
+				actionManager.startSettingsActivity();
 			} else if (ACTION_SHOW_ALL.equals(text)) {
-				ActionManager.startShowAllActivity();
+				actionManager.startShowAllActivity();
 			} else if (ACTION_USER_PASS.equals(text)) {
-				ActionManager.typeUsernameAndPassword(layoutName, false);
+				actionManager.typeUsernameAndPassword(layoutName, false);
 			} else if (ACTION_USER_PASS_ENTER.equals(text)) {
-				ActionManager.typeUsernameAndPassword(layoutName, true);
+				actionManager.typeUsernameAndPassword(layoutName, true);
 			} else if (ACTION_MAC_SETUP.equals(text)) {
-				ActionManager.startMacSetupActivity();
+				actionManager.startMacSetupActivity();
 			} else if (ACTION_MACRO_ADDEDIT.equals(text)) {	
-				ActionManager.addEditMacro(false, false, 0);
+				actionManager.addEditMacro(false, false, 0);
 			} else if (ACTION_CLIPBOARD.equals(text)) {	
-				ActionManager.clipboardTyping(layoutName);
+				actionManager.clipboardTyping(layoutName);
 			} else if (ACTION_MACRO_RUN.equals(text)) {
-				ActionManager.runMacro(layoutName);
+				actionManager.runMacro(layoutName);
 			} else if (ACTION_TAB.equals(text)) {
-				ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB);
+				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB);
 			} else if (ACTION_ENTER.equals(text)) {
-				ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 			} else if (ACTION_CONNECT.equals(text)) {
-				ActionManager.connect();
+				actionManager.connect();
 			} else if (ACTION_DISCONNECT.equals(text)) {
-				ActionManager.disconnect();
+				actionManager.disconnect();
 			} else if (ACTION_TEMPLATE_RUN.equals(text)) {
-				ActionManager.startSelectTemplateActivity(layoutName, false);
+				actionManager.startSelectTemplateActivity(layoutName, false);
 			} else if (ACTION_TEMPLATE_MANAGE.equals(text)) {
-				ActionManager.startSelectTemplateActivity(layoutName, true);
+				actionManager.startSelectTemplateActivity(layoutName, true);
 			} 
 			
 		} else {
@@ -253,21 +273,25 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			String fieldKey = actionSelected.getFieldId().substring(Strings.PREFIX_STRING.length());
 			String text = actionSelected.getEntryFields().get(fieldKey);
 			if (typeSlow) {
-				ActionManager.queueText(text, layoutName, Const.SLOW_TYPING_MULTIPLIER);
+				actionManager.queueText(text, layoutName, Const.SLOW_TYPING_MULTIPLIER);
 			} else {
-				ActionManager.queueText(text, layoutName);
+				actionManager.queueText(text, layoutName);
 			}
 			
 			if ((userPrefs.isEnterAfterURL()) && ("URL".equals(fieldKey))) {
-				ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 			}			
 		}
+		ActionManager.test();
 	}		
 
 		
 
 	@Override
 	protected void entryOutputModified(EntryOutputModifiedAction eom) {	
+		actionManager = ActionManager.getInstance(eom.getContext(), eom.getEntryId(), eom.getEntryFields());
+		UserPreferences userPrefs = actionManager.getUserPrefs();
+		
 		try {						
 			//primary layout:
 			if (userPrefs.isShowType(true)) {
@@ -286,6 +310,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
 		}
+		ActionManager.test();
 	}
 
 

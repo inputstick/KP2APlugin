@@ -2,9 +2,7 @@ package com.inputstick.apps.kp2aplugin;
 
 import android.content.SharedPreferences;
 
-public class UserPreferences {		
-	
-	private SharedPreferences prefs;
+public class UserPreferences {			
 
 	private String layoutPrimary;
 	private String layoutSecondary;
@@ -16,10 +14,7 @@ public class UserPreferences {
 	private boolean autoConnect;
 	private int autoConnectTimeout;
 	private boolean disconnectOnClose;
-	private int reportMultiplier;
-	
-	private String macro;
-	private String entryId;
+	private int reportMultiplier;	
 	
 	//clipboard	
 	private boolean clipboardLaunchAuthenticator;
@@ -54,15 +49,11 @@ public class UserPreferences {
 	private boolean showTypeSlowSec;	
 	
 
-	public UserPreferences(SharedPreferences prefs, String id) {
-		this.prefs = prefs;
-		entryId = id;
-		reload();
+	public UserPreferences(SharedPreferences prefs) {
+		reload(prefs);
 	}
 	
-	public void reload() {
-		getMacro();		 //is always reloaded
-
+	public void reload(SharedPreferences prefs) {
 		layoutPrimary = prefs.getString("kbd_layout", "en-US");
 		layoutSecondary = prefs.getString("secondary_kbd_layout", "en-US");
 		showSecondary = prefs.getBoolean("show_secondary", false);	
@@ -81,6 +72,7 @@ public class UserPreferences {
 			reportMultiplier = 1;
 		}
 		
+		autoConnect = prefs.getBoolean("autoconnect", false);
 		disconnectOnClose = !prefs.getBoolean("do_not_disconnect", false);				
 		autoConnectTimeout = Const.DEFAULT_AUTOCONNECT_TIMEOUT_MS;
 		try {
@@ -267,14 +259,14 @@ public class UserPreferences {
 	
 	
 	
-	public String getMacro() {
+	/*public String getMacro() {
 		macro = prefs.getString(Const.MACRO_PREF_PREFIX + entryId, null);
 		return macro;
 	}
 	
 	public String getEntryId() {
 		return entryId;
-	}
+	}*/
 	
 	
 	public boolean isClipboardLaunchAuthenticator() {

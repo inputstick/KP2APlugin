@@ -254,7 +254,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	protected void onPause() {
 		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-		ActionManager.reloadPreferences();
+		ActionManager actionManager = ActionManager.getInstance(this);
+		actionManager.reloadPreferences(sharedPref);
 		super.onPause();				
 	}
 	

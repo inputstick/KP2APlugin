@@ -64,32 +64,34 @@ public class ClipboardService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		int action = 0;				
-		Bundle b = intent.getExtras();
-		if (b != null) {
-			action = b.getInt(Const.EXTRA_NOTIFICATION_ACTION, 0);
-		}
-		
-		if (action == ACTION_DISABLE) {
-			remainingTime = 0;
-		} else if (action == ACTION_EXTEND) {
-			remainingTime += MAX_EXTEND_TIME;	
-			if (remainingTime > MAX_ALLOWED_TIME) {
-				remainingTime = MAX_ALLOWED_TIME;
+		int action = 0;		
+		if (intent != null) {
+			Bundle b = intent.getExtras();
+			if (b != null) {
+				action = b.getInt(Const.EXTRA_NOTIFICATION_ACTION, 0);
 			}
-			showNotification();		
-		} else {
-			layout = intent.getStringExtra(Const.EXTRA_LAYOUT);
-			if (myClipBoard == null) {
-				myClipBoard = (ClipboardManager)getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-				myClipBoard.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
-			}		
-			delayhandler.removeCallbacksAndMessages(null);
-			delayhandler.postDelayed(mUpdateTimeTask, 1000);
-			remainingTime = Const.CLIPBOARD_TIMEOUT_MS / 1000;
-			Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
-			showNotification();		
-		}				
+			
+			if (action == ACTION_DISABLE) {
+				remainingTime = 0;
+			} else if (action == ACTION_EXTEND) {
+				remainingTime += MAX_EXTEND_TIME;	
+				if (remainingTime > MAX_ALLOWED_TIME) {
+					remainingTime = MAX_ALLOWED_TIME;
+				}
+				showNotification();		
+			} else {
+				layout = intent.getStringExtra(Const.EXTRA_LAYOUT);
+				if (myClipBoard == null) {
+					myClipBoard = (ClipboardManager)getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+					myClipBoard.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
+				}		
+				delayhandler.removeCallbacksAndMessages(null);
+				delayhandler.postDelayed(mUpdateTimeTask, 1000);
+				remainingTime = Const.CLIPBOARD_TIMEOUT_MS / 1000;
+				Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
+				showNotification();		
+			}				
+		}
 			
 		return START_NOT_STICKY;
 	}
@@ -102,14 +104,15 @@ public class ClipboardService extends Service {
 	        if (clipData.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 	           String text = clipData.getItemAt(0).getText().toString();
 	           if (text != null) {
+	        	   ActionManager actionManager = ActionManager.getInstance(ClipboardService.this);
 	        	   SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ClipboardService.this);
-	        	   UserPreferences userPrefs = ActionManager.getUserPrefs();
+	        	   UserPreferences userPrefs = actionManager.getUserPrefs();
 	        	   if ((text.length() > MAX_TEXT_LENGTH) && (prefs.getBoolean("clipboard_check_length", true))) {
 	        		   Toast.makeText(ClipboardService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
 	        	   } else {
-		        	   ActionManager.queueText(text, layout);
+	        		   actionManager.queueText(text, layout);
 		        	   if (userPrefs.isClipboardAutoEnter()) {
-		        		   ActionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+		        		   actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 		        	   }
 		        	   if (userPrefs.isClipboardAutoDisable()) {
 		        		   delayhandler.removeCallbacksAndMessages(null);

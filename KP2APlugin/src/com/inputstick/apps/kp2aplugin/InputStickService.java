@@ -192,7 +192,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				InputStickHID.setKeyboardReportMultiplier(mBundle.getInt(Const.EXTRA_REPORT_MULTIPLIER, 1));				
 				
 				if (Const.ACTION_TYPE.equals(action)) {
-					String text = mBundle.getString(Const.EXTRA_TEXT);
+					String text = mBundle.getString(Const.EXTRA_TEXT, "");
 					String layout = mBundle.getString(Const.EXTRA_LAYOUT);
 					if (InputStickKeyboard.isCapsLock()) {
 						long now = System.currentTimeMillis();

@@ -31,6 +31,7 @@ public class MacroExecuteActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_macro_execute);
 		
+		final ActionManager actionManager = ActionManager.getInstance(this);
 		maxTime = getIntent().getLongExtra(Const.EXTRA_MAX_TIME, 0);
 		lastActionTime = System.currentTimeMillis();
 		
@@ -43,7 +44,7 @@ public class MacroExecuteActivity extends Activity {
 					finish();
 				} else {
 					if (checkTime()) {
-						ActionManager.runMacroAction(layoutName, actions.get(index));
+						actionManager.runMacroAction(layoutName, actions.get(index));
 						goToNext();
 					}
 				}

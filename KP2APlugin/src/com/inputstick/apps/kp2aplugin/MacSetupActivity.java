@@ -24,7 +24,8 @@ public class MacSetupActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_mac_setup);
 
-		String layoutName = ActionManager.getUserPrefs().getLayoutPrimary();				
+		ActionManager actionManager = ActionManager.getInstance(this);
+		String layoutName = actionManager.getUserPrefs().getLayoutPrimary();				
 		KeyboardLayout layout = KeyboardLayout.getLayout(layoutName);
 		
 		TextView textViewLayoutInfo = (TextView)findViewById(R.id.textViewLayoutInfo);
