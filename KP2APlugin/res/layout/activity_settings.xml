@@ -75,7 +75,7 @@
             android:title="@string/autoconnect_title" />
         
         <ListPreference
-            android:defaultValue="600000"
+            android:defaultValue="0"
             android:entries="@array/autoconnect_timeout_names"
             android:entryValues="@array/autoconnect_timeout_values"
             android:key="autoconnect_timeout"

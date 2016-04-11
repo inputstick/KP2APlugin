@@ -29,8 +29,8 @@
     <string name="enter_after_url_summary_off">Do nothing after typing URL field</string>               
     
     <string name="autoconnect_title">Auto-connect</string>
-    <string name="autoconnect_summary_on">Connect to InputStick each time entry is being opened. Use this mode when InputStick is used most of the time.</string>
-    <string name="autoconnect_summary_off">Connect to InputStick before typing text OR when entry is being opened within \"Timeout\" (see below) since last typing action. Use this mode when InputStick is used occasionally</string>
+    <string name="autoconnect_summary_on">Connect to InputStick each time entry is opened. (InputStick is used most of the time)</string>
+    <string name="autoconnect_summary_off">Connect to InputStick only if typing is requested OR if entry is being opened within \"Timeout\" (see below) since last plugin action. (InputStick is used occasionally)</string>
     
     <string name="autoconnect_timeout_title">Timeout</string>
         
@@ -65,7 +65,8 @@
     
     <string-array name="layout_names">
         <item>Danish</item>
-        <item>English (US)</item>
+        <item>Dutch</item>        
+        <item>English (US/International)</item>
         <item>English (UK)</item>
         <item>Finnish</item>
         <item>French</item>
@@ -75,6 +76,7 @@
         <item>German (Mac)</item>
         <item>German (Switzerland)</item>
         <item>Hebrew</item>
+        <item>Hungarian</item>        
         <item>Italian</item>
         <item>Norwegian</item>
         <item>Polish</item>
@@ -105,6 +107,7 @@
     
     <string-array name="layout_values">
         <item>da-DK</item>
+        <item>nl-NL</item>        
         <item>en-US</item>
         <item>en-GB</item>
         <item>fi-FI</item>
@@ -115,6 +118,7 @@
         <item>de-DE-mac</item>
         <item>de-CH</item>
         <item>he-IL</item>
+        <item>hu-HU</item>        
         <item>it-IT</item>
         <item>nb-NO</item>
         <item>pl-PL</item>

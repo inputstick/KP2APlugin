@@ -21,7 +21,11 @@
   <body>
 $ 1.03
   % Version 1.03
-  	* Bug fixes (auto-connect option not working, app crashes) 
+  	* New keyboard layouts: nl-NL and hu-HU
+  	* en-US layout is now changed to US-International
+  	* Auto-connect option works now as intended when turned off
+  	* Auto-connect is now off by default, default timeout is 0 (disabled)     
+  	* Bug fixes
 $ 1.02
   % Version 1.02
   	_ <b>Manual for the plugin (pdf) is now available</b>   	  

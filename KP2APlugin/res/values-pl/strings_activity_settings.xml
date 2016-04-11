@@ -29,8 +29,8 @@
     <string name="enter_after_url_summary_off">Nic nie rób po wpisaniu pola URL</string>  
     
     <string name="autoconnect_title">Łącz automatycznie</string>
-    <string name="autoconnect_summary_on">Łącz z InputStick za każdym razem gdy otwierany jest wpis. Użyj tego trybu gdy korzystasz z InputStick przez większość czasu.</string>
-    <string name="autoconnect_summary_off">Łącz z InputStick tuż przed wpisywaniem tekstu LUB gdy wpis otwierany jest po upływie max okresu bezczynności (zobacz poniżej) od ostatniej akcji wpisywania tekstu. Użyj tego trybu gdy rzadko korzystasz z InputStick.</string>
+    <string name="autoconnect_summary_on">Łącz z InputStick za każdym razem gdy otwierany jest wpis. (Korzystasz z InputStick przez większość czasu)</string>
+    <string name="autoconnect_summary_off">Łącz z InputStick dopiero gdy trzeba wpisać tekst LUB gdy wpis otwierany jest przed upływem max okresu bezczynności (zobacz poniżej) od ostatniej akcji pluginu. (Korzystasz z InputStick tylko czasami)</string>
 
     <string name="autoconnect_timeout_title">Max okres bezczynności</string>
     
@@ -79,7 +79,8 @@
     
     <string-array name="layout_names">
         <item>Duński</item>
-        <item>Angielski (US)</item>
+        <item>Holenderski</item>
+        <item>Angielski (US/International)</item>
         <item>Angielski (UK)</item>
         <item>Fiński</item>
         <item>Francuski</item>
@@ -89,6 +90,7 @@
         <item>Niemiecki (Mac)</item>
         <item>Niemiecki (Szwajcaria)</item>
         <item>Hebrajski</item>
+        <item>Węgiersji</item>        
         <item>Włoski</item>
         <item>Norweski</item>
         <item>Polski</item>
