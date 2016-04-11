@@ -80,8 +80,9 @@
     <string-array name="layout_names">
         <item>Duński</item>
         <item>Holenderski</item>
+        <item>Angielski (UK)</item>        
         <item>Angielski (US/International)</item>
-        <item>Angielski (UK)</item>
+        <item>Angielski (US)</item>
         <item>Fiński</item>
         <item>Francuski</item>
 		<item>Francuski (Kanada)</item>        

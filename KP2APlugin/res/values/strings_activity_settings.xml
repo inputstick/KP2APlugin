@@ -65,9 +65,10 @@
     
     <string-array name="layout_names">
         <item>Danish</item>
-        <item>Dutch</item>        
-        <item>English (US/International)</item>
-        <item>English (UK)</item>
+        <item>Dutch</item>   
+        <item>English (UK)</item>        
+		<item>English (US/International)</item>             
+        <item>English (US)</item>
         <item>Finnish</item>
         <item>French</item>
         <item>French (Canada)</item>
@@ -107,9 +108,10 @@
     
     <string-array name="layout_values">
         <item>da-DK</item>
-        <item>nl-NL</item>        
+        <item>nl-NL</item>
+        <item>en-GB</item>              
+        <item>en-US-int</item>          
         <item>en-US</item>
-        <item>en-GB</item>
         <item>fi-FI</item>
         <item>fr-FR</item>
         <item>fr-CA</item>
