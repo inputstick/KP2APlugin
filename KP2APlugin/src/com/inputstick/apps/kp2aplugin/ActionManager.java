@@ -22,7 +22,7 @@ public class ActionManager {
 	
 	private static HashMap<String, String> mEntryFields;
 	private static String mEntryId;
-	private static long mLastActivityTime;
+	protected static long lastActivityTime;
 	
     private ActionManager() {
     }
@@ -58,14 +58,6 @@ public class ActionManager {
 		}
 		
 		return instance;
-	}
-	
-	public static void test() {
-		//TODO
-		//mCtx = null;
-		//mUserPrefs = null;
-		//mEntryFields = null;
-		//mEntryId = null;
 	}
 
 	
@@ -106,14 +98,6 @@ public class ActionManager {
 			s += " (IS)";
 		}
 		return s;
-	}
-	
-	public long getPreviousEntryOpenTime() {
-		return mLastActivityTime;
-	}
-	
-	public void onEntryOpened() {
-		mLastActivityTime = System.currentTimeMillis();
 	}
 	
 	public void onEntryClosed() {
@@ -198,7 +182,7 @@ public class ActionManager {
 	}
 	
 	public void sendToService(Bundle b) {
-		mLastActivityTime = System.currentTimeMillis();
+		lastActivityTime = System.currentTimeMillis();
 		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_EXEC);
 		serviceIntent.putExtras(b);

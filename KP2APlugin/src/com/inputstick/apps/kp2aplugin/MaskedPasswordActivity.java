@@ -199,6 +199,7 @@ public class MaskedPasswordActivity extends Activity {
 				char c = password.charAt(index);
 				String toType = String.valueOf(c);
 				if ((InputStickHID.isReady()) && (layout != null)) {
+					ActionManager.lastActivityTime = System.currentTimeMillis(); 
 					layout.type(toType);
 				} else {
 					Toast.makeText(this, R.string.not_ready, Toast.LENGTH_SHORT).show();

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.inputstick.api.basic.InputStickHID;
 import com.inputstick.api.hid.HIDKeycodes;
 
 public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadcastReceiver {
@@ -45,13 +46,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	protected void openEntry(OpenEntryAction oe) {
 		Context ctx = null;
 		UserPreferences userPrefs = null;
-		long previousEntryOpenTime = 0;
 		try {			
 			ctx = oe.getContext();
 			actionManager = ActionManager.getInstance(ctx, oe.getEntryId(), oe.getEntryFields());
-			userPrefs = actionManager.getUserPrefs();
-			previousEntryOpenTime = actionManager.getPreviousEntryOpenTime();
-			actionManager.onEntryOpened();
+			userPrefs = actionManager.getUserPrefs();	
 			
 			for (String field: oe.getEntryFields().keySet()) {
 				//primary layout
@@ -145,7 +143,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				if (userPrefs.isAutoConnect()) {
 					actionManager.connect();
 				} else {	
-					if ((previousEntryOpenTime != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < previousEntryOpenTime)) {
+					if ((ActionManager.lastActivityTime != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < ActionManager.lastActivityTime)) {
 						actionManager.connect();
 					} 
 				}				
@@ -160,8 +158,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				ctx.getApplicationContext().startActivity(i);			
 		    }
 		}
-		
-		ActionManager.test();
 	}	
 	
 
@@ -183,7 +179,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			displayText = actionManager.getActionString(nameResId, true);
 		}
 		oe.addEntryAction(displayText, IC, b);	
-		ActionManager.test();
 	}
 	
 	private void addEntryFieldTypeAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType) throws PluginAccessException {
@@ -207,7 +202,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			displayText = actionManager.getActionStringForPrimaryLayout(nameResId, true);
 		}
 		oe.addEntryFieldAction(actionId, fieldId, displayText, IC, b);
-		ActionManager.test();
 	}
 	
 	
@@ -216,6 +210,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	protected void closeEntryView(CloseEntryViewAction closeEntryView) {
 		actionManager = ActionManager.getInstance(closeEntryView.getContext());
 		try {
+			if ( !InputStickHID.isConnected()) {
+				ActionManager.lastActivityTime = 0;			
+			} 
+			
 			UserPreferences userPrefs = actionManager.getUserPrefs();		
 			if ((userPrefs != null) && (userPrefs.isDisconnectOnClose())) {		
 				actionManager.disconnect();
@@ -223,7 +221,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} catch (Exception e) {			
 		}
 		actionManager.onEntryClosed();
-		ActionManager.test();
 	};
 	
 	@Override
@@ -282,7 +279,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
 			}			
 		}
-		ActionManager.test();
 	}		
 
 		
@@ -310,7 +306,6 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
 		}
-		ActionManager.test();
 	}
 
 

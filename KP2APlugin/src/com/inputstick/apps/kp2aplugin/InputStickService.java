@@ -105,7 +105,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	public void onStateChanged(int state) {
 		Log.d(_TAG, "state changed: "+state);
 		switch (state) {
-			case ConnectionManager.STATE_READY:					
+			case ConnectionManager.STATE_READY:		
 				executeQueue();
 				break;
 			case ConnectionManager.STATE_DISCONNECTED:
