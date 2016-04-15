@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.04
+  % Version 1.04
+  	* fixed ^ character bug in fr-FR layout
 $ 1.03
   % Version 1.03
   	* New keyboard layouts: nl-NL, hu-HU and US-International
