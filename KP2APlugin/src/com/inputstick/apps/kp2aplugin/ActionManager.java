@@ -38,8 +38,9 @@ public class ActionManager {
 		
 		mCtx = ctx;		
 		if (mUserPrefs == null) {
-			mUserPrefs = new UserPreferences(PreferenceManager.getDefaultSharedPreferences(ctx));
-		}		
+			mUserPrefs = new UserPreferences(PreferenceManager.getDefaultSharedPreferences(ctx));			
+		}				
+		//System.out.println("L: " + mUserPrefs.getLayoutPrimary());
 		
 		if (entryFields != null) {
 			mEntryFields = entryFields;
