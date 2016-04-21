@@ -71,6 +71,7 @@
         <item>English (US)</item>
         <item>Finnish</item>
         <item>French</item>
+        <item>French (Linux)</item>        
         <item>French (Canada)</item>
         <item>French (Switzerland)</item>
         <item>German</item>
@@ -114,6 +115,7 @@
         <item>en-US</item>
         <item>fi-FI</item>
         <item>fr-FR</item>
+        <item>fr-FR-linux</item>        
         <item>fr-CA</item>
         <item>fr-CH</item>
         <item>de-DE</item>
