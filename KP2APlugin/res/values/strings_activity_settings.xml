@@ -82,6 +82,7 @@
         <item>Italian</item>
         <item>Norwegian</item>
         <item>Polish</item>
+        <item>Polish (Linux)</item>        
 		<item>Portuguese</item>        
         <item>Portuguese (Brazil)</item>
         <item>Russian</item>
@@ -126,6 +127,7 @@
         <item>it-IT</item>
         <item>nb-NO</item>
         <item>pl-PL</item>
+        <item>pl-PL-linux</item>        
         <item>pt-PT</item>
         <item>pt-BR</item>
         <item>ru-RU</item>

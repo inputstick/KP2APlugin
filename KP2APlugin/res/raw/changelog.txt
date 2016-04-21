@@ -21,6 +21,7 @@
   <body>
 $ 1.05
   % Version 1.05
+    * added pl-PL (Linux) keyboard layout  
   	* added fr-FR (Linux) keyboard layout
 $ 1.04
   % Version 1.04
