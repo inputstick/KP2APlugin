@@ -31,8 +31,10 @@ public class MacSetupActivity extends Activity {
 		TextView textViewLayoutInfo = (TextView)findViewById(R.id.textViewLayoutInfo);
 		textViewLayoutInfo.append(" " + layoutName);
 		
-		Button buttonNextToShift = (Button)findViewById(R.id.buttonNextToShift);		
-		buttonNextToShift.setOnClickListener(new OnClickListener() {			
+		Button buttonNextToShiftLeft;
+		Button buttonNextToShiftRight;
+		buttonNextToShiftLeft = (Button)findViewById(R.id.buttonNextToShiftLeft);		
+		buttonNextToShiftLeft.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
 					if (nonUS) {
@@ -40,6 +42,16 @@ public class MacSetupActivity extends Activity {
 					} else {
 						InputStickKeyboard.pressAndRelease(HIDKeycodes.NONE, HIDKeycodes.KEY_Z);
 					}
+				} else {				
+					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		buttonNextToShiftRight = (Button)findViewById(R.id.buttonNextToShiftRight);		
+		buttonNextToShiftRight.setOnClickListener(new OnClickListener() {			
+			public void onClick(View v) {
+				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
+					InputStickKeyboard.pressAndRelease(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH);
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
 				}
@@ -61,11 +73,12 @@ public class MacSetupActivity extends Activity {
 		}
 		if (nonUS) {
 			//non-US ISO
-			buttonNextToShift.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_BACKSLASH_NON_US), false, false, false)));
+			buttonNextToShiftLeft.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_BACKSLASH_NON_US), false, false, false)));
 		} else {
 			//US ANSI
-			buttonNextToShift.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_Z), false, false, false)));
+			buttonNextToShiftLeft.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_Z), false, false, false)));
 		}
+		buttonNextToShiftRight.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_SLASH), false, false, false)));
 	}
 
 
