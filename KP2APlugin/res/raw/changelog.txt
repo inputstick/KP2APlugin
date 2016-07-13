@@ -19,6 +19,11 @@
     </style>
   </head>
   <body>
+$ 1.06
+  % Version 1.06
+  	* added "key next to right shift" in Mac setup screen
+    * fixed crash when InputStickUtility is not installed  	
+    * fixed bug in hu-HU layout   
 $ 1.05
   % Version 1.05
     * added pl-PL (Linux) keyboard layout  
