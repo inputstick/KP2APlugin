@@ -2,7 +2,6 @@ package com.inputstick.apps.kp2aplugin;
 
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.inputstick.api.ConnectionManager;
+import com.inputstick.api.InputStickError;
 import com.inputstick.api.InputStickStateListener;
 import com.inputstick.api.basic.InputStickHID;
 import com.inputstick.api.basic.InputStickKeyboard;
@@ -114,14 +114,14 @@ public class InputStickService extends Service implements InputStickStateListene
 				break;
 			case ConnectionManager.STATE_FAILURE:
 				Log.d(_TAG, "stopping service. State = "+state);				
-				AlertDialog ad = InputStickHID.getDownloadDialog(this); 
-				if (ad != null) {
-					//InputStickUtility application not installed
-					//ad.show(); context - badtoken TODO launch separate activity to display download dialog
+				
+				// can't use: AlertDialog ad = InputStickHID.getDownloadDialog(this.getApplicationContext()); - badtoken exception				
+				if (InputStickHID.getErrorCode() == InputStickError.ERROR_ANDROID_NO_UTILITY_APP) {
 					Toast.makeText(this, R.string.text_missing_utility_app, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(this, R.string.text_connection_failed, Toast.LENGTH_LONG).show();
 				}
+				
 				stopSelf();
 				break;		
 			default:
