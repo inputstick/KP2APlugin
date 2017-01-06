@@ -2,7 +2,9 @@ package com.inputstick.apps.kp2aplugin;
 
 import android.content.SharedPreferences;
 
-public class UserPreferences {			
+public class UserPreferences {
+	
+	private boolean useBroadcasts;
 
 	private String layoutPrimary;
 	private String layoutSecondary;
@@ -54,6 +56,11 @@ public class UserPreferences {
 	}
 	
 	public void reload(SharedPreferences prefs) {
+		String tmp;
+		
+		tmp = prefs.getString("transfer_method", "standard");
+		useBroadcasts = tmp.contains("broadcast");
+		
 		layoutPrimary = prefs.getString("kbd_layout", "en-US");
 		layoutSecondary = prefs.getString("secondary_kbd_layout", "en-US");
 		showSecondary = prefs.getBoolean("show_secondary", false);	
@@ -82,7 +89,7 @@ public class UserPreferences {
 		}
 
 		displayInputstickText = prefs.getBoolean("display_inputstick_text", true);
-		String tmp;
+		
 		tmp = prefs.getString("items_general", "settings|osx|tab_enter|macro");
 		showSettings = tmp.contains(SettingsActivity.ITEM_SETTINGS);
 		showConnectionOptions = tmp.contains(SettingsActivity.ITEM_CONNECTION);	
@@ -125,7 +132,10 @@ public class UserPreferences {
 		clipboardAutoEnter = prefs.getBoolean("clipboard_auto_enter", false);
 		
 	}
-	
+
+	public boolean getUseBroadcasts() {
+		return useBroadcasts;
+	}
 
 	public String getLayoutPrimary() {
 		return layoutPrimary;
@@ -257,16 +267,7 @@ public class UserPreferences {
 		}
 	}
 	
-	
-	
-	/*public String getMacro() {
-		macro = prefs.getString(Const.MACRO_PREF_PREFIX + entryId, null);
-		return macro;
-	}
-	
-	public String getEntryId() {
-		return entryId;
-	}*/
+
 	
 	
 	public boolean isClipboardLaunchAuthenticator() {

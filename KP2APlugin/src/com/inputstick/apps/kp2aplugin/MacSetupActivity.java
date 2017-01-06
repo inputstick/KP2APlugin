@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.inputstick.api.ConnectionManager;
 import com.inputstick.api.basic.InputStickHID;
-import com.inputstick.api.basic.InputStickKeyboard;
 import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
 
@@ -24,7 +23,7 @@ public class MacSetupActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_mac_setup);
 
-		ActionManager actionManager = ActionManager.getInstance(this);
+		final ActionManager actionManager = ActionManager.getInstance(this);
 		String layoutName = actionManager.getUserPrefs().getLayoutPrimary();				
 		KeyboardLayout layout = KeyboardLayout.getLayout(layoutName);
 		
@@ -38,9 +37,9 @@ public class MacSetupActivity extends Activity {
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
 					if (nonUS) {
-						InputStickKeyboard.pressAndRelease(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US);
+						actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US);
 					} else {
-						InputStickKeyboard.pressAndRelease(HIDKeycodes.NONE, HIDKeycodes.KEY_Z);
+						actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_Z);
 					}
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
@@ -51,7 +50,7 @@ public class MacSetupActivity extends Activity {
 		buttonNextToShiftRight.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
-					InputStickKeyboard.pressAndRelease(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH);
+					actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH);
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
 				}

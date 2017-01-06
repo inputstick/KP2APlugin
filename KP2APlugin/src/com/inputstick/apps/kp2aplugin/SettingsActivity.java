@@ -27,6 +27,7 @@ import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {	
 	
+	private static final int TIP_DATA_TRANSFER_METHOD = 1;
 	
 	public static final String ITEMS_GENERAL = "items_general";
 	public static final String ITEMS_ENTRY_PRIMARY = "items_entry_primary";
@@ -117,6 +118,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		setListSummary("secondary_kbd_layout");
 		setListSummary("typing_speed");
 		setListSummary("autoconnect_timeout");		
+		setListSummary("transfer_method");
+		
         		
 		pref = findPreference("enable_plugin_pref");
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -209,6 +212,14 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
 		prefAutoconnectTimeout = (Preference) findPreference("autoconnect_timeout");
 		prefAutoconnectTimeout.setOnPreferenceClickListener(reloadInfoListener);		
+		
+		pref = (Preference)findPreference("transfer_method");
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				return displayTip(TIP_DATA_TRANSFER_METHOD);
+			}
+		});
 		
 		
 		//UI:
@@ -324,5 +335,33 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefSecondaryKbdLayout.setEnabled(enabled);
 	}		
 
+	
+	
+	private boolean displayTip(int tipId) {
+		String key = "show_tip_" + tipId; 		
+		if (sharedPref.getBoolean(key, true)) {
+			//tip was not displayed yet, display it now and never again
+			/*Editor editor = sharedPref.edit();
+			editor.putBoolean(key, false);
+			editor.apply();*/
+			
+			int resId = R.string.tip_empty;
+			switch (tipId) {
+				case TIP_DATA_TRANSFER_METHOD:
+					resId = R.string.tip_data_transfer_method; 
+					break;
+			}						
+			String message = getString(resId);			
+			
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle(R.string.tip_title);
+			alert.setMessage(message);			
+			alert.setNeutralButton(R.string.ok, null);	
+			alert.show();				
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }

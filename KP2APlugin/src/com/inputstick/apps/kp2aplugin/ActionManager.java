@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.inputstick.api.broadcast.InputStickBroadcast;
 import com.inputstick.api.hid.HIDKeycodes;
 
 public class ActionManager {
@@ -40,7 +41,6 @@ public class ActionManager {
 		if (mUserPrefs == null) {
 			mUserPrefs = new UserPreferences(PreferenceManager.getDefaultSharedPreferences(ctx));			
 		}				
-		//System.out.println("L: " + mUserPrefs.getLayoutPrimary());
 		
 		if (entryFields != null) {
 			mEntryFields = entryFields;
@@ -141,25 +141,38 @@ public class ActionManager {
 	
 	
 	public void connect() {
-		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
-		serviceIntent.setAction(Const.SERVICE_CONNECT);
-		mCtx.startService(serviceIntent);
+		if (mUserPrefs.getUseBroadcasts()) {
+			InputStickBroadcast.requestConnection(mCtx);
+		} else {
+			Intent serviceIntent = new Intent(mCtx, InputStickService.class);
+			serviceIntent.setAction(Const.SERVICE_CONNECT);
+			mCtx.startService(serviceIntent);
+		}
 	}
 	
 	public void disconnect() {
-		Intent serviceIntent = new Intent(mCtx, InputStickService.class);
-		serviceIntent.setAction(Const.SERVICE_DISCONNECT);
-		mCtx.startService(serviceIntent);
-	}
-	
+		if (mUserPrefs.getUseBroadcasts()) {
+			InputStickBroadcast.releaseConnection(mCtx);
+		} else {
+			Intent serviceIntent = new Intent(mCtx, InputStickService.class);
+			serviceIntent.setAction(Const.SERVICE_DISCONNECT);
+			mCtx.startService(serviceIntent);
+		}
+
+	}	
 	
 	public void queueText(String text, String layout, int reportMultiplier) {
-		Bundle b = new Bundle();
-		b.putString(Const.EXTRA_ACTION, Const.ACTION_TYPE);		
-		b.putString(Const.EXTRA_TEXT, text);
-		b.putString(Const.EXTRA_LAYOUT, layout);
-		b.putInt(Const.EXTRA_REPORT_MULTIPLIER, reportMultiplier);		
-		sendToService(b);	
+		if (mUserPrefs.getUseBroadcasts()) {
+			lastActivityTime = System.currentTimeMillis();
+			InputStickBroadcast.type(mCtx, text, layout, reportMultiplier);
+		} else {
+			Bundle b = new Bundle();
+			b.putString(Const.EXTRA_ACTION, Const.ACTION_TYPE);		
+			b.putString(Const.EXTRA_TEXT, text);
+			b.putString(Const.EXTRA_LAYOUT, layout);
+			b.putInt(Const.EXTRA_REPORT_MULTIPLIER, reportMultiplier);		
+			sendToService(b);
+		}
 	}
 
 	public void queueText(String text, String layout) {
@@ -167,20 +180,35 @@ public class ActionManager {
 	}
 	
 	public void queueDelay(int value) {	
-		Bundle b = new Bundle();
-		b.putString(Const.EXTRA_ACTION, Const.ACTION_DELAY);		
-		b.putInt(Const.EXTRA_DELAY, value);
-		sendToService(b);
+		if (mUserPrefs.getUseBroadcasts()) {
+			lastActivityTime = System.currentTimeMillis();
+			//TODO at this time it is not possible to add queue delays
+			for (int i = 0; i < value; i++) {
+				InputStickBroadcast.pressAndRelease(mCtx, (byte)0x00, (byte)0x00);
+			}
+		} else {
+			Bundle b = new Bundle();
+			b.putString(Const.EXTRA_ACTION, Const.ACTION_DELAY);		
+			b.putInt(Const.EXTRA_DELAY, value);
+			sendToService(b);
+		}
+
 	}
 	
 	public void queueKey(byte modifier, byte key) {
-		Bundle b = new Bundle();
-		b.putString(Const.EXTRA_ACTION, Const.ACTION_KEY_PRESS);		
-		b.putByte(Const.EXTRA_MODIFIER, modifier);
-		b.putByte(Const.EXTRA_KEY, key);
-		b.putInt(Const.EXTRA_REPORT_MULTIPLIER, mUserPrefs.getReportMultiplier());	
-		sendToService(b);		
+		if (mUserPrefs.getUseBroadcasts()) {
+			lastActivityTime = System.currentTimeMillis();
+			InputStickBroadcast.pressAndRelease(mCtx, modifier, key);
+		} else {
+			Bundle b = new Bundle();
+			b.putString(Const.EXTRA_ACTION, Const.ACTION_KEY_PRESS);		
+			b.putByte(Const.EXTRA_MODIFIER, modifier);
+			b.putByte(Const.EXTRA_KEY, key);
+			b.putInt(Const.EXTRA_REPORT_MULTIPLIER, mUserPrefs.getReportMultiplier());	
+			sendToService(b);
+		}		
 	}
+	
 	
 	public void sendToService(Bundle b) {
 		lastActivityTime = System.currentTimeMillis();
@@ -190,9 +218,7 @@ public class ActionManager {
 		mCtx.startService(serviceIntent);
 	}
 
-	
-	
-	
+			
 	
 	public void typeUsernameAndPassword(String layoutName, boolean addEnter) {
 		queueText(mEntryFields.get(KeepassDefs.UserNameField), layoutName);

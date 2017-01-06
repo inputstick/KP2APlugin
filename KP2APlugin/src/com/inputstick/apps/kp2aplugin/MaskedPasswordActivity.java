@@ -10,10 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
-
-import com.inputstick.api.basic.InputStickHID;
-import com.inputstick.api.layout.KeyboardLayout;
 
 public class MaskedPasswordActivity extends Activity {
 		
@@ -25,7 +21,7 @@ public class MaskedPasswordActivity extends Activity {
 	private MyButtonOnClickListener listener = new MyButtonOnClickListener();
 	
 	private String password;
-	private KeyboardLayout layout;	
+	private String layout;	
 			
 	private Button buttonPrev;
 	private Button buttonNext;
@@ -67,6 +63,8 @@ public class MaskedPasswordActivity extends Activity {
 			}
 	    }
 	};
+	
+	private ActionManager actionManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +73,8 @@ public class MaskedPasswordActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,  WindowManager.LayoutParams.FLAG_SECURE);
 
 		setContentView(R.layout.activity_masked_password);		
+		
+		actionManager = ActionManager.getInstance(this);
 		
 		timeLeftMessage = getString(R.string.time_left);
 		
@@ -113,7 +113,7 @@ public class MaskedPasswordActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		if (b != null) {				
 			password = b.getString(Const.EXTRA_TEXT, " ");
-			layout = KeyboardLayout.getLayout(b.getString(Const.EXTRA_LAYOUT, "en-US"));
+			layout = b.getString(Const.EXTRA_LAYOUT, "en-US");
 			wasClicked = new boolean[password.length()];			
 		}
 	
@@ -198,12 +198,13 @@ public class MaskedPasswordActivity extends Activity {
 				if (index < 0) return;
 				char c = password.charAt(index);
 				String toType = String.valueOf(c);
-				if ((InputStickHID.isReady()) && (layout != null)) {
+				actionManager.queueText(toType, layout);
+				/*if ((InputStickHID.isReady()) && (layout != null)) {
 					ActionManager.lastActivityTime = System.currentTimeMillis(); 
 					layout.type(toType);
 				} else {
 					Toast.makeText(this, R.string.not_ready, Toast.LENGTH_SHORT).show();
-				}
+				}*/
 			}
 		}
 	}
