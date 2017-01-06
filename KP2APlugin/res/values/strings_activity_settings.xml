@@ -40,11 +40,25 @@
     <string name="do_not_disconnect_summary_on">Connection will NOT be closed after closing entry. You must disconnect manually or set timeout in InputStickUtility application</string>           
     <string name="do_not_disconnect_summary_off">Connection will be closed after closing entry.</string>
 
+    <string name="transfer_method_title">Data transfer method</string>         
+    
     <string name="entry_reload_message">UI changes will be visible after entry is reloaded or new entry is opened</string>
     	
 	<string name="uninstall_title">Uninstall</string>  
 	<string name="uninstall_message">Uninstall previous release of the plugin now?\n\nRemember to configure current release: \"Configure as plugin\", set keyboard layout, etc.\n\n\"Open help webpage\" to learn about new features.</string>  
 	<string name="uninstall_toast">Uninstall old release of the plugin</string>	
+	
+
+	
+	<string-array name="transfer_method_values">
+        <item>standard</item>	    
+        <item>broadcast</item>
+    </string-array>	 
+    
+	<string-array name="transfer_method_names">
+        <item>Standard method</item>
+        <item>Use broadcasts (can solve connection issues on some devices)</item>
+    </string-array>	   
 	
         
 	<string-array name="autoconnect_timeout_names">
@@ -64,26 +78,30 @@
     </string-array>
     
     <string-array name="layout_names">
+        <item>Belgian</item>    
+        <item>Croatian</item>   
+		<item>Czech</item>                  
         <item>Danish</item>
-        <item>Dutch</item>   
-        <item>English (UK)</item>        
-		<item>English (US/International)</item>             
+        <item>Dutch</item>
+        <item>English (UK)</item>
+        <item>English (US/International)</item>
         <item>English (US)</item>
-        <item>Finnish</item>
+        <item>Finnish</item>        
         <item>French</item>
-        <item>French (Linux)</item>        
+        <item>French (Linux)</item>
         <item>French (Canada)</item>
         <item>French (Switzerland)</item>
         <item>German</item>
         <item>German (Mac)</item>
         <item>German (Switzerland)</item>
+        <item>Greek</item>
         <item>Hebrew</item>
-        <item>Hungarian</item>        
+        <item>Hungarian</item>
         <item>Italian</item>
         <item>Norwegian</item>
         <item>Polish</item>
-        <item>Polish (Linux)</item>        
-		<item>Portuguese</item>        
+        <item>Polish (Linux)</item>
+        <item>Portuguese</item>
         <item>Portuguese (Brazil)</item>
         <item>Russian</item>
         <item>Slovak</item>
@@ -109,25 +127,29 @@
     </string-array>	  
     
     <string-array name="layout_values">
+        <item>fr-BE</item>     
+        <item>hr-HR</item>          
+        <item>cs-CZ</item>              
         <item>da-DK</item>
         <item>nl-NL</item>
-        <item>en-GB</item>              
-        <item>en-US-int</item>          
+        <item>en-GB</item>
+        <item>en-US-int</item>
         <item>en-US</item>
-        <item>fi-FI</item>
+        <item>fi-FI</item>        
         <item>fr-FR</item>
-        <item>fr-FR-linux</item>        
+        <item>fr-FR-linux</item>
         <item>fr-CA</item>
         <item>fr-CH</item>
         <item>de-DE</item>
         <item>de-DE-mac</item>
         <item>de-CH</item>
+        <item>el-GR</item>
         <item>he-IL</item>
-        <item>hu-HU</item>        
+        <item>hu-HU</item>
         <item>it-IT</item>
         <item>nb-NO</item>
         <item>pl-PL</item>
-        <item>pl-PL-linux</item>        
+        <item>pl-PL-linux</item>
         <item>pt-PT</item>
         <item>pt-BR</item>
         <item>ru-RU</item>
@@ -204,6 +226,10 @@
     <string-array name="fieldItemsReturnList">
         <item>type_normal</item>
         <item>type_slow</item>
-    </string-array>      
+    </string-array>     
+    
+    <string name="tip_title">Tip:</string>
+    <string name="tip_empty">Error: empty message</string>
+    <string name="tip_data_transfer_method">If you are experiencing following issues:\n- connection failures,\n- text not being typed sometimes,\ntry \"Use broadcasts\" option, it can fix the issues on some devices\n\nIn most cases \"standard method\" works just fine and should not be changed.\nNote: change will be applied when new KP2A entry is opened.</string>
 
 </resources>

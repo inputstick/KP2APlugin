@@ -88,7 +88,16 @@
             android:key="do_not_disconnect"
             android:summaryOn="@string/do_not_disconnect_summary_on"
             android:summaryOff="@string/do_not_disconnect_summary_off"
-            android:title="@string/do_not_disconnect_title" />        
+            android:title="@string/do_not_disconnect_title" />    
+            
+        <ListPreference
+            android:defaultValue="standard"
+            android:entries="@array/transfer_method_names"
+            android:entryValues="@array/transfer_method_values"
+            android:key="transfer_method"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/transfer_method_title" />                   
         
     </PreferenceCategory>
     

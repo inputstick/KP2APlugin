@@ -40,6 +40,8 @@
     <string name="do_not_disconnect_summary_on">Połaczenie NIE zostanie zakończone gdy wpis jest zamykany. Musisz zakończyć połączenie ręcznie lub ustawić maks okres bezczynności w aplikacji InputStickUtility</string>           
     <string name="do_not_disconnect_summary_off">Połaczenie zostanie zakończone gdy wpis jest zamykany.</string>       
     
+    <string name="transfer_method_title">Transfer danych</string>       
+    
     <string name="entry_reload_message">Zmiany ustawień interfejsu będą widoczne po przeładowaniu wpisu lub po załadowaniu nowego wpisu</string>
     
     
@@ -59,7 +61,13 @@
 	<string name="clipboard_auto_disable_summary_off">Opcja zawsze aktywna przez 30 sekund od uruchomienia</string>
 	<string name="clipboard_check_length_title">Sprawdzaj długość</string>
 	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
-	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>	
+	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>
+	
+	
+	<string-array name="transfer_method_names">
+        <item>Metoda standardowa</item>
+        <item>Użyj broadcastów (rozwiązuje problemy z połączeniem na części urządzeń)</item>
+    </string-array>	
     
 	<string-array name="autoconnect_timeout_names">
         <item>Brak</item>
@@ -78,12 +86,15 @@
     </string-array>    
     
     <string-array name="layout_names">
+        <item>Belgijski</item>    
+        <item>Chorwacki</item> 
+		<item>Czeski</item>                      
         <item>Duński</item>
         <item>Holenderski</item>
         <item>Angielski (UK)</item>        
         <item>Angielski (US/International)</item>
         <item>Angielski (US)</item>
-        <item>Fiński</item>
+        <item>Fiński</item>       
         <item>Francuski</item>
         <item>Francuski (Linux)</item>        
 		<item>Francuski (Kanada)</item>        
@@ -91,12 +102,13 @@
         <item>Niemiecki</item>
         <item>Niemiecki (Mac)</item>
         <item>Niemiecki (Szwajcaria)</item>
+        <item>Grecki</item>
         <item>Hebrajski</item>
         <item>Węgiersji</item>        
         <item>Włoski</item>
         <item>Norweski</item>
         <item>Polski</item>
-        <item>Polski (Linux)</item>            
+        <item>Polski (Linux)</item>        
 		<item>Portugalski</item>         
         <item>Portugalski (Brazylia)</item>
         <item>Rosyjski</item>
@@ -137,5 +149,10 @@
         <item>Wpisz</item>
         <item>Wpisz (powoli)</item>
     </string-array>
+    
+    <string name="tip_title">Porada:</string>
+    <string name="tip_empty">Błąd: pusta wiadomość</string>
+    <string name="tip_data_transfer_method">Jeżeli występują następujące problemy:\n- błędy połączenia Bluetooth,\n- od czasu do czasu tekst nie jest wpisywany,\nwybierz opcję \"Użyj broadcastów\", na części urządzeń powinna rozwiązać te problemy.\n\nW większości przypadków \"Metoda standardowa\" działa poprawnie i nie powinna być zmieniana.\nZmiany zostaną zastosowane po otwarciu kolejnego wpisu w KP2A.</string>
+    
 
 </resources>

@@ -36,7 +36,7 @@
     <string name="action_masked_password">Maskowane hasło</string>
 	<string name="action_macro_run">Uruchom makro</string>   
 	<string name="action_template_run">Uruchom szablon</string>    
-	<string name="action_macro_add">Dodaj/Edytuj makro</string>
+	<string name="action_macro_add_edit">Dodaj/Edytuj makro</string>
 	<string name="action_template_manage">Zarządzaj szablonami</string>  
 	<string name="action_clipboard">Schowek/Authenticator</string>  
     
