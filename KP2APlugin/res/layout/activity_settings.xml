@@ -24,8 +24,6 @@
         
         <ListPreference
             android:defaultValue="en-US"
-            android:entries="@array/layout_names"
-            android:entryValues="@array/layout_values"
             android:key="kbd_layout"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
@@ -40,8 +38,6 @@
 
         <ListPreference
             android:defaultValue="en-US"
-            android:entries="@array/layout_names"
-            android:entryValues="@array/layout_values"
             android:key="secondary_kbd_layout"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"

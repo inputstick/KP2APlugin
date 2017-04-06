@@ -78,38 +78,6 @@
         <item>Slowest (0.1)</item>
     </string-array>
     
-    <string-array name="layout_names">
-        <item>Belgian</item>    
-        <item>Croatian</item>   
-		<item>Czech</item>                  
-        <item>Danish</item>
-        <item>Dutch</item>
-        <item>English (UK)</item>
-        <item>English (US/International)</item>
-        <item>English (US)</item>
-        <item>Finnish</item>        
-        <item>French</item>
-        <item>French (Linux)</item>
-        <item>French (Canada)</item>
-        <item>French (Switzerland)</item>
-        <item>German</item>
-        <item>German (Mac)</item>
-        <item>German (Switzerland)</item>
-        <item>Greek</item>
-        <item>Hebrew</item>
-        <item>Hungarian</item>
-        <item>Italian</item>
-        <item>Norwegian</item>
-        <item>Polish</item>
-        <item>Polish (Linux)</item>
-        <item>Portuguese</item>
-        <item>Portuguese (Brazil)</item>
-        <item>Russian</item>
-        <item>Slovak</item>
-        <item>Spanish</item>
-        <item>Swedish</item>
-        <item>English (Dvorak)</item>
-    </string-array>
         
 	<string-array name="autoconnect_timeout_values">
         <item>0</item>
@@ -128,38 +96,6 @@
         <item>10</item>
     </string-array>	  
     
-    <string-array name="layout_values">
-        <item>fr-BE</item>     
-        <item>hr-HR</item>          
-        <item>cs-CZ</item>              
-        <item>da-DK</item>
-        <item>nl-NL</item>
-        <item>en-GB</item>
-        <item>en-US-int</item>
-        <item>en-US</item>
-        <item>fi-FI</item>        
-        <item>fr-FR</item>
-        <item>fr-FR-linux</item>
-        <item>fr-CA</item>
-        <item>fr-CH</item>
-        <item>de-DE</item>
-        <item>de-DE-mac</item>
-        <item>de-CH</item>
-        <item>el-GR</item>
-        <item>he-IL</item>
-        <item>hu-HU</item>
-        <item>it-IT</item>
-        <item>nb-NO</item>
-        <item>pl-PL</item>
-        <item>pl-PL-linux</item>
-        <item>pt-PT</item>
-        <item>pt-BR</item>
-        <item>ru-RU</item>
-        <item>sk-SK</item>
-        <item>es-ES</item>
-        <item>sv-SE</item>
-        <item>en-DV</item>
-    </string-array>
         
 	<string name="display_inputstick_text_title">Display \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>           

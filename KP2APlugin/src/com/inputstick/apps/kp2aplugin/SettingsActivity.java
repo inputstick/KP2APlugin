@@ -21,6 +21,8 @@ import android.preference.PreferenceManager;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.inputstick.api.Util;
+import com.inputstick.api.layout.KeyboardLayout;
 import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 
 
@@ -88,9 +90,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		setupSimplePreferencesScreen();		
 		
 		ChangeLog cl = new ChangeLog(this);
-		setupCompleted = sharedPref.getBoolean("setup_completed", false);		
+		setupCompleted = sharedPref.getBoolean("setup_completed", false);
 		if ( !setupCompleted) {
-			if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
+			//start setup only if the plugin is not enabled in kp2a; otherwise assume it was already completed manually somehow
+			if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) { 
 				Intent intent = new Intent(this, SetupWizardActivity.class);
 				startActivity(intent);
 			}
@@ -115,6 +118,14 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private void setupSimplePreferencesScreen() {
 		Preference pref;	
+		
+		ListPreference listPref;
+		listPref = (ListPreference)findPreference("kbd_layout");
+		listPref.setEntries(KeyboardLayout.getLayoutNames(true));
+		listPref.setEntryValues(KeyboardLayout.getLayoutCodes());
+		listPref = (ListPreference)findPreference("secondary_kbd_layout");
+		listPref.setEntries(KeyboardLayout.getLayoutNames(true));
+		listPref.setEntryValues(KeyboardLayout.getLayoutCodes());
 		
 		setListSummary("kbd_layout");
 		setListSummary("secondary_kbd_layout");
@@ -255,10 +266,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		}
 		
-		//handle layout change in setup wizard
+		//handle layout change made in setup wizard
 		String layout = sharedPref.getString("kbd_layout", "en-US");				
-		String[] layoutValues = getResources().getStringArray(R.array.layout_values);	
-		String[] layoutNames = getResources().getStringArray(R.array.layout_names);	
+		String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());	
+		String[] layoutNames = Util.convertToStringArray(KeyboardLayout.getLayoutNames(true));	
 		int selectedLayout = Arrays.asList(layoutValues).indexOf(layout);
 		Preference pref  = findPreference("kbd_layout");
 		pref.setSummary(layoutNames[selectedLayout]);		

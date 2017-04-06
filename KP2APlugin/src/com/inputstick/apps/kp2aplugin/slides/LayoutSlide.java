@@ -12,10 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.inputstick.api.Util;
+import com.inputstick.api.layout.KeyboardLayout;
 import com.inputstick.apps.kp2aplugin.Const;
 import com.inputstick.apps.kp2aplugin.InputStickService;
 import com.inputstick.apps.kp2aplugin.R;
@@ -36,14 +39,16 @@ public class LayoutSlide extends Fragment {
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     	getView();
 		final View view = inflater.inflate(R.layout.slide_layout, container, false);
-		//TODO get locale?
-		
-		final String[] layoutValues = getResources().getStringArray(R.array.layout_values);				
+		//TODO get localeof the deivce?
+
+		final String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());		
 		int selectedLayout = Arrays.asList(layoutValues).indexOf(SlidesUtils.getLayout());	
 		
 		final EditText editTextTest = (EditText)view.findViewById(R.id.editTextTest);		
 		
-		final Spinner spinnerLayout = (Spinner)view.findViewById(R.id.spinnerLayout);		
+		final Spinner spinnerLayout = (Spinner)view.findViewById(R.id.spinnerLayout);	
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this.getContext(), android.R.layout.simple_spinner_item, KeyboardLayout.getLayoutNames(true));
+		spinnerLayout.setAdapter(adapter);
 		spinnerLayout.setSelection(selectedLayout, false);		
 		spinnerLayout.setOnItemSelectedListener(new OnItemSelectedListener() {
 

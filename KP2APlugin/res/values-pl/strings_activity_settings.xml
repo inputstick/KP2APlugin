@@ -86,39 +86,6 @@
         <item>Najwolniej (0.1)</item>
     </string-array>    
     
-    <string-array name="layout_names">
-        <item>Belgijski</item>    
-        <item>Chorwacki</item> 
-		<item>Czeski</item>                      
-        <item>Duński</item>
-        <item>Holenderski</item>
-        <item>Angielski (UK)</item>        
-        <item>Angielski (US/International)</item>
-        <item>Angielski (US)</item>
-        <item>Fiński</item>       
-        <item>Francuski</item>
-        <item>Francuski (Linux)</item>        
-		<item>Francuski (Kanada)</item>        
-        <item>Francuski (Szwajcaria)</item>
-        <item>Niemiecki</item>
-        <item>Niemiecki (Mac)</item>
-        <item>Niemiecki (Szwajcaria)</item>
-        <item>Grecki</item>
-        <item>Hebrajski</item>
-        <item>Węgiersji</item>        
-        <item>Włoski</item>
-        <item>Norweski</item>
-        <item>Polski</item>
-        <item>Polski (Linux)</item>        
-		<item>Portugalski</item>         
-        <item>Portugalski (Brazylia)</item>
-        <item>Rosyjski</item>
-        <item>Słowacki</item>
-        <item>Hiszpański</item>
-        <item>Szwedzki</item>
-        <item>Angielski (Dvorak)</item>
-    </string-array>
-    
     
 	<string name="display_inputstick_text_title">Wyświetlaj \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Pokaż nazwę akcji + (IS), przykład: Wpisz (IS)</string>           
