@@ -172,8 +172,8 @@ public class InputStickService extends Service implements InputStickStateListene
 		}		
 	}*/
 	
-	private long lastCapsLockWatningTime;
-	private static final long CAPSLOCK_WATNING_TIMEOUT = 10000;
+	private long lastCapsLockWarningTime;
+	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
 	
 	private class ItemToExecute {
 		public Bundle mBundle;
@@ -191,8 +191,8 @@ public class InputStickService extends Service implements InputStickStateListene
 					String layout = mBundle.getString(Const.EXTRA_LAYOUT);
 					if (InputStickKeyboard.isCapsLock()) {
 						long now = System.currentTimeMillis();
-						if (now > lastCapsLockWatningTime + CAPSLOCK_WATNING_TIMEOUT) {
-							lastCapsLockWatningTime = now;
+						if (now > lastCapsLockWarningTime + CAPSLOCK_WARNING_TIMEOUT) {
+							lastCapsLockWarningTime = now;
 							Toast.makeText(InputStickService.this, R.string.text_capslock_warning, Toast.LENGTH_LONG).show();
 						}
 					}
