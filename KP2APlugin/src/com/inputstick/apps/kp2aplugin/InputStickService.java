@@ -184,7 +184,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		public void execute() {
 			if ((InputStickHID.getState() == ConnectionManager.STATE_READY) && (mBundle != null)) {				
 				String action = mBundle.getString(Const.EXTRA_ACTION);
-				InputStickHID.setKeyboardReportMultiplier(mBundle.getInt(Const.EXTRA_REPORT_MULTIPLIER, 1));				
+				int speed = mBundle.getInt(Const.EXTRA_REPORT_MULTIPLIER, 1);
 				
 				if (Const.ACTION_TYPE.equals(action)) {
 					String text = mBundle.getString(Const.EXTRA_TEXT, "");
@@ -196,20 +196,20 @@ public class InputStickService extends Service implements InputStickStateListene
 							Toast.makeText(InputStickService.this, R.string.text_capslock_warning, Toast.LENGTH_LONG).show();
 						}
 					}
-					InputStickKeyboard.type(text, layout);							
+					InputStickKeyboard.type(text, layout, speed);							
 				} else if (Const.ACTION_KEY_PRESS.equals(action)) {
 					byte modifier = mBundle.getByte(Const.EXTRA_MODIFIER);
 					byte key = mBundle.getByte(Const.EXTRA_KEY);					
-					InputStickKeyboard.pressAndRelease(modifier, key);
+					InputStickKeyboard.pressAndRelease(modifier, key, speed);
 				} else if (Const.ACTION_DELAY.equals(action)) {
 					int reports = mBundle.getInt(Const.EXTRA_DELAY, 0) / 4; //1 report / 4ms
 					dummyKeyPresses(reports);
 				} else {
 					//unknown action type!
-				}				
-				InputStickHID.setKeyboardReportMultiplier(1);			
+				}							
 			}
 		}
+		
 	}
 
 

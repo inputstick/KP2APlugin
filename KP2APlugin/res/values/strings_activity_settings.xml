@@ -71,6 +71,7 @@
     </string-array>	 
     
 	<string-array name="typing_speed_names">
+	    <item>Fastest (>2.0)</item> 
         <item>Normal (1.0)</item>
         <item>Slow (0.5)</item>
         <item>Slower (0.2)</item>
@@ -120,6 +121,7 @@
     </string-array>	      
     
 	<string-array name="typing_speed_values">
+	    <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>5</item>
@@ -230,6 +232,8 @@
     
     <string name="tip_title">Tip:</string>
     <string name="tip_empty">Error: empty message</string>
-    <string name="tip_data_transfer_method">If you are experiencing following issues:\n- connection failures,\n- text not being typed sometimes,\ntry \"Use broadcasts\" option, it can fix the issues on some devices\n\nIn most cases \"standard method\" works just fine and should not be changed.\nNote: change will be applied when new KP2A entry is opened.</string>
+    <string name="tip_data_transfer_method">If you are experiencing following issues:\n- connection failures,\n- text not being typed sometimes,\ntry \"Use broadcasts\" option, it can fix the issues on some devices\n\nIn most cases \"standard method\" works just fine and should not be changed.\nNote: change will be applied when new KP2A entry is opened.</string>    
+	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>        
+       
 
 </resources>

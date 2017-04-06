@@ -79,6 +79,7 @@
     </string-array>	     
     
 	<string-array name="typing_speed_names">
+	    <item>Najszybsza (>2.0)</item>      
         <item>Standardowa (1.0)</item>
         <item>Wolno (0.5)</item>
         <item>Wolniej (0.2)</item>
@@ -152,7 +153,8 @@
     
     <string name="tip_title">Porada:</string>
     <string name="tip_empty">Błąd: pusta wiadomość</string>
-    <string name="tip_data_transfer_method">Jeżeli występują następujące problemy:\n- błędy połączenia Bluetooth,\n- od czasu do czasu tekst nie jest wpisywany,\nwybierz opcję \"Użyj broadcastów\", na części urządzeń powinna rozwiązać te problemy.\n\nW większości przypadków \"Metoda standardowa\" działa poprawnie i nie powinna być zmieniana.\nZmiany zostaną zastosowane po otwarciu kolejnego wpisu w KP2A.</string>
+    <string name="tip_data_transfer_method">Jeżeli występują następujące problemy:\n- błędy połączenia Bluetooth,\n- od czasu do czasu tekst nie jest wpisywany,\nwybierz opcję \"Użyj broadcastów\", na części urządzeń powinna rozwiązać te problemy.\n\nW większości przypadków \"Metoda standardowa\" działa poprawnie i nie powinna być zmieniana.\nZmiany zostaną zastosowane po otwarciu kolejnego wpisu w KP2A.</string>    
+	<string name="tip_typing_speed">Upewnij się, że wybrana opcja działa poprawnie! W niektórych sytuacjach (BIOS) test może nie być wpisywany poprawnie.</string>    
     
 
 </resources>

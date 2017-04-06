@@ -28,6 +28,8 @@ import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {	
 	
 	private static final int TIP_DATA_TRANSFER_METHOD = 1;
+	private static final int TIP_TYPING_SPEED = 2;
+	
 	
 	public static final String ITEMS_GENERAL = "items_general";
 	public static final String ITEMS_ENTRY_PRIMARY = "items_entry_primary";
@@ -217,7 +219,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				return displayTip(TIP_DATA_TRANSFER_METHOD);
+				return displayTip(TIP_DATA_TRANSFER_METHOD, false);
 			}
 		});
 		
@@ -271,7 +273,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	}
 	
 	@Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {                
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("typing_speed")) {
+        	if (sharedPreferences.getString("typing_speed", "1").equals("0")) {        		
+        		displayTip(TIP_TYPING_SPEED, false);
+        	}
+        }
+        
         setListSummary(key);
     }
 	
@@ -337,19 +345,24 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 	
 	
-	private boolean displayTip(int tipId) {
+	private boolean displayTip(int tipId, boolean displayOnce) {
 		String key = "show_tip_" + tipId; 		
 		if (sharedPref.getBoolean(key, true)) {
-			//tip was not displayed yet, display it now and never again
-			/*Editor editor = sharedPref.edit();
-			editor.putBoolean(key, false);
-			editor.apply();*/
+			if (displayOnce) {
+				//tip was not displayed yet, display it now and never again
+				/*Editor editor = sharedPref.edit();
+				editor.putBoolean(key, false);
+				editor.apply();*/
+			}
 			
 			int resId = R.string.tip_empty;
 			switch (tipId) {
 				case TIP_DATA_TRANSFER_METHOD:
 					resId = R.string.tip_data_transfer_method; 
 					break;
+				case TIP_TYPING_SPEED:
+					resId = R.string.tip_typing_speed; 
+					break;					
 			}						
 			String message = getString(resId);			
 			

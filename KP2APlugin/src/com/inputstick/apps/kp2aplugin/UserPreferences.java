@@ -78,6 +78,9 @@ public class UserPreferences {
 		} catch (Exception e) {	
 			reportMultiplier = 1;
 		}
+		if (reportMultiplier > 10) {
+			reportMultiplier = 10;
+		}
 		
 		autoConnect = prefs.getBoolean("autoconnect", false);
 		disconnectOnClose = !prefs.getBoolean("do_not_disconnect", false);				
