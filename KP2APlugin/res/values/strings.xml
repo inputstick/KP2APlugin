@@ -57,6 +57,9 @@
     <string name="configuration_title">Configuration</string>
     
     <string name="title_activity_about">About application</string>
-    <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>        
+    <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
+    
+    <string name="test_chars">abc123xyz_;![/?@)</string>
+    
 
 </resources>

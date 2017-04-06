@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:text="abc123xyz_;![/?@)"
+                android:text="@string/test_chars"
                 android:inputType="text"
                 android:singleLine="true" />
             
