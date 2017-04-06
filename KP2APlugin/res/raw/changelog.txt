@@ -19,6 +19,11 @@
     </style>
   </head>
   <body>
+$ 1.08
+  % Version 1.08
+  	_ <a href="http://blog.inputstick.com/2017/04/kp2a-plugin-v108.html">(More info)</a>   
+  	* added option for faster text typing
+  	* keyboard layouts are now named in both English and its native language
 $ 1.07
   % Version 1.07
   	_ <a href="http://blog.inputstick.com/2017/01/kp2a-plugin-v107.html">(More info)</a>   
