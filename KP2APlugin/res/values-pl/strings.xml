@@ -12,8 +12,12 @@
          
     <string name="title_activity_init">Plugin Init</string>
 	<string name="title_activity_all_actions">Wybierz akcję:</string>
+	<string name="title_activity_select_app">Wybierz aplikację:</string>
+    <string name="text_please_wait">Proszę czekać</string>
 	<string name="text_locked">Zablokowano po 3 minutach bezczynności. Otwórz ponownie z aplikacji Keepass2Android.</string>  
-	<string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator NIE jest zainstalowany!</string>  
+	<string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator NIE jest zainstalowany!</string>
+	<string name="text_custom_app_not_found">InputStick plugin: NIE odnaleziono aplikacji!</string>
+    <string name="text_custom_app_not_specified">InputStick plugin: NIE wybrano aplikacji do uruchomienia (napraw w ustawieniach)!</string>
 	<string name="text_connection_failed">InputStick plugin: błąd połaczenia!</string>  
 	<string name="text_clipboard_disabled">InputStick plugin: Pisanie ze schowka zostało wyłączone</string>  
 	<string name="text_clipboard_notification_info">Pisanie ze schowka aktywne</string>
@@ -38,7 +42,7 @@
 	<string name="action_template_run">Uruchom szablon</string>    
 	<string name="action_macro_add_edit">Dodaj/Edytuj makro</string>
 	<string name="action_template_manage">Zarządzaj szablonami</string>  
-	<string name="action_clipboard">Schowek/Authenticator</string>  
+	<string name="action_clipboard">Schowek</string>  
     
     <string name="ok">OK</string>
     <string name="yes">Tak</string>

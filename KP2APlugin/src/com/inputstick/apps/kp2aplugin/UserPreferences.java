@@ -20,6 +20,9 @@ public class UserPreferences {
 	
 	//clipboard	
 	private boolean clipboardLaunchAuthenticator;
+	private boolean clipboardLaunchCustomApp;
+	private String	clipboardCustomAppPackage;
+	private String 	clipboardCustomAppName;
 	private boolean clipboardAutoDisable;
 	private boolean clipboardAutoEnter;
 
@@ -131,6 +134,9 @@ public class UserPreferences {
 		}		
 		
 		clipboardLaunchAuthenticator = prefs.getBoolean("clipboard_launch_authenticator", true);
+		clipboardLaunchCustomApp = prefs.getBoolean("clipboard_launch_custom_app", false);
+		clipboardCustomAppPackage = prefs.getString("clipboard_custom_app_package", "none");
+		clipboardCustomAppName = prefs.getString("clipboard_custom_app_name", "Unknown app");
 		clipboardAutoDisable = prefs.getBoolean("clipboard_auto_disable", true);
 		clipboardAutoEnter = prefs.getBoolean("clipboard_auto_enter", false);
 		
@@ -275,6 +281,15 @@ public class UserPreferences {
 	
 	public boolean isClipboardLaunchAuthenticator() {
 		return clipboardLaunchAuthenticator;
+	}
+	public boolean isClipboardLaunchCustomApp() {
+		return clipboardLaunchCustomApp;
+	}
+	public String getClipboardCustomAppPackage() {
+		return clipboardCustomAppPackage;
+	}
+	public String getClipboardCustomAppName() {
+		return clipboardCustomAppName;
 	}
 	public boolean isClipboardAutoDisable() {
 		return clipboardAutoDisable;

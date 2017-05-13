@@ -53,6 +53,12 @@
 	<string name="clipboard_launch_authenticator_title">Google Authenticator</string>
 	<string name="clipboard_launch_authenticator_summary_on">Uruchom Google Authenticator po wybraniu opcji pisanie ze schowka</string>
 	<string name="clipboard_launch_authenticator_summary_off">Nie uruchamiaj Google Authenticator</string>
+	<string name="clipboard_launch_custom_app_title">Uruchom wybraną aplikację</string>
+	<string name="clipboard_launch_custom_app_summary_on">Uruchom aplikację wskazaną poniżej po wybraniu opcji pisanie ze schowka</string>
+	<string name="clipboard_launch_custom_app_summary_off">Nie uruchamiaj aplikacji</string>
+	<string name="clipboard_custom_app_title">Wybrana aplikacja</string>
+	<string name="clipboard_custom_app_not_selected">Nie wybrano</string>	
+	<string name="clipboard_custom_app_unknown">Nieznana aplikacja</string>
 	<string name="clipboard_auto_enter_title">Dodaj Enter</string>
 	<string name="clipboard_auto_enter_summary_on">Dodaj Enter po wpisaniu tekstu ze schowka</string>
 	<string name="clipboard_auto_enter_summary_off">Nic nie rób po wpisaniu tekstu ze schowka</string>

@@ -104,7 +104,19 @@
             android:key="clipboard_launch_authenticator"
             android:summaryOn="@string/clipboard_launch_authenticator_summary_on"
             android:summaryOff="@string/clipboard_launch_authenticator_summary_off"
-            android:title="@string/clipboard_launch_authenticator_title" />           
+            android:title="@string/clipboard_launch_authenticator_title" />    
+            
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="clipboard_launch_custom_app"
+            android:summaryOn="@string/clipboard_launch_custom_app_summary_on"
+            android:summaryOff="@string/clipboard_launch_custom_app_summary_off"
+            android:title="@string/clipboard_launch_custom_app_title" />      
+        
+	    <Preference
+	        android:key="clipboard_custom_app_package"
+	        android:title="@string/clipboard_custom_app_title" >
+	    </Preference>          
         
         <CheckBoxPreference
             android:defaultValue="false"

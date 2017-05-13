@@ -109,9 +109,15 @@
 	
 	
 	<string name="clipboard_typing_settings_title">Clipboard typing</string>	
-	<string name="clipboard_launch_authenticator_title">Google Authenticator</string>
+	<string name="clipboard_launch_authenticator_title">Launch Google Authenticator</string>
 	<string name="clipboard_launch_authenticator_summary_on">Launch Google Authenticator app when clipboard typing is activated</string>
 	<string name="clipboard_launch_authenticator_summary_off">Do not launch Google Authenticator app</string>
+	<string name="clipboard_launch_custom_app_title">Launch custom app</string>
+	<string name="clipboard_launch_custom_app_summary_on">Launch app selected below when clipboard typing is activated</string>
+	<string name="clipboard_launch_custom_app_summary_off">Do not launch custom app</string>
+	<string name="clipboard_custom_app_title">Custom app</string>
+	<string name="clipboard_custom_app_not_selected">App not selected</string>	
+	<string name="clipboard_custom_app_unknown">Unknown app</string>		
 	<string name="clipboard_auto_enter_title">Add Enter</string>
 	<string name="clipboard_auto_enter_summary_on">Press Enter key after typing</string>
 	<string name="clipboard_auto_enter_summary_off">Do nothing after typing</string>
@@ -169,7 +175,6 @@
     <string name="tip_title">Tip:</string>
     <string name="tip_empty">Error: empty message</string>
     <string name="tip_data_transfer_method">If you are experiencing following issues:\n- connection failures,\n- text not being typed sometimes,\ntry \"Use broadcasts\" option, it can fix the issues on some devices\n\nIn most cases \"standard method\" works just fine and should not be changed.\nNote: change will be applied when new KP2A entry is opened.</string>    
-	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>        
-       
+	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>        	 	
 
 </resources>

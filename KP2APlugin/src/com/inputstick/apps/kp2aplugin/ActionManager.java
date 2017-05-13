@@ -83,15 +83,36 @@ public class ActionManager {
 	public String getActionStringForPrimaryLayout(int id, boolean allowInputStickText) {
 		return getActionString(id, mUserPrefs.getLayoutPrimaryDisplayCode(), allowInputStickText);
 	}
+	
+	public String getActionStringForPrimaryLayout(String actionText, boolean allowInputStickText) {
+		return getActionString(actionText, mUserPrefs.getLayoutPrimaryDisplayCode(), allowInputStickText);
+	}
+	
+	
 	public String getActionStringForSecondaryLayout(int id, boolean allowInputStickText) {
 		return getActionString(id, mUserPrefs.getLayoutSecondaryDisplayCode(), allowInputStickText);
 	}
+		
+	public String getActionStringForSecondaryLayout(String actionText, boolean allowInputStickText) {
+		return getActionString(actionText, mUserPrefs.getLayoutSecondaryDisplayCode(), allowInputStickText);
+	}
+	
+	
 	public String getActionString(int id, boolean allowInputStickText) {
 		return getActionString(id, null, allowInputStickText);
 	}	
 	
+	public String getActionString(String actionText, boolean allowInputStickText) {
+		return getActionString(actionText, null, allowInputStickText);
+	}	
+	
+	
 	private String getActionString(int id, String layoutCode, boolean allowInputStickText) {
-		String s = mCtx.getString(id);
+		return getActionString(mCtx.getString(id), layoutCode, allowInputStickText);
+	}
+	
+	private String getActionString(String actionText, String layoutCode, boolean allowInputStickText) {
+		String s = actionText;
 		if (layoutCode != null) {
 			s += " (" + layoutCode + ")";
 		}
@@ -310,7 +331,21 @@ public class ActionManager {
 			} else {
 				Toast.makeText(mCtx, R.string.text_authenticator_app_not_found, Toast.LENGTH_LONG).show();
 			}						
+		} else if (mUserPrefs.isClipboardLaunchCustomApp()) {
+			String customPackage = mUserPrefs.getClipboardCustomAppPackage();
+			if ("none".equals(customPackage)) {
+				Toast.makeText(mCtx, R.string.text_custom_app_not_specified, Toast.LENGTH_LONG).show();
+			} else {
+				Intent launchIntent = mCtx.getPackageManager().getLaunchIntentForPackage(customPackage);
+				if (launchIntent != null) {
+					mCtx.getApplicationContext().startActivity(launchIntent);
+				} else {
+					String message = mCtx.getString(R.string.text_custom_app_not_found) + " (" + customPackage + ")";
+					Toast.makeText(mCtx, message, Toast.LENGTH_LONG).show();
+				}		
+			}
 		}
+		
 		
 		Intent i = new Intent(mCtx, ClipboardService.class);
 		i.putExtra(Const.EXTRA_LAYOUT, layoutName);

@@ -112,7 +112,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			} 
 			
 			if (userPrefs.isShowClipboard(true)) {
-				addEntryAction(oe, R.string.action_clipboard, ACTION_CLIPBOARD, LAYOUT_PRIMARY);		
+				addEntryAction(oe, getTextForClipboardAction(ctx, userPrefs), ACTION_CLIPBOARD, LAYOUT_PRIMARY);		
 			}				
 			
 			//entry items, secondary layout 
@@ -131,8 +131,8 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			if (userPrefs.isShowRunTemplate(false)) {
 				addEntryAction(oe, R.string.action_template_run, ACTION_TEMPLATE_RUN, LAYOUT_SECONDARY);
 			}			
-			if (userPrefs.isShowClipboard(false)) {
-				addEntryAction(oe, R.string.action_clipboard, ACTION_CLIPBOARD, LAYOUT_SECONDARY);
+			if (userPrefs.isShowClipboard(false)) {				
+				addEntryAction(oe, getTextForClipboardAction(ctx, userPrefs), ACTION_CLIPBOARD, LAYOUT_SECONDARY);	
 			}			
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
@@ -160,10 +160,38 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		}
 	}	
 	
+	private String getTextForClipboardAction(Context ctx, UserPreferences userPrefs) {
+		String actionName = ctx.getString(R.string.action_clipboard);
+		if (userPrefs.isClipboardLaunchAuthenticator()) {
+			actionName += "/Authenticator";
+		} else if (userPrefs.isClipboardLaunchCustomApp()) {
+			actionName += "/" + userPrefs.getClipboardCustomAppName();
+		}
+		return actionName;
+	}
 
+	private void addEntryAction(OpenEntryAction oe, String actionText, String action, int layoutType) throws PluginAccessException {
+		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
+		UserPreferences userPrefs = actionManager.getUserPrefs();
+		
+		Bundle b = new Bundle();
+		b.putString(Const.SELECTED_UI_ACTION, action);		
+		String displayText;
+		if (layoutType == LAYOUT_PRIMARY) {
+			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
+			displayText = actionManager.getActionStringForPrimaryLayout(actionText, true);
+		} else if (layoutType == LAYOUT_SECONDARY) {
+			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
+			displayText = actionManager.getActionStringForSecondaryLayout(actionText, true);
+		} else {
+			displayText = actionManager.getActionString(actionText, true);
+		}
+		oe.addEntryAction(displayText, IC, b);
+	}
 	
 	private void addEntryAction(OpenEntryAction oe, int nameResId, String action, int layoutType) throws PluginAccessException {
-		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
+		addEntryAction(oe, oe.getContext().getString(nameResId), action, layoutType);
+		/*actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
 		UserPreferences userPrefs = actionManager.getUserPrefs();
 		
 		Bundle b = new Bundle();
@@ -178,7 +206,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} else {
 			displayText = actionManager.getActionString(nameResId, true);
 		}
-		oe.addEntryAction(displayText, IC, b);	
+		oe.addEntryAction(displayText, IC, b);	*/
 	}
 	
 	private void addEntryFieldTypeAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType) throws PluginAccessException {

@@ -100,7 +100,7 @@ public class ClipboardService extends Service {
 	ClipboardManager myClipBoard ;
 	ClipboardManager.OnPrimaryClipChangedListener mPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
 	    public void onPrimaryClipChanged() {
-	        ClipData clipData = myClipBoard.getPrimaryClip();
+	        ClipData clipData = myClipBoard.getPrimaryClip();	        
 	        if (clipData.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 	           String text = clipData.getItemAt(0).getText().toString();
 	           if (text != null) {

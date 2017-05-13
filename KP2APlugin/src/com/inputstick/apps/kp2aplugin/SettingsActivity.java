@@ -6,12 +6,18 @@ import keepass2android.pluginsdk.AccessManager;
 import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -28,6 +34,9 @@ import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {	
+	
+	private static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
+	private static final int REQUEST_CODE_SELECT_APP = 124;
 	
 	private static final int TIP_DATA_TRANSFER_METHOD = 1;
 	private static final int TIP_TYPING_SPEED = 2;
@@ -72,6 +81,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private Preference prefAutoconnectTimeout;	
 	private Preference prefUiEntrySecondary;
 	private Preference prefUiFieldSecondary;
+	private CheckBoxPreference prefLaunchAuthenticator;
+	private CheckBoxPreference prefLaunchCustomApp;
+	private Preference prefCustomAppPackage;
 	
 	private boolean displayReloadInfo;
 	private OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
@@ -114,6 +126,20 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		}
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if ((requestCode == REQUEST_CODE_SELECT_APP) && (resultCode == RESULT_OK)) {	
+			String packageName = data.getStringExtra(SelectAppActivity.RESULT_PACKAGE);
+			String name = getNameForPackage(packageName);
+			Editor edit = sharedPref.edit();
+			edit.putString("clipboard_custom_app_package", packageName).apply();
+			edit.putString("clipboard_custom_app_name", name).apply();
+			edit.apply();									
+			setCustomAppPackageSummary();
+		}		
+	}
 
 	
 	private void setupSimplePreferencesScreen() {
@@ -139,9 +165,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				try {
-					Intent i = new Intent( Strings.ACTION_EDIT_PLUGIN_SETTINGS);
+					Intent i = new Intent(Strings.ACTION_EDIT_PLUGIN_SETTINGS);
 					i.putExtra(Strings.EXTRA_PLUGIN_PACKAGE, SettingsActivity.this.getPackageName());
-					startActivityForResult(i, 123);
+					startActivityForResult(i, REQUEST_CODE_ENABLE_PLUGIN);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -235,6 +261,48 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		});
 		
 		
+		//clipboard:
+		prefLaunchAuthenticator = (CheckBoxPreference)findPreference("clipboard_launch_authenticator");
+		prefLaunchAuthenticator.setOnPreferenceClickListener(reloadInfoListener);
+		prefLaunchAuthenticator.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean enabled = (Boolean)newValue;
+				if (enabled) {
+					prefLaunchCustomApp.setChecked(false);
+					setLaunchCustomAppEnabled(false);
+				}
+        		return true;
+			}
+        });
+		
+		prefLaunchCustomApp = (CheckBoxPreference)findPreference("clipboard_launch_custom_app");
+		prefLaunchCustomApp.setOnPreferenceClickListener(reloadInfoListener);
+		prefLaunchCustomApp.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean enabled = (Boolean)newValue;
+				setLaunchCustomAppEnabled(enabled);
+				if (enabled) {
+					prefLaunchAuthenticator.setChecked(false);
+				}
+        		return true;
+			}
+        });
+		
+		
+		prefCustomAppPackage = (Preference)findPreference("clipboard_custom_app_package");
+		prefCustomAppPackage.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				//loading list of all installed apps can take a few seconds
+				new LoadAppsTask().execute();
+				return true;
+			}
+		});
+		setCustomAppPackageSummary();		
+		
+		
 		//UI:
 		findPreference("display_inputstick_text").setOnPreferenceClickListener(reloadInfoListener);
 		findPreference("items_general").setOnPreferenceClickListener(reloadInfoListener);
@@ -245,8 +313,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefUiFieldSecondary = findPreference("items_field_secondary");
 		prefUiFieldSecondary.setOnPreferenceClickListener(reloadInfoListener);						
 		
+		//enable/disable preferences
 		setSecondaryLayoutEnabled(sharedPref.getBoolean("show_secondary", false));		
 		setAutoconnectTimeoutEnabled(sharedPref.getBoolean("autoconnect", true));		
+		setLaunchCustomAppEnabled(sharedPref.getBoolean("clipboard_launch_custom_app", false));		
 	}
 	
 	@Override
@@ -304,6 +374,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}
 	}
 	
+	private void setCustomAppPackageSummary() {
+		String packageName = sharedPref.getString("clipboard_custom_app_package", "none");
+		if ("none".equals(packageName)) {
+			prefCustomAppPackage.setSummary(R.string.clipboard_custom_app_not_selected);
+		} else {
+			prefCustomAppPackage.setSummary(getNameForPackage(packageName));
+		}
+	}
+	
 	
 	@Override
 	public void onBackPressed() {
@@ -352,8 +431,20 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefUiEntrySecondary.setEnabled(enabled);
 		prefUiFieldSecondary.setEnabled(enabled);		
 		prefSecondaryKbdLayout.setEnabled(enabled);
-	}		
-
+	}	
+	
+	private void setLaunchCustomAppEnabled(boolean enabled) {
+		prefCustomAppPackage.setEnabled(enabled);
+	}
+	
+	private String getNameForPackage(String packageName) {
+		final PackageManager pm = getPackageManager();	
+		try {
+		    return pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString();
+		} catch (final NameNotFoundException e) {
+			return getString(R.string.clipboard_custom_app_unknown);
+		}	
+	}
 	
 	
 	private boolean displayTip(int tipId, boolean displayOnce) {
@@ -386,6 +477,41 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		} else {
 			return false;
 		}
+	}
+	
+	
+	
+	
+	
+	class LoadAppsTask extends AsyncTask<String, String, String> {
+
+		private ProgressDialog progDailog;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progDailog = new ProgressDialog(SettingsActivity.this);
+			progDailog.setMessage(getString(R.string.text_please_wait));
+			progDailog.setIndeterminate(true);
+			progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progDailog.setCancelable(false);
+			progDailog.show();
+		}
+
+		@Override
+		protected String doInBackground(String... aurl) {
+			SelectAppActivity.getInstalledApps(SettingsActivity.this);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String unused) {
+			super.onPostExecute(unused);
+			progDailog.dismiss();
+			Intent i = new Intent(SettingsActivity.this, SelectAppActivity.class);
+			startActivityForResult(i, REQUEST_CODE_SELECT_APP);
+		}
+		
 	}
 	
 }
