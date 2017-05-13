@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inputstick.apps.kp2aplugin"
-    android:versionCode="9"
-    android:versionName="1.08" >
+    android:versionCode="10"
+    android:versionName="1.09" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -96,8 +96,14 @@
         <activity
             android:name=".SelectTemplateActivity"
             android:excludeFromRecents="true"
-            android:label="@string/title_activity_select_template" 
-			android:theme="@android:style/Theme.Dialog" >>
+            android:label="@string/title_activity_select_template"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".SelectAppActivity"
+            android:label="@string/title_activity_select_app"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
     </application>
 

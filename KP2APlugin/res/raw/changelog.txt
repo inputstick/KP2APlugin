@@ -19,6 +19,10 @@
     </style>
   </head>
   <body>
+$ 1.09
+  % Version 1.09
+  	_ <a href="http://blog.inputstick.com/2017/05/kp2a-plugin-v109.html">(More info)</a>   
+  	* added option to launch custom app (instead of Google Authenticator) when typing from clipboard action is selected
 $ 1.08
   % Version 1.08
   	_ <a href="http://blog.inputstick.com/2017/04/kp2a-plugin-v108.html">(More info)</a>   
