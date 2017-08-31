@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inputstick.apps.kp2aplugin"
-    android:versionCode="10"
-    android:versionName="1.09" >
+    android:versionCode="11"
+    android:versionName="1.10" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="22" />    
 
     <application
         android:allowBackup="true"
@@ -34,16 +34,17 @@
                 <action android:name="keepass2android.ACTION_OPEN_ENTRY" />
                 <action android:name="keepass2android.ACTION_ENTRY_OUTPUT_MODIFIED" />
                 <action android:name="keepass2android.ACTION_ENTRY_ACTION_SELECTED" />
-                <action android:name="keepass2android.ACTION_CLOSE_ENTRY_VIEW" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".InputStickService"
+            android:exported="false"
             android:enabled="true" >
         </service>
         <service
             android:name=".ClipboardService"
+            android:exported="false"
             android:enabled="true" >
         </service>
 
@@ -101,8 +102,8 @@
         </activity>
         <activity
             android:name=".SelectAppActivity"
-            android:label="@string/title_activity_select_app"
             android:excludeFromRecents="true"
+            android:label="@string/title_activity_select_app"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
     </application>

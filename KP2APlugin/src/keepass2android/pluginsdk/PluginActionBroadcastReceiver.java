@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 public abstract class PluginActionBroadcastReceiver extends BroadcastReceiver {
 	
@@ -54,7 +54,7 @@ public abstract class PluginActionBroadcastReceiver extends BroadcastReceiver {
 				for(Iterator<String> iter = json.keys();iter.hasNext();) {
 				    String key = iter.next();
 				    String value = json.get(key).toString();
-				    Log.d("KP2APluginSDK", "received " + key+"/"+value);
+				    //Log.d("KP2APluginSDK", "received " + key+"/"+value);
 				    res.put(key, value);
 				}
 				
@@ -186,7 +186,7 @@ public abstract class PluginActionBroadcastReceiver extends BroadcastReceiver {
 			return getProtectedFieldsListFromIntent();
 		}
 		
-		public void addEntryAction(String actionDisplayText, int actionIconResourceId, Bundle actionData) throws PluginAccessException
+		/*public void addEntryAction(String actionDisplayText, int actionIconResourceId, Bundle actionData) throws PluginAccessException
 		{
 			addEntryFieldAction(null, null, actionDisplayText, actionIconResourceId, actionData);
 		}
@@ -207,11 +207,41 @@ public abstract class PluginActionBroadcastReceiver extends BroadcastReceiver {
 			i.putExtra(Strings.EXTRA_ACTION_ID, actionId);
 			
 			_context.sendBroadcast(i);
+		}*/
+		
+		public void addEntryAction(String actionDisplayText, int actionIconResourceId, Bundle actionData, String accessToken) throws PluginAccessException
+		{
+			addEntryFieldAction(null, null, actionDisplayText, actionIconResourceId, actionData, accessToken);
 		}
 
+		public void addEntryFieldAction(String actionId, String fieldId, String actionDisplayText, int actionIconResourceId, Bundle actionData, String accessToken) throws PluginAccessException
+		{
+			Intent i = new Intent(Strings.ACTION_ADD_ENTRY_ACTION);
+			ArrayList<String> scope = new ArrayList<String>();
+			scope.add(Strings.SCOPE_CURRENT_ENTRY);
+			i.putExtra(Strings.EXTRA_ACCESS_TOKEN, accessToken);
+			i.setPackage(getHostPackage());
+			i.putExtra(Strings.EXTRA_SENDER, _context.getPackageName());
+			i.putExtra(Strings.EXTRA_ACTION_DATA, actionData);
+			i.putExtra(Strings.EXTRA_ACTION_DISPLAY_TEXT, actionDisplayText);
+			i.putExtra(Strings.EXTRA_ACTION_ICON_RES_ID, actionIconResourceId);
+			i.putExtra(Strings.EXTRA_ENTRY_ID, getEntryId());
+			i.putExtra(Strings.EXTRA_FIELD_ID, fieldId);
+			i.putExtra(Strings.EXTRA_ACTION_ID, actionId);
+			
+			_context.sendBroadcast(i);
+		}
 		
+		public String getAccessTokenForCurrentEntryScope() throws PluginAccessException {
+			ArrayList<String> scope = new ArrayList<String>();
+			scope.add(Strings.SCOPE_CURRENT_ENTRY);
+			return AccessManager.getAccessToken(_context, getHostPackage(), scope);
+		}
 		
-		
+		public String getScope() {
+			SharedPreferences prefs = _context.getSharedPreferences("KP2A.PluginAccess." + getHostPackage(), Context.MODE_PRIVATE);
+			return prefs.getString("scope", "");
+		}
 	}
 	
 	protected class DatabaseAction extends PluginActionBase
@@ -256,7 +286,7 @@ public abstract class PluginActionBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		String action = intent.getAction();
-		android.util.Log.d("KP2A.pluginsdk", "received broadcast in PluginActionBroadcastReceiver with action="+action);
+		//android.util.Log.d("KP2A.pluginsdk", "received broadcast in PluginActionBroadcastReceiver with action="+action);
 		if (action == null)
 			return;
 		if (action.equals(Strings.ACTION_OPEN_ENTRY))

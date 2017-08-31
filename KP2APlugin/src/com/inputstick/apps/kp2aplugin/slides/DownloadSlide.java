@@ -1,7 +1,5 @@
 package com.inputstick.apps.kp2aplugin.slides;
 
-import com.inputstick.apps.kp2aplugin.R;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,9 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.inputstick.apps.kp2aplugin.PluginHelper;
+import com.inputstick.apps.kp2aplugin.R;
 
 public class DownloadSlide extends Fragment {
 	
@@ -78,7 +79,7 @@ public class DownloadSlide extends Fragment {
     @Override
     public void  onResume() {
     	super.onResume();
-    	if (SlidesUtils.isPackageInstalled(targetPackage)) {
+    	if (PluginHelper.isPackageInstalled(getActivity(), targetPackage)) {
     		buttonDownload.setText(R.string.slide_button_done);
     		buttonDownload.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done, 0);
     		isInstalled = true;

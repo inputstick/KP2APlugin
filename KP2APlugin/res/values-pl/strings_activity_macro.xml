@@ -42,7 +42,7 @@
     
     <string name="execution">Tryb wykonania:</string>    
     <string name="execution_background">W tle ,automatycznie (ostrożnie!)</string>    
-    <string name="execution_show_controls">Krok po kroku, ręcznie</string>        
+    <string name="execution_show_controls">Krok po kroku, ręczne sterowanie</string>        
         
     <string name="title_activity_macro_execute">Makro (sterowanie ręczne)</string>
     <string name="next">Dalej</string>

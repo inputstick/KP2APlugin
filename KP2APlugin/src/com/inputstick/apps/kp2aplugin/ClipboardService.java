@@ -20,7 +20,6 @@ import com.inputstick.api.hid.HIDKeycodes;
 
 public class ClipboardService extends Service {
 	
-	private static final int NOTIFICATION_ID = 0;
 	private static final int ACTION_DISABLE = 1;
 	private static final int ACTION_EXTEND = 2;
 	
@@ -30,7 +29,9 @@ public class ClipboardService extends Service {
 	
 	private int remainingTime;;
 	
-	private String layout;
+	private TypingParams params;
+	
+	NotificationManager mNotificationManager;
 
 	Handler delayhandler = new Handler();
 	private Runnable mUpdateTimeTask = new Runnable() {
@@ -39,7 +40,7 @@ public class ClipboardService extends Service {
 			if (remainingTime <= 0) {
 				stopSelf();	
 			} else {
-				showNotification();
+				showNotification(true);
 				delayhandler.postDelayed(mUpdateTimeTask, 1000);
 			}			
 		}
@@ -48,18 +49,24 @@ public class ClipboardService extends Service {
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
-	}
+	}		
 
 	@Override
 	public void onDestroy() {
 		Toast.makeText(this, R.string.text_clipboard_disabled, Toast.LENGTH_SHORT).show();
-		cancelNotification();		
+		showNotification(false);	
 		delayhandler.removeCallbacksAndMessages(null);
 		if (myClipBoard != null) {
 			myClipBoard.removePrimaryClipChangedListener(mPrimaryClipChangedListener);
 			myClipBoard = null;
 		}
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 
 	@Override
@@ -78,9 +85,9 @@ public class ClipboardService extends Service {
 				if (remainingTime > MAX_ALLOWED_TIME) {
 					remainingTime = MAX_ALLOWED_TIME;
 				}
-				showNotification();		
+				showNotification(true);		
 			} else {
-				layout = intent.getStringExtra(Const.EXTRA_LAYOUT);
+				params = new TypingParams(intent);
 				if (myClipBoard == null) {
 					myClipBoard = (ClipboardManager)getSystemService(android.content.Context.CLIPBOARD_SERVICE);
 					myClipBoard.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
@@ -89,7 +96,7 @@ public class ClipboardService extends Service {
 				delayhandler.postDelayed(mUpdateTimeTask, 1000);
 				remainingTime = Const.CLIPBOARD_TIMEOUT_MS / 1000;
 				Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
-				showNotification();		
+				showNotification(true);		
 			}				
 		}
 			
@@ -100,21 +107,21 @@ public class ClipboardService extends Service {
 	ClipboardManager myClipBoard ;
 	ClipboardManager.OnPrimaryClipChangedListener mPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
 	    public void onPrimaryClipChanged() {
-	        ClipData clipData = myClipBoard.getPrimaryClip();	        
+	    	final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ClipboardService.this);
+	        final ClipData clipData = myClipBoard.getPrimaryClip();	        
 	        if (clipData.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 	           String text = clipData.getItemAt(0).getText().toString();
 	           if (text != null) {
-	        	   ActionManager actionManager = ActionManager.getInstance(ClipboardService.this);
-	        	   SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ClipboardService.this);
-	        	   UserPreferences userPrefs = actionManager.getUserPrefs();
-	        	   if ((text.length() > MAX_TEXT_LENGTH) && (prefs.getBoolean("clipboard_check_length", true))) {
+	        	   if ((text.length() > MAX_TEXT_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
 	        		   Toast.makeText(ClipboardService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
 	        	   } else {
-	        		   actionManager.queueText(text, layout);
-		        	   if (userPrefs.isClipboardAutoEnter()) {
-		        		   actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+	        		   //ItemToExecute.sendTextToService(ClipboardService.this, text, params);
+	        		   new ItemToExecute(text, params).sendToService(ClipboardService.this);
+		        	   if (PreferencesHelper.isClipboardAutoEnter(prefs)) {
+		        		   //ItemToExecute.sendKeyToService(ClipboardService.this, HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+		        		   new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardService.this);
 		        	   }
-		        	   if (userPrefs.isClipboardAutoDisable()) {
+		        	   if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
 		        		   delayhandler.removeCallbacksAndMessages(null);
 		        		   stopSelf();
 		        	   }
@@ -126,32 +133,30 @@ public class ClipboardService extends Service {
 	
 	
 	
-	private void showNotification() {				
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-
-		mBuilder.setContentTitle(getString(R.string.app_name));		
-		mBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + remainingTime + ")");
-		mBuilder.setSmallIcon(R.drawable.ic_notification);
-				
-		Intent disableActionIntent = new Intent(this, ClipboardService.class);
-		disableActionIntent.putExtra(Const.EXTRA_NOTIFICATION_ACTION, ACTION_DISABLE);
-		PendingIntent disableActionPendingIntent = PendingIntent.getService(this, ACTION_DISABLE, disableActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		
-		Intent extendActionIntent = new Intent(this, ClipboardService.class);
-		extendActionIntent.putExtra(Const.EXTRA_NOTIFICATION_ACTION, ACTION_EXTEND);
-		PendingIntent extendActionPendingIntent = PendingIntent.getService(this, ACTION_EXTEND, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);		
-		
-		mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-		mBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
-		mBuilder.addAction(0, "+3min", extendActionPendingIntent);
-
-		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());	
+	private void showNotification(boolean enabled) {
+		if (enabled) {
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+	
+			mBuilder.setContentTitle(getString(R.string.app_name));		
+			mBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + remainingTime + ")");
+			mBuilder.setSmallIcon(R.drawable.ic_notification);
+					
+			Intent disableActionIntent = new Intent(this, ClipboardService.class);
+			disableActionIntent.putExtra(Const.EXTRA_NOTIFICATION_ACTION, ACTION_DISABLE);
+			PendingIntent disableActionPendingIntent = PendingIntent.getService(this, ACTION_DISABLE, disableActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			Intent extendActionIntent = new Intent(this, ClipboardService.class);
+			extendActionIntent.putExtra(Const.EXTRA_NOTIFICATION_ACTION, ACTION_EXTEND);
+			PendingIntent extendActionPendingIntent = PendingIntent.getService(this, ACTION_EXTEND, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);		
+			
+			mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+			mBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
+			mBuilder.addAction(0, "+3min", extendActionPendingIntent);
+	
+			mNotificationManager.notify(Const.CLIPBOARD_SERVICE_NOTIFICATION_ID, mBuilder.build());
+		} else {
+			mNotificationManager.cancel(Const.CLIPBOARD_SERVICE_NOTIFICATION_ID);    	 
+		}
 	}	
-
-	private void cancelNotification() {
-		NotificationManager nMgr = (NotificationManager)(getSystemService(Context.NOTIFICATION_SERVICE));
-		nMgr.cancel(NOTIFICATION_ID);    	    	
-    }
     
 }

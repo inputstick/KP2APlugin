@@ -2,8 +2,9 @@ package com.inputstick.apps.kp2aplugin.slides;
 
 import java.util.Arrays;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,9 +21,10 @@ import android.widget.Spinner;
 import com.inputstick.api.Util;
 import com.inputstick.api.layout.KeyboardLayout;
 import com.inputstick.apps.kp2aplugin.Const;
-import com.inputstick.apps.kp2aplugin.InputStickService;
+import com.inputstick.apps.kp2aplugin.ItemToExecute;
+import com.inputstick.apps.kp2aplugin.PreferencesHelper;
 import com.inputstick.apps.kp2aplugin.R;
-import com.inputstick.apps.kp2aplugin.SetupWizardActivity;
+import com.inputstick.apps.kp2aplugin.TypingParams;
 
 public class LayoutSlide extends Fragment {
 
@@ -41,8 +43,9 @@ public class LayoutSlide extends Fragment {
 		final View view = inflater.inflate(R.layout.slide_layout, container, false);
 		//TODO get localeof the deivce?
 
-		final String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());		
-		int selectedLayout = Arrays.asList(layoutValues).indexOf(SlidesUtils.getLayout());	
+		final String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());		
+		int selectedLayout = Arrays.asList(layoutValues).indexOf(PreferencesHelper.getPrimaryLayoutCode(prefs));	
 		
 		final EditText editTextTest = (EditText)view.findViewById(R.id.editTextTest);		
 		
@@ -54,7 +57,7 @@ public class LayoutSlide extends Fragment {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				SlidesUtils.setLayout(layoutValues[position]);
+				PreferencesHelper.setPrimaryLayoutCode(PreferenceManager.getDefaultSharedPreferences(getActivity()), layoutValues[position]);				
 			}
 
 			@Override
@@ -67,15 +70,17 @@ public class LayoutSlide extends Fragment {
 		buttonTest.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {				
-				Bundle b = new Bundle();
+				/*Bundle b = new Bundle();
 				b.putString(Const.EXTRA_ACTION, Const.ACTION_TYPE);		
 				b.putString(Const.EXTRA_TEXT, editTextTest.getText().toString());
 				b.putString(Const.EXTRA_LAYOUT, layoutValues[spinnerLayout.getSelectedItemPosition()]);
 				Intent serviceIntent = new Intent(getActivity(), InputStickService.class);
 				serviceIntent.setAction(Const.SERVICE_EXEC);
 				serviceIntent.putExtras(b);
-				getActivity().startService(serviceIntent); 	
-				SetupWizardActivity.shouldDisconnect();
+				getActivity().startService(serviceIntent); 	*/
+				TypingParams params = new TypingParams(layoutValues[spinnerLayout.getSelectedItemPosition()], Const.TYPING_SPEED_DEFAULT);
+				//ItemToExecute.sendTextToService(getActivity(), editTextTest.getText().toString(), params); //TODO
+				new ItemToExecute(editTextTest.getText().toString(), params).sendToService(getActivity());
 			}			
 		});		
 		

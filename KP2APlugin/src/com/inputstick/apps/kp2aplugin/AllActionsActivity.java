@@ -3,7 +3,10 @@ package com.inputstick.apps.kp2aplugin;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -11,51 +14,58 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.inputstick.api.hid.HIDKeycodes;
-
 public class AllActionsActivity extends Activity {
 	
 	private long lastActionTime;
 	private long maxTime;
 
+	private boolean isSecondaryLayoutEnabled;
+	private String primaryLayoutCode;
+	private String secondaryLayoutCode;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_all_actions);
 		
-		final ActionManager actionManager = ActionManager.getInstance(this);
-		final UserPreferences userPrefs = actionManager.getUserPrefs();
-		maxTime = getIntent().getLongExtra(Const.EXTRA_MAX_TIME, 0);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		isSecondaryLayoutEnabled = PreferencesHelper.isSecondaryLayoutEnabled(prefs);
+		primaryLayoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);
+		secondaryLayoutCode = PreferencesHelper.getSecondaryLayoutCode(prefs);		
+		
+		Intent intent = getIntent();
+		final EntryData entryData = new EntryData(intent);
+		maxTime = intent.getLongExtra(Const.EXTRA_MAX_TIME, 0);
 		lastActionTime = System.currentTimeMillis();
 
 		ListView listViewActions = (ListView) findViewById(R.id.listViewActions);
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
 		
-		listAdapter.add(actionManager.getActionString(R.string.action_open_settings, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_connect, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_disconnect, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_open_mac_setup, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_type_tab, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_type_enter, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_macro_add_edit, false));
-		listAdapter.add(actionManager.getActionString(R.string.action_template_manage, false));
+		listAdapter.add(getActionString(R.string.action_open_settings, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_connect, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_disconnect, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_open_mac_setup, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_type_tab, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_type_enter, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_macro_add_edit, Const.LAYOUT_NONE));
+		listAdapter.add(getActionString(R.string.action_template_manage, Const.LAYOUT_NONE));
 		
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_type_user_tab_pass, false));
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_type_user_tab_pass_enter, false));
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_masked_password, false));
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_macro_run, false));
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_template_run, false));
-		listAdapter.add(actionManager.getActionStringForPrimaryLayout(R.string.action_clipboard, false));
+		listAdapter.add(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_PRIMARY));
+		listAdapter.add(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_PRIMARY));
+		listAdapter.add(getActionString(R.string.action_masked_password, Const.LAYOUT_PRIMARY));
+		listAdapter.add(getActionString(R.string.action_macro_run, Const.LAYOUT_PRIMARY));
+		listAdapter.add(getActionString(R.string.action_template_run, Const.LAYOUT_PRIMARY));
+		listAdapter.add(getActionString(R.string.action_clipboard, Const.LAYOUT_PRIMARY));
 		
-		if (userPrefs.isShowSecondary()) {
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_type_user_tab_pass, false));
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_type_user_tab_pass_enter, false));
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_masked_password, false));
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_macro_run, false));
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_template_run, false));
-			listAdapter.add(actionManager.getActionStringForSecondaryLayout(R.string.action_clipboard, false));
+		if (isSecondaryLayoutEnabled) {
+			listAdapter.add(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_SECONDARY));
+			listAdapter.add(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_SECONDARY));
+			listAdapter.add(getActionString(R.string.action_masked_password, Const.LAYOUT_SECONDARY));
+			listAdapter.add(getActionString(R.string.action_macro_run, Const.LAYOUT_SECONDARY));
+			listAdapter.add(getActionString(R.string.action_template_run, Const.LAYOUT_SECONDARY));
+			listAdapter.add(getActionString(R.string.action_clipboard, Const.LAYOUT_SECONDARY));
 		}
 		
 		listViewActions.setAdapter(listAdapter);
@@ -68,75 +78,115 @@ public class AllActionsActivity extends Activity {
 				} else {
 					maxTime += (now - lastActionTime);
 					lastActionTime = now;
+					boolean finish = true;
+					
+					Intent serviceIntent = new Intent(AllActionsActivity.this, InputStickService.class);
+					serviceIntent.setAction(Const.SERVICE_ENTRY_ACTION); 
 					
 					switch (pos) {
 						//general:
 						case 0:
-							actionManager.startSettingsActivity();
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SETTINGS);
 							break;
 						case 1:
-							actionManager.connect();
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CONNECT);
 							break;
 						case 2:
-							actionManager.disconnect();
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_DISCONNECT);   
 							break;						
 						case 3:
-							actionManager.startMacSetupActivity();
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MAC_SETUP);
 							break;		
 						case 4:
-							actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TAB);   
+							finish = false;
 							break;		
-						case 5:
-							actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
+						case 5:							
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_ENTER);
+							finish = false;
 							break;
 						case 6:
-							actionManager.addEditMacro(false, false, 0);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_ADDEDIT);  
 							break;
 						case 7:
-							actionManager.startSelectTemplateActivity(userPrefs.getLayoutPrimary(), true);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_MANAGE);
 							break;							
 						//entry, primary layout
 						case 8:
-							actionManager.typeUsernameAndPassword(userPrefs.getLayoutPrimary(), false);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;				
 						case 9:
-							actionManager.typeUsernameAndPassword(userPrefs.getLayoutPrimary(), true);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;	
 						case 10:
-							actionManager.openMaskedPassword(userPrefs.getLayoutPrimary(), true);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
 							break;		
 						case 11:
-							actionManager.runMacro(userPrefs.getLayoutPrimary());
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
 							break;	
 						case 12:
-							actionManager.startSelectTemplateActivity(userPrefs.getLayoutPrimary(), false);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);	
 							break;															
 						case 13:
-							actionManager.clipboardTyping(userPrefs.getLayoutPrimary());
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;
 						//entry, secondary layout
 						case 14:
-							actionManager.typeUsernameAndPassword(userPrefs.getLayoutSecondary(), false);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;				
 						case 15:
-							actionManager.typeUsernameAndPassword(userPrefs.getLayoutSecondary(), true);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;	
 						case 16:
-							actionManager.openMaskedPassword(userPrefs.getLayoutSecondary(), true);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;		
 						case 17:
-							actionManager.runMacro(userPrefs.getLayoutSecondary());
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;
 						case 18:
-							actionManager.startSelectTemplateActivity(userPrefs.getLayoutSecondary(), false);
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;								
 						case 19:
-							actionManager.clipboardTyping(userPrefs.getLayoutSecondary());
-							break;							
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
+							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+							break;			
+						default:
+							serviceIntent = null;							
+					}
+					
+					if (serviceIntent != null) {
+						serviceIntent.putExtras(entryData.getBundle());
+						AllActionsActivity.this.startService(serviceIntent);
+					}
+					
+					if (finish){
+						finish();
 					}
 				}
 			}			
 		});
+	}
+	
+	private String getActionString(int resId, int actionLayoutType) {
+		String s = getString(resId);		
+		if (actionLayoutType == Const.LAYOUT_PRIMARY && isSecondaryLayoutEnabled) {
+			s += " (" + primaryLayoutCode + ")";
+		}
+		if (actionLayoutType == Const.LAYOUT_SECONDARY) {
+			s += " (" + secondaryLayoutCode + ")";
+		}
+		return s;
 	}
 	
 	

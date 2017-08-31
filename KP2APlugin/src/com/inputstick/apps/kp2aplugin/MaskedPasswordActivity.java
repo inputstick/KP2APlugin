@@ -1,6 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 public class MaskedPasswordActivity extends Activity {
+	
+	private static final String OFFSET_KEY = "offset";
+	private static final String CLICKED_KEY = "clicked";
 		
 	private static final int BUTTONS_CNT = 16;
 	
@@ -21,7 +25,7 @@ public class MaskedPasswordActivity extends Activity {
 	private MyButtonOnClickListener listener = new MyButtonOnClickListener();
 	
 	private String password;
-	private String layout;	
+	private TypingParams params;
 			
 	private Button buttonPrev;
 	private Button buttonNext;
@@ -64,7 +68,6 @@ public class MaskedPasswordActivity extends Activity {
 	    }
 	};
 	
-	private ActionManager actionManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +75,15 @@ public class MaskedPasswordActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,  WindowManager.LayoutParams.FLAG_SECURE);
 
-		setContentView(R.layout.activity_masked_password);		
+		setContentView(R.layout.activity_masked_password);
 		
-		actionManager = ActionManager.getInstance(this);
+		Intent intent = getIntent();
+		params = new TypingParams(intent);		
+		password = intent.getStringExtra(Const.EXTRA_TEXT);
+		if (password == null) {
+			password = "";
+		}
+		wasClicked = new boolean[password.length()];
 		
 		timeLeftMessage = getString(R.string.time_left);
 		
@@ -109,20 +118,13 @@ public class MaskedPasswordActivity extends Activity {
 			buttons[i] = (Button)findViewById(buttonIds[i]);
 			buttons[i].setOnClickListener(listener);
 		}
-
-		Bundle b = getIntent().getExtras();
-		if (b != null) {				
-			password = b.getString(Const.EXTRA_TEXT, " ");
-			layout = b.getString(Const.EXTRA_LAYOUT, "en-US");
-			wasClicked = new boolean[password.length()];			
-		}
 	
 		if (savedInstanceState == null) {			
 			remainingTime = Const.MASKED_PASSWORD_TIMEOUT_MS;
 			mHandler.post(tick);
 		} else {	
-			offset = savedInstanceState.getInt("offset");	
-			wasClicked = savedInstanceState.getBooleanArray("clicked");
+			offset = savedInstanceState.getInt(OFFSET_KEY);	
+			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);
 			mHandler.post(tick);
 		}
 		
@@ -132,8 +134,8 @@ public class MaskedPasswordActivity extends Activity {
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-	    savedInstanceState.putInt("offset", offset);
-	    savedInstanceState.putBooleanArray("clicked", wasClicked);
+	    savedInstanceState.putInt(OFFSET_KEY, offset);
+	    savedInstanceState.putBooleanArray(CLICKED_KEY, wasClicked);
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
@@ -192,20 +194,12 @@ public class MaskedPasswordActivity extends Activity {
 	}
 	
 	private void type(int n) {
-		if (password != null) {
-			if (password.length() >= n) {
-				int index = n;
-				if (index < 0) return;
-				char c = password.charAt(index);
-				String toType = String.valueOf(c);
-				actionManager.queueText(toType, layout);
-				/*if ((InputStickHID.isReady()) && (layout != null)) {
-					ActionManager.lastActivityTime = System.currentTimeMillis(); 
-					layout.type(toType);
-				} else {
-					Toast.makeText(this, R.string.not_ready, Toast.LENGTH_SHORT).show();
-				}*/
-			}
+		if (password.length() >= n) {
+			int index = n;
+			if (index < 0) return;
+			char c = password.charAt(index);
+			String toType = String.valueOf(c);
+			new ItemToExecute(toType, params).sendToService(this);
 		}
 	}
 	

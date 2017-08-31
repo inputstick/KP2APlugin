@@ -19,6 +19,16 @@
     </style>
   </head>
   <body>
+$ 1.10
+  % Version 1.10
+  	_ <a href="http://blog.inputstick.com/2017/09/kp2a-plugin-v110.html">(More info)</a>
+  	<b>Important:</b> some of new features requires access to KP2A database locked/closed events. To request necessary KP2A plugin permissions:
+  	<br>
+  	click on Configure as plugin -> Accept    		
+  	* redesigned connection settings (can now disconnect when DB is locked/closed)  	
+  	* plugin will now display notification (can be disabled)  	  	
+  	* fixed issue that sometimes caused actions to be executed after delay 
+  	* fixed bugs and potential security issues, several minor improvements   	 	
 $ 1.09
   % Version 1.09
   	_ <a href="http://blog.inputstick.com/2017/05/kp2a-plugin-v109.html">(More info)</a>   

@@ -2,35 +2,32 @@ package com.inputstick.apps.kp2aplugin;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.inputstick.apps.kp2aplugin.slides.DownloadSlide;
 import com.inputstick.apps.kp2aplugin.slides.EnableSlide;
 import com.inputstick.apps.kp2aplugin.slides.InfoSlide;
 import com.inputstick.apps.kp2aplugin.slides.LayoutSlide;
-import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 import com.inputstick.apps.kp2aplugin.slides.UninstallSlide;
 
 public class SetupWizardActivity extends AppIntro2 {
 
     @Override
     public void init(Bundle savedInstanceState) {
-    	SlidesUtils.init(this);
         addSlide(InfoSlide.newInstance(R.layout.slide_intro));
-                
-        if (( !SlidesUtils.isPackageInstalled(Const.PACKAGE_KP2A)) && ( !SlidesUtils.isPackageInstalled(Const.PACKAGE_KP2A_NO_NET)))  {
+        if (( !PluginHelper.isPackageInstalled(this, Const.PACKAGE_KP2A)) && ( !PluginHelper.isPackageInstalled(this, Const.PACKAGE_KP2A_NO_NET)))  {
         	addSlide(DownloadSlide.newInstance(R.layout.slide_download_kp2a, Const.PACKAGE_KP2A));
         }        
-        if ( !SlidesUtils.isPackageInstalled(Const.PACKAGE_UTILITY)) {
+        if ( !PluginHelper.isPackageInstalled(this, Const.PACKAGE_UTILITY)) {
         	addSlide(InfoSlide.newInstance(R.layout.slide_hardware));
         	addSlide(DownloadSlide.newInstance(R.layout.slide_download_utility, Const.PACKAGE_UTILITY));        	
         }
-        if (SlidesUtils.isPackageInstalled(Const.PACKAGE_PLUGIN_OLD)) {
+        if (PluginHelper.isPackageInstalled(this, Const.PACKAGE_PLUGIN_OLD)) {
         	addSlide(new UninstallSlide());        
         }
-        if ( !SlidesUtils.isEnabled()) {
+        if ( !PluginHelper.isPluginEnabled(this)) {
         	addSlide(new EnableSlide());	
         }
                 
@@ -48,19 +45,9 @@ public class SetupWizardActivity extends AppIntro2 {
     	super.onDestroy();
     }
     
-    
-    private static boolean shouldDisconnect = false;
-    
-    public static void shouldDisconnect() {    	   	    	
-    	shouldDisconnect = true;
-    }
-    
     private void disconnect() {
-    	if (shouldDisconnect) {
-        	Intent serviceIntent = new Intent(this, InputStickService.class);
-        	serviceIntent.setAction(Const.SERVICE_DISCONNECT);
-        	startService(serviceIntent);    		
-    		shouldDisconnect = false;
+    	if (InputStickService.isRunning) {
+    		ActionHelper.forceStopService(this);
     	}    	
     }
     
@@ -71,7 +58,7 @@ public class SetupWizardActivity extends AppIntro2 {
 
     @Override
     public void onDonePressed() {
-    	SlidesUtils.setAsCompleted();
+    	PreferencesHelper.setSetupCompleted(PreferenceManager.getDefaultSharedPreferences(this));
     	finish();
     }
 
@@ -91,7 +78,7 @@ public class SetupWizardActivity extends AppIntro2 {
 		alert.setMessage(R.string.setup_skip_text);
 		alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				SlidesUtils.setAsCompleted();
+				PreferencesHelper.setSetupCompleted(PreferenceManager.getDefaultSharedPreferences(SetupWizardActivity.this));
 				disconnect();
 				finish();
 			}

@@ -1,9 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,12 +11,13 @@ import android.widget.Toast;
 
 public class MacroExecuteActivity extends Activity {
 	
-	private long lastActionTime;
-	private long maxTime;
+	private static final String INDEX_KEY = "index";
 	
-	private String layoutName;
-	private List<String> actions;
+	private long lastActionTime;
+	private long maxTime;	
 	private int index;
+	
+	private EntryMacro macro;
 	
 	private Button buttonActionExecute;
 	private Button buttonActionPrev;
@@ -31,8 +30,18 @@ public class MacroExecuteActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_macro_execute);
 		
-		final ActionManager actionManager = ActionManager.getInstance(this);
-		maxTime = getIntent().getLongExtra(Const.EXTRA_MAX_TIME, 0);
+		Intent intent = getIntent();		
+		final TypingParams params = new TypingParams(intent);
+		final EntryData entryData = new EntryData(intent);
+		maxTime = intent.getLongExtra(Const.EXTRA_MAX_TIME, 0);
+		final String macroData = intent.getStringExtra(Const.EXTRA_MACRO_DATA);
+		
+		if (macroData == null) {
+			finish();
+		} else {
+			macro = new EntryMacro(macroData, entryData, params, false);
+		}
+		
 		lastActionTime = System.currentTimeMillis();
 		
 		textViewActionPreview = (TextView)findViewById(R.id.textViewActionPreview);
@@ -40,11 +49,11 @@ public class MacroExecuteActivity extends Activity {
 		buttonActionExecute = (Button) findViewById(R.id.buttonActionExecute);
 		buttonActionExecute.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (index >= actions.size()) {
+				if (index >= macro.getActionsCount()) {
 					finish();
 				} else {
 					if (checkTime()) {
-						actionManager.runMacroAction(layoutName, actions.get(index));
+						macro.executeActionAtIndex(MacroExecuteActivity.this, index);  
 						goToNext();
 					}
 				}
@@ -68,21 +77,22 @@ public class MacroExecuteActivity extends Activity {
 				}
 			}
 		});	
-		
-		layoutName = getIntent().getStringExtra(Const.EXTRA_LAYOUT);
-		String tmp[] = getIntent().getStringArrayExtra(Const.EXTRA_MACRO_ACTIONS);
-		if (tmp == null) finish();
-		
-		actions = new ArrayList<String>();
-		for (String s : tmp) {
-			if ((s != null) && (s.length() > 0)) {			
-				if (( !s.startsWith(MacroHelper.MACRO_ACTION_DELAY)) && ( !s.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING))) {
-					actions.add(s);
-				}
-			}
-		}				
-		index = 0;
+
+		if (savedInstanceState == null) {			
+			index = 0;
+		} else {				
+			index = savedInstanceState.getInt(INDEX_KEY);
+		}
 		manageUI();		
+	}
+	
+	
+
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putInt(INDEX_KEY, index);
+		super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	private void goToPrev() {
@@ -93,20 +103,20 @@ public class MacroExecuteActivity extends Activity {
 	}
 	
 	private void goToNext() {
-		if (index < actions.size()) {
+		if (index < macro.getActionsCount()) {
 			index++;
 			manageUI();
 		}		
 	}
 	
 	private void manageUI() {
-		if (index >= actions.size()) {
+		if (index >= macro.getActionsCount()) {
 			textViewActionPreview.setText(R.string.end);
 			buttonActionExecute.setText(R.string.done);
 			buttonActionNext.setEnabled(false);
 		} else {			
-			textViewActionPreview.setText(getString(R.string.current_position) + " " + (index + 1) + "/" + actions.size());			
-			textViewActionPreview.append("\n" + getString(R.string.preview) + "\n" + actions.get(index));
+			textViewActionPreview.setText(getString(R.string.current_position) + " " + (index + 1) + "/" + macro.getActionsCount());			
+			textViewActionPreview.append("\n" + getString(R.string.preview) + "\n" + macro.getPreviewAtIndex(index));
 			buttonActionExecute.setText(R.string.execute);
 			buttonActionNext.setEnabled(true);
 		}

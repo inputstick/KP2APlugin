@@ -31,7 +31,7 @@ public class MacroActivity extends Activity {
 	private SharedPreferences prefs;
 	
 	private String macro;
-	private String id;
+	private String entryId;
 	
 	private EditText editTextMacro;
 	private EditText editTextString;
@@ -215,9 +215,6 @@ public class MacroActivity extends Activity {
 				final CheckBox cbAltRight = new CheckBox(MacroActivity.this);
 				cbAltRight.setText("AltGr (right)");
 				
-				//cbKeyword = new CheckBox(SettingsTextActivity.this);
-				//cbKeyword.setChecked(false);
-				
 				lin.addView(tvInfo);
 				lin.addView(spinner);
 				lin.addView(cbCtrlLeft);
@@ -261,6 +258,7 @@ public class MacroActivity extends Activity {
 						Toast.makeText(MacroActivity.this, R.string.illegal_character_toast, Toast.LENGTH_LONG).show();
 					} else {
 						addAction(MacroHelper.MACRO_ACTION_TYPE, s);
+						editTextString.setText("");
 					}
 				}								
 			}
@@ -287,8 +285,9 @@ public class MacroActivity extends Activity {
 		
 		
 		Bundle b = getIntent().getExtras();
-		macro = b.getString(Const.EXTRA_MACRO, null);
-		id = b.getString(Const.EXTRA_ENTRY_ID, null);
+		//macro = b.getString(Const.EXTRA_MACRO_DATA, null);
+		entryId = b.getString(Const.EXTRA_ENTRY_ID, null);
+		macro = MacroHelper.loadMacro(prefs, entryId);
 		
 		if (b.getBoolean(Const.EXTRA_MACRO_RUN_BUT_EMPTY, false)) {
 			Toast.makeText(MacroActivity.this, R.string.no_macro_create_new, Toast.LENGTH_LONG).show();
@@ -429,53 +428,46 @@ public class MacroActivity extends Activity {
 	}
 	
 	private void saveMacro() {
-		macro = editTextMacro.getText().toString();
-		SharedPreferences.Editor editor = prefs.edit();
+		macro = editTextMacro.getText().toString();		
 		if ("".equals(macro)) {
-			editor.putString(Const.MACRO_PREF_PREFIX + id, null); //do not save empty macro
+			deleteMacro();
 		} else {
-			editor.putString(Const.MACRO_PREF_PREFIX + id, macro);
-		}
-		editor.apply();	
-		buttonDelete.setEnabled(true);
-		Toast.makeText(MacroActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
+			MacroHelper.saveMacro(prefs, entryId, macro);
+			buttonDelete.setEnabled(true);
+			Toast.makeText(MacroActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
+		}		
 	}
 	
 	private void deleteMacro() {
 		macro = "";
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.remove(Const.MACRO_PREF_PREFIX + id);
-		editor.apply();	
+		MacroHelper.deleteMacro(prefs, entryId);
 		editTextMacro.setText("");
 		buttonDelete.setEnabled(false);
 		Toast.makeText(MacroActivity.this, R.string.deleted_toast, Toast.LENGTH_SHORT).show();
 	}
 	
+	
+	private boolean shouldShowSaveDialog() {
+		if (templateMode) {			
+			return ( !editTextMacro.getText().toString().equals(savedTemplate));
+		} else {		
+			return ( !editTextMacro.getText().toString().equals(macro)); 
+		}
+	}
+	
+	
 	@Override
 	public void onBackPressed() {
-		if (templateMode) {			
-			if ( !editTextMacro.getText().toString().equals(savedTemplate)) {		
-				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
-				alert.setTitle(R.string.save_title);
+		if (shouldShowSaveDialog()) {
+			AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);			
+			if (templateMode) {			
 				alert.setMessage(R.string.template_not_saved);
 				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						getSaveTemplateDialog(templateId).show();
 					}
 				});
-				alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						finish();
-					}
-				});		
-				alert.show();					
 			} else {
-				super.onBackPressed();
-			}
-		} else {		
-			if ( !editTextMacro.getText().toString().equals(macro)) {		
-				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
-				alert.setTitle(R.string.save_title);
 				alert.setMessage(R.string.save_message);
 				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
@@ -483,16 +475,18 @@ public class MacroActivity extends Activity {
 						finish();			
 					}
 				});
-				alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						finish();
-					}
-				});		
-				alert.setNeutralButton(R.string.cancel, null);
-				alert.show();	
-			} else {
-				super.onBackPressed();
-			}
+			}			
+			//common:
+			alert.setTitle(R.string.save_title);
+			alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					finish();
+				}
+			});		
+			alert.setNeutralButton(R.string.cancel, null);
+			alert.show();
+		} else {
+			super.onBackPressed();
 		}
 	}
 	

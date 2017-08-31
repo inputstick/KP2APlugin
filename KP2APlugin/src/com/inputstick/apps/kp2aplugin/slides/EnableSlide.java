@@ -3,6 +3,7 @@ package com.inputstick.apps.kp2aplugin.slides;
 import keepass2android.pluginsdk.Strings;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.inputstick.apps.kp2aplugin.PluginHelper;
+import com.inputstick.apps.kp2aplugin.PreferencesHelper;
 import com.inputstick.apps.kp2aplugin.R;
 
 public class EnableSlide extends Fragment {
@@ -65,11 +68,11 @@ public class EnableSlide extends Fragment {
     @Override
     public void  onResume() {
     	super.onResume();
-    	if (SlidesUtils.isEnabled()) {
+    	if (PluginHelper.isPluginEnabled(getActivity())) {
     		buttonEnable.setText(R.string.slide_button_done);
     		buttonEnable.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done, 0);    		
-    		isEnabled = true;
-    		SlidesUtils.setAsCompleted();
+    		isEnabled = true; 
+    		PreferencesHelper.setSetupCompleted(PreferenceManager.getDefaultSharedPreferences(getActivity()));
     	} else {
     		buttonEnable.setText(R.string.slide_button_enable);
     		buttonEnable.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_enable, 0);

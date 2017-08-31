@@ -8,6 +8,7 @@ import sheetrock.panda.changelog.ChangeLog;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -29,63 +30,32 @@ import android.widget.Toast;
 
 import com.inputstick.api.Util;
 import com.inputstick.api.layout.KeyboardLayout;
-import com.inputstick.apps.kp2aplugin.slides.SlidesUtils;
 
 
 @SuppressWarnings("deprecation")
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {	
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	
+	private static final String DISMISSED_KEY = "dismissed";	
+	private static final String DISPLAY_RELOAD_INFO_KEY = "displayReloadInfo";
 	
 	private static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
 	private static final int REQUEST_CODE_SELECT_APP = 124;
 	
-	private static final int TIP_DATA_TRANSFER_METHOD = 1;
-	private static final int TIP_TYPING_SPEED = 2;
+	private static final int TIP_TYPING_SPEED = 1;	
 	
-	
-	public static final String ITEMS_GENERAL = "items_general";
-	public static final String ITEMS_ENTRY_PRIMARY = "items_entry_primary";
-	public static final String ITEMS_FIELD_PRIMARY = "items_field_primary";
-	public static final String ITEMS_ENTRY_SECONDARY = "items_entry_secondary";
-	public static final String ITEMS_FIELD_SECONDARY = "items_field_secondary";
-	
-	//IMPORTANT: checked using .contains() !
-	//username_password_only
-	//general
-	public static final String ITEM_SETTINGS = "settings";
-	public static final String ITEM_CONNECTION = "con_disc";
-	public static final String ITEM_MAC_SETUP = "osx";
-	public static final String ITEM_TAB_ENTER = "tab_enter";
-	public static final String ITEM_MACRO = "macro";
-	public static final String ITEM_RUN_TEMPLATE = "run_template";
-	public static final String ITEM_TEMPLATE_MANAGE = "manage_template";
-	
-	
-	//entry
-	public static final String ITEM_USER_PASSWORD = "username_and_password";
-	public static final String ITEM_USER_PASSWORD_ENTER = "username_password_enter";
-	public static final String ITEM_MASKED = "masked_password";
-	public static final String ITEM_CLIPBOARD = "clipboard";
-	
-	//field
-	public static final String ITEM_TYPE = "type_normal";
-	public static final String ITEM_TYPE_SLOW = "type_slow";
-		
-	
-	private SharedPreferences sharedPref;
-	
-	private boolean setupCompleted;
-	
+	private SharedPreferences prefs;	
+	private boolean setupCompleted;	
 	private Preference prefShowSecondary;
-	private Preference prefSecondaryKbdLayout;
-	
-	private Preference prefAutoconnectTimeout;	
+	private Preference prefSecondaryKbdLayout;	
 	private Preference prefUiEntrySecondary;
 	private Preference prefUiFieldSecondary;
 	private CheckBoxPreference prefLaunchAuthenticator;
 	private CheckBoxPreference prefLaunchCustomApp;
 	private Preference prefCustomAppPackage;
 	
+	private boolean dismissed;	
 	private boolean displayReloadInfo;
+	
 	private OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
@@ -97,22 +67,28 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);		
 		addPreferencesFromResource(R.layout.activity_settings);
 		setupSimplePreferencesScreen();		
 		
+		if (savedInstanceState != null) {
+			dismissed = savedInstanceState.getBoolean(DISMISSED_KEY);
+			displayReloadInfo = savedInstanceState.getBoolean(DISPLAY_RELOAD_INFO_KEY);
+		} 
+		
 		ChangeLog cl = new ChangeLog(this);
-		setupCompleted = sharedPref.getBoolean("setup_completed", false);
+		setupCompleted = prefs.getBoolean(Const.PREF_SETUP_COMPLETED, false);
 		if ( !setupCompleted) {
 			//start setup only if the plugin is not enabled in kp2a; otherwise assume it was already completed manually somehow
 			if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) { 
 				Intent intent = new Intent(this, SetupWizardActivity.class);
 				startActivity(intent);
 			}
-		} else {			
+		} else {	
+			Intent intent = getIntent();
 			try {
 				// this version launched for the very first time, from kp2a
-				if (getIntent().getBooleanExtra(Const.EXTRA_SHOW_CHANGELOG, false)) {
+				if (intent.getBooleanExtra(Const.EXTRA_SHOW_CHANGELOG, false)) {
 					cl.getLogDialog().show();
 				} else {
 					// this version launched for the very first time, from launcher					
@@ -124,7 +100,23 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			} catch (Exception e) {
 				Toast.makeText(this, "Couldn't show changelog!", Toast.LENGTH_LONG).show();
 			}
+			
+			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_SCOPE, false)) && ( !dismissed)) {
+				showRequestDbScopeDialog();
+			}		
+			
+			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, false)) && ( !dismissed)) {
+				showNotificationInfoDialog();
+			}	
+			
 		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putBoolean(DISMISSED_KEY, dismissed);
+	    savedInstanceState.putBoolean(DISPLAY_RELOAD_INFO_KEY, displayReloadInfo);
+	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	@Override
@@ -133,9 +125,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		if ((requestCode == REQUEST_CODE_SELECT_APP) && (resultCode == RESULT_OK)) {	
 			String packageName = data.getStringExtra(SelectAppActivity.RESULT_PACKAGE);
 			String name = getNameForPackage(packageName);
-			Editor edit = sharedPref.edit();
-			edit.putString("clipboard_custom_app_package", packageName).apply();
-			edit.putString("clipboard_custom_app_name", name).apply();
+			Editor edit = prefs.edit();
+			edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE, packageName).apply();
+			edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_NAME, name).apply();
 			edit.apply();									
 			setCustomAppPackageSummary();
 		}		
@@ -146,36 +138,31 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		Preference pref;	
 		
 		ListPreference listPref;
-		listPref = (ListPreference)findPreference("kbd_layout");
+		listPref = (ListPreference)findPreference(Const.PREF_PRIMARY_LAYOUT);
 		listPref.setEntries(KeyboardLayout.getLayoutNames(true));
 		listPref.setEntryValues(KeyboardLayout.getLayoutCodes());
-		listPref = (ListPreference)findPreference("secondary_kbd_layout");
+		listPref = (ListPreference)findPreference(Const.PREF_SECONDARY_LAYOUT);
 		listPref.setEntries(KeyboardLayout.getLayoutNames(true));
 		listPref.setEntryValues(KeyboardLayout.getLayoutCodes());
 		
-		setListSummary("kbd_layout");
-		setListSummary("secondary_kbd_layout");
-		setListSummary("typing_speed");
-		setListSummary("autoconnect_timeout");		
-		setListSummary("transfer_method");
+		setListSummary(Const.PREF_PRIMARY_LAYOUT);
+		setListSummary(Const.PREF_SECONDARY_LAYOUT);
+		setListSummary(Const.PREF_TYPING_SPEED);
+		
+		setListSummary(Const.PREF_AUTO_CONNECT);    
+		setListSummary(Const.PREF_MAX_IDLE_PERIOD);
 		
         		
-		pref = findPreference("enable_plugin_pref");
+		pref = findPreference(Const.PREF_ENABLE_PLUGIN_PREF);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				try {
-					Intent i = new Intent(Strings.ACTION_EDIT_PLUGIN_SETTINGS);
-					i.putExtra(Strings.EXTRA_PLUGIN_PACKAGE, SettingsActivity.this.getPackageName());
-					startActivityForResult(i, REQUEST_CODE_ENABLE_PLUGIN);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				enableAsPlugin();
 				return true;
 			}
 		});
 		
-		pref = (Preference) findPreference("show_changelog_preference_key");
+		pref = (Preference) findPreference(Const.PREF_SHOW_CHANGELOG_PREFERENCE_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {				
@@ -184,7 +171,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});
 		
-		pref = (Preference)findPreference("show_help_webpage_key");
+		pref = (Preference)findPreference(Const.PREF_SHOW_HELP_WEBPAGE_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -193,18 +180,18 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});		
 		
-		pref = (Preference)findPreference("show_about_key");
+		pref = (Preference)findPreference(Const.PREF_SHOW_ABOUT_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {				
 				startActivity(new Intent(SettingsActivity.this, AboutActivity.class));
 				return true;
 			}
-		});					
+		});				
 
 		//typing:		
-		findPreference("kbd_layout").setOnPreferenceClickListener(reloadInfoListener);
-		prefShowSecondary = (Preference) findPreference("show_secondary");
+		findPreference(Const.PREF_PRIMARY_LAYOUT).setOnPreferenceClickListener(reloadInfoListener);
+		prefShowSecondary = (Preference) findPreference(Const.PREF_SHOW_SECONDARY_LAYOUT);
 		prefShowSecondary.setOnPreferenceClickListener(reloadInfoListener);
 		prefShowSecondary.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -215,11 +202,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 					//check if at least one action is enabled
 					boolean showMessage = true;
 					String tmp;
-					tmp = sharedPref.getString(SettingsActivity.ITEMS_FIELD_SECONDARY, null);
+					tmp = prefs.getString(Const.PREF_ITEMS_FIELD_SECONDARY, null);
 					if ((tmp != null) && (tmp.length() > 1)) {
 						showMessage = false;
 					}
-					tmp = sharedPref.getString(SettingsActivity.ITEMS_ENTRY_SECONDARY, null);
+					tmp = prefs.getString(Const.PREF_ITEMS_ENTRY_SECONDARY, null);
 					if ((tmp != null) && (tmp.length() > 1)) {
 						showMessage = false;
 					}					
@@ -235,34 +222,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         		return true;
 			}
         });
-		prefSecondaryKbdLayout = findPreference("secondary_kbd_layout");
+		prefSecondaryKbdLayout = findPreference(Const.PREF_SECONDARY_LAYOUT);
 		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);	
 		
-		//connection:
-		pref = (Preference) findPreference("autoconnect");
-		pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				setAutoconnectTimeoutEnabled((Boolean)newValue);
-				displayReloadInfo = true;
-        		return true;
-			}
-        });
-		
-		prefAutoconnectTimeout = (Preference) findPreference("autoconnect_timeout");
-		prefAutoconnectTimeout.setOnPreferenceClickListener(reloadInfoListener);		
-		
-		pref = (Preference)findPreference("transfer_method");
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				return displayTip(TIP_DATA_TRANSFER_METHOD, false);
-			}
-		});
-		
-		
 		//clipboard:
-		prefLaunchAuthenticator = (CheckBoxPreference)findPreference("clipboard_launch_authenticator");
+		prefLaunchAuthenticator = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR);
 		prefLaunchAuthenticator.setOnPreferenceClickListener(reloadInfoListener);
 		prefLaunchAuthenticator.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -276,7 +240,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
         });
 		
-		prefLaunchCustomApp = (CheckBoxPreference)findPreference("clipboard_launch_custom_app");
+		prefLaunchCustomApp = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_CUSTOM_APP);
 		prefLaunchCustomApp.setOnPreferenceClickListener(reloadInfoListener);
 		prefLaunchCustomApp.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -291,7 +255,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         });
 		
 		
-		prefCustomAppPackage = (Preference)findPreference("clipboard_custom_app_package");
+		prefCustomAppPackage = (Preference)findPreference(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE);
 		prefCustomAppPackage.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -304,19 +268,18 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
 		
 		//UI:
-		findPreference("display_inputstick_text").setOnPreferenceClickListener(reloadInfoListener);
-		findPreference("items_general").setOnPreferenceClickListener(reloadInfoListener);
-		findPreference("items_entry_primary").setOnPreferenceClickListener(reloadInfoListener);
-		findPreference("items_field_primary").setOnPreferenceClickListener(reloadInfoListener);
-		prefUiEntrySecondary = findPreference("items_entry_secondary");
+		findPreference(Const.PREF_DISPLAY_IS_TEXT).setOnPreferenceClickListener(reloadInfoListener);
+		findPreference(Const.PREF_ITEMS_GENERAL).setOnPreferenceClickListener(reloadInfoListener);
+		findPreference(Const.PREF_ITEMS_ENTRY_PRIMARY).setOnPreferenceClickListener(reloadInfoListener);
+		findPreference(Const.PREF_ITEMS_FIELD_PRIMARY).setOnPreferenceClickListener(reloadInfoListener);
+		prefUiEntrySecondary = findPreference(Const.PREF_ITEMS_ENTRY_SECONDARY);
 		prefUiEntrySecondary.setOnPreferenceClickListener(reloadInfoListener);
-		prefUiFieldSecondary = findPreference("items_field_secondary");
+		prefUiFieldSecondary = findPreference(Const.PREF_ITEMS_FIELD_SECONDARY);
 		prefUiFieldSecondary.setOnPreferenceClickListener(reloadInfoListener);						
 		
 		//enable/disable preferences
-		setSecondaryLayoutEnabled(sharedPref.getBoolean("show_secondary", false));		
-		setAutoconnectTimeoutEnabled(sharedPref.getBoolean("autoconnect", true));		
-		setLaunchCustomAppEnabled(sharedPref.getBoolean("clipboard_launch_custom_app", false));		
+		setSecondaryLayoutEnabled(PreferencesHelper.isSecondaryLayoutEnabled(prefs));			
+		setLaunchCustomAppEnabled(PreferencesHelper.isClipboardLaunchCustomApp(prefs));
 	}
 	
 	@Override
@@ -324,43 +287,39 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);		
 		displayReloadInfo = false;
-		Preference enablePref = findPreference("enable_plugin_pref");
+		Preference enablePref = findPreference(Const.PREF_ENABLE_PLUGIN_PREF);
 		if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
 			enablePref.setSummary(R.string.not_configured);
 		} else {
 			enablePref.setSummary(R.string.enabled);
 			if ( !setupCompleted) {
-				setupCompleted = true;
-				SlidesUtils.init(this);
-				SlidesUtils.setAsCompleted();
+				setupCompleted = true;				
+				PreferencesHelper.setSetupCompleted(prefs);
 			}
 		}
 		
 		//handle layout change made in setup wizard
-		String layout = sharedPref.getString("kbd_layout", "en-US");				
+		String layoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);
 		String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());	
 		String[] layoutNames = Util.convertToStringArray(KeyboardLayout.getLayoutNames(true));	
-		int selectedLayout = Arrays.asList(layoutValues).indexOf(layout);
-		Preference pref  = findPreference("kbd_layout");
+		int selectedLayout = Arrays.asList(layoutValues).indexOf(layoutCode);
+		Preference pref  = findPreference(Const.PREF_PRIMARY_LAYOUT);
 		pref.setSummary(layoutNames[selectedLayout]);		
 	}
 	
 	@Override
 	protected void onPause() {
 		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-		ActionManager actionManager = ActionManager.getInstance(this);
-		actionManager.reloadPreferences(sharedPref);
 		super.onPause();				
 	}
 	
 	@Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("typing_speed")) {
-        	if (sharedPreferences.getString("typing_speed", "1").equals("0")) {        		
-        		displayTip(TIP_TYPING_SPEED, false);
+        if (key.equals(Const.PREF_TYPING_SPEED)) {
+        	if (PreferencesHelper.getTypingSpeed(sharedPreferences) == 0) {
+        		displayTip(TIP_TYPING_SPEED);
         	}
-        }
-        
+        }        
         setListSummary(key);
     }
 	
@@ -370,16 +329,22 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		pref = findPreference(key);
 		if (pref instanceof ListPreference) {
 			listPref = (ListPreference) pref;
-			pref.setSummary(listPref.getEntry());
+			String summary = listPref.getEntry().toString();
+			int tmp = summary.indexOf('\n');
+			if (tmp > 0) {
+				summary = summary.substring(0, tmp);
+			}			
+			pref.setSummary(summary);
+			//pref.setSummary(listPref.getEntry());
 		}
 	}
 	
 	private void setCustomAppPackageSummary() {
-		String packageName = sharedPref.getString("clipboard_custom_app_package", "none");
-		if ("none".equals(packageName)) {
+		String appPackage = PreferencesHelper.getClipboardCustomAppPackage(prefs);
+		if (Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE_VALUE.equals(appPackage)) {
 			prefCustomAppPackage.setSummary(R.string.clipboard_custom_app_not_selected);
 		} else {
-			prefCustomAppPackage.setSummary(getNameForPackage(packageName));
+			prefCustomAppPackage.setSummary(getNameForPackage(appPackage));
 		}
 	}
 	
@@ -387,7 +352,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	public void onBackPressed() {
 		boolean kp2a = getIntent().getBooleanExtra(Const.EXTRA_LAUNCHED_FROM_KP2A, false); //show warning only if activity was launched from kp2a app, 
-		boolean showWarning = sharedPref.getBoolean("show_reload_warning", true); //show warning only if user did not checked "do not show again" before
+		boolean showWarning = prefs.getBoolean(Const.PREF_SHOW_RELOAD_WARNING, Const.PREF_SHOW_RELOAD_WARNING_VALUE); //show warning only if user did not checked "do not show again" before
 		//show warning only if it is necessary to reload entry
 		if (kp2a && displayReloadInfo) {
 			if (showWarning) {
@@ -405,8 +370,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 					public void onClick(DialogInterface dialog, int which) {
 						SettingsActivity.this.onBackPressed();	
 						if (cb.isChecked()) {
-							SharedPreferences.Editor editor = sharedPref.edit();
-							editor.putBoolean("show_reload_warning", false);
+							SharedPreferences.Editor editor = prefs.edit();
+							editor.putBoolean(Const.PREF_SHOW_RELOAD_WARNING, false);
 							editor.apply();
 						}
 					}
@@ -420,12 +385,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		} else {
 			super.onBackPressed();
 		}
-	}
-	
-	
-	private void setAutoconnectTimeoutEnabled(boolean enabled) {
-		prefAutoconnectTimeout.setEnabled( !enabled); // show this pref only if autoconnect is DISABLED
-	}
+	}	
 	
 	private void setSecondaryLayoutEnabled(boolean enabled) {
 		prefUiEntrySecondary.setEnabled(enabled);
@@ -446,40 +406,81 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}	
 	}
 	
+	private void enableAsPlugin() {
+		try {
+			Intent i = new Intent(Strings.ACTION_EDIT_PLUGIN_SETTINGS);
+			i.putExtra(Strings.EXTRA_PLUGIN_PACKAGE, SettingsActivity.this.getPackageName());
+			startActivityForResult(i, REQUEST_CODE_ENABLE_PLUGIN);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 	
-	private boolean displayTip(int tipId, boolean displayOnce) {
-		String key = "show_tip_" + tipId; 		
-		if (sharedPref.getBoolean(key, true)) {
-			if (displayOnce) {
-				//tip was not displayed yet, display it now and never again
-				/*Editor editor = sharedPref.edit();
-				editor.putBoolean(key, false);
-				editor.apply();*/
+	private void showRequestDbScopeDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.missing_access_scope_title);
+		alert.setMessage(R.string.missing_access_scope_message);
+		alert.setPositiveButton(R.string.yes, new OnClickListener() {					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismissed = true;
+				enableAsPlugin();					
 			}
-			
-			int resId = R.string.tip_empty;
-			switch (tipId) {
-				case TIP_DATA_TRANSFER_METHOD:
-					resId = R.string.tip_data_transfer_method; 
-					break;
-				case TIP_TYPING_SPEED:
-					resId = R.string.tip_typing_speed; 
-					break;					
-			}						
-			String message = getString(resId);			
-			
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle(R.string.tip_title);
-			alert.setMessage(message);			
-			alert.setNeutralButton(R.string.ok, null);	
-			alert.show();				
-			return true;
-		} else {
-			return false;
-		}
+		});
+		alert.setNegativeButton(R.string.never, new OnClickListener() {					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismissed = true;
+				PreferencesHelper.disableDbScopeDialog(prefs);
+			}
+		});
+		alert.setNeutralButton(R.string.later, new OnClickListener() {					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismissed = true;
+			}
+		});
+		alert.show();		
+	}
+	
+	private void showNotificationInfoDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.app_name);
+		alert.setMessage(R.string.text_notification_info);
+		alert.setPositiveButton(R.string.ok, new OnClickListener() {					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismissed = true;			
+			}
+		});
+		alert.setNegativeButton(R.string.text_stop_plugin, new OnClickListener() {					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dismissed = true;
+				ActionHelper.forceStopService(SettingsActivity.this);
+			}
+		});
+		alert.show();		
 	}
 	
 	
+	private void displayTip(int tipId) {
+		//String key = "show_tip_" + tipId; 		
+		int resId = R.string.tip_empty;
+		switch (tipId) {
+			case TIP_TYPING_SPEED:
+				resId = R.string.tip_typing_speed; 
+				break;					
+				
+		}						
+		String message = getString(resId);			
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.tip_title);
+		alert.setMessage(message);			
+		alert.setNeutralButton(R.string.ok, null);	
+		alert.show();
+	}	
 	
 	
 	

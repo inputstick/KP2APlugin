@@ -1,6 +1,8 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+
 import com.inputstick.api.hid.HIDKeycodes;
 
 public class MacroHelper {
@@ -239,5 +241,22 @@ public class MacroHelper {
 		}
 		return 0;
 	}
+	
 
+	public static String loadMacro(SharedPreferences prefs, String entryId) {
+		return prefs.getString(Const.MACRO_PREF_PREFIX + entryId, null);
+	}
+	
+	public static void saveMacro(SharedPreferences prefs, String entryId, String macroData) {
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Const.MACRO_PREF_PREFIX + entryId, macroData);
+		editor.apply();	
+	}
+	
+	public static void deleteMacro(SharedPreferences prefs, String entryId) {
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.remove(Const.MACRO_PREF_PREFIX + entryId);
+		editor.apply();
+	}
+	
 }

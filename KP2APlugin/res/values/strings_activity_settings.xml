@@ -6,13 +6,22 @@
     <string name="configure_plugin">Configure as plugin</string>   
 	<string name="enabled">Enabled</string>
     <string name="not_configured">NOT configured!</string>    
-        
-    <string name="configuration_message">Please take a minute to configure the plugin.\n\nConfigure as plugin -> Accept\n\nMake sure that host keyboard layout matches the one used by USB host (your PC).\nEnable and set secondary layout if you work with different keyboard layouts.\n\nENABLE autoconnect if InputStick is used most of the time. Application will try to connect to InputStick every time entry is opened.\nDISABLE autoconnect when InputStick is used occasionally. Application will not connect unless you request typing.\n\nRemember: this plugin requires InputStickUtility app to be installed.</string>            
+    
+    <string name="missing_access_scope_title">KP2A access scope</string>    
+    <string name="missing_access_scope_message">The plugin can automatically disconnect when Keepass2Android database is locked or closed. This requires access to KP2A database events. Request access now?</string>    
+            
     <string name="secondary_layout_action_reminder_message">You should enable at least one action for secondary keyboard layout (see \"Displayed UI actions\" below)</string>
     
   	<string name="show_changelog_title">Show changelog</string>
   	<string name="show_help_webpage_title">Open help webpage</string>
-  	<string name="show_about_app_title">About app</string>  	  	
+  	<string name="show_about_app_title">About app</string>  	
+  	
+  	<string name="help_and_info_settings_title">Help and info</string>
+    <string name="general_settings_title">General</string>
+    
+	<string name="show_notification_title">Show notification</string>       
+    <string name="show_notification_summary_on">Show notification when the plugin is running</string>           
+    <string name="show_notification_summary_off">Do not show notification</string>    		
     
     <string name="typing_settings_title">Typing settings</string>
     <string name="connection_settings_title">InputStick connection settings</string>    
@@ -27,66 +36,15 @@
     <string name="enter_after_url_title">Enter after URL</string>
     <string name="enter_after_url_summary_on">Press Enter key after typing URL field</string>
     <string name="enter_after_url_summary_off">Do nothing after typing URL field</string>               
-    
-    <string name="autoconnect_title">Auto-connect</string>
-    <string name="autoconnect_summary_on">Connect to InputStick each time entry is opened. (InputStick is used most of the time)</string>
-    <string name="autoconnect_summary_off">Connect to InputStick only if typing is requested OR if entry is being opened within \"Timeout\" (see below) since last plugin action. (InputStick is used occasionally)</string>
-    
-    <string name="autoconnect_timeout_title">Timeout</string>
-        
-    <string name="typing_speed_title">Typing speed</string>    
-    
-    <string name="do_not_disconnect_title">Stay connected</string>   
-    <string name="do_not_disconnect_summary_on">Connection will NOT be closed after closing entry. You must disconnect manually or set timeout in InputStickUtility application</string>           
-    <string name="do_not_disconnect_summary_off">Connection will be closed after closing entry.</string>
-
-    <string name="transfer_method_title">Data transfer method</string>         
-    
-    <string name="entry_reload_message">UI changes will be visible after entry is reloaded or new entry is opened</string>
-    	
-	<string name="uninstall_title">Uninstall</string>  
-	<string name="uninstall_message">Uninstall previous release of the plugin now?\n\nRemember to configure current release: \"Configure as plugin\", set keyboard layout, etc.\n\n\"Open help webpage\" to learn about new features.</string>  
-	<string name="uninstall_toast">Uninstall old release of the plugin</string>	
-	
-
-	
-	<string-array name="transfer_method_values">
-        <item>standard</item>	    
-        <item>broadcast</item>
-    </string-array>	 
-    
-	<string-array name="transfer_method_names">
-        <item>Standard method</item>
-        <item>Use broadcasts (can solve connection issues on some devices)</item>
-    </string-array>	   
-	
-        
-	<string-array name="autoconnect_timeout_names">
-        <item>Disabled</item>
-        <item>1 min</item>
-        <item>3 min</item>
-        <item>10 min</item>
-        <item>30 min</item>
-        <item>60 min</item>
-    </string-array>	 
-    
+           
+    <string name="typing_speed_title">Typing speed</string>
 	<string-array name="typing_speed_names">
 	    <item>Fastest (>2.0)</item> 
         <item>Normal (1.0)</item>
         <item>Slow (0.5)</item>
         <item>Slower (0.2)</item>
         <item>Slowest (0.1)</item>
-    </string-array>
-    
-        
-	<string-array name="autoconnect_timeout_values">
-        <item>0</item>
-        <item>60000</item>
-        <item>180000</item>
-        <item>600000</item>
-        <item>1800000</item>
-        <item>3600000</item>
-    </string-array>	      
+    </string-array>   
     
 	<string-array name="typing_speed_values">
 	    <item>0</item>
@@ -94,19 +52,14 @@
         <item>2</item>
         <item>5</item>
         <item>10</item>
-    </string-array>	  
+    </string-array>	            
+           
     
-        
-	<string name="display_inputstick_text_title">Display \"(IS)\"</string>       
-    <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>           
-    <string name="display_inputstick_text_summary_off">Display only action name, example: Type</string>	
-    <string name="ui_settings_title">Displayed UI actions:</string>
-	<string name="items_general_title">General actions</string>
-	<string name="items_entry_primary_title">Entry actions (primary layout)</string>
-	<string name="items_entry_secondary_title">Entry actions (secondary layout)</string>
-	<string name="items_field_primary_title">Field actions (primary layout)</string>
-	<string name="items_field_secondary_title">Field actions (secondary layout)</string>
-	
+    <string name="entry_reload_message">UI changes will be visible after entry is reloaded or new entry is opened</string>
+    	
+	<string name="uninstall_title">Uninstall</string>  
+	<string name="uninstall_message">Uninstall previous release of the plugin now?\n\nRemember to configure current release: \"Configure as plugin\", set keyboard layout, etc.\n\n\"Open help webpage\" to learn about new features.</string>  
+	<string name="uninstall_toast">Uninstall old release of the plugin</string>		        
 	
 	<string name="clipboard_typing_settings_title">Clipboard typing</string>	
 	<string name="clipboard_launch_authenticator_title">Launch Google Authenticator</string>
@@ -126,9 +79,19 @@
 	<string name="clipboard_auto_disable_summary_off">Keep active for 30 seconds since activation</string>	
 	<string name="clipboard_check_length_title">Check length</string>
 	<string name="clipboard_check_length_summary_on">Do not type if text in clipboard is longer than 64 characters</string>
-	<string name="clipboard_check_length_summary_off">Always type, even long text</string>
-		
-	  
+	<string name="clipboard_check_length_summary_off">Always type, even long text</string>	
+	
+	<string name="display_inputstick_text_title">Display \"(IS)\"</string>       
+    <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>           
+    <string name="display_inputstick_text_summary_off">Display only action name, example: Type</string>         
+    	
+    <string name="ui_settings_title">Displayed UI actions:</string>
+	<string name="items_general_title">General actions</string>
+	<string name="items_entry_primary_title">Entry actions (primary layout)</string>
+	<string name="items_entry_secondary_title">Entry actions (secondary layout)</string>
+	<string name="items_field_primary_title">Field actions (primary layout)</string>
+	<string name="items_field_secondary_title">Field actions (secondary layout)</string>	
+			  
     <string-array name="generalItemsDisplayList">
         <item>Settings shortcut</item>
         <item>Connect/Disconnect</item>
@@ -174,7 +137,39 @@
     
     <string name="tip_title">Tip:</string>
     <string name="tip_empty">Error: empty message</string>
-    <string name="tip_data_transfer_method">If you are experiencing following issues:\n- connection failures,\n- text not being typed sometimes,\ntry \"Use broadcasts\" option, it can fix the issues on some devices\n\nIn most cases \"standard method\" works just fine and should not be changed.\nNote: change will be applied when new KP2A entry is opened.</string>    
-	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>        	 	
-
+	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>
+	
+	<string name="text_notification_info">Notification indicates that KP2A InputStick plugin is running in the background. You can disable this notification in settings. Plugin will stop automatically when KP2A database is locked or closed. If this does not work make sure plugin has necessary KP2A permissions: Configure as plugin -> Accept</string>
+		
+	
+	<string name="connection_auto_connect_title">Auto-connect</string>
+	<string-array name="connection_auto_connect_names">
+		<item>Disabled\n- wait until typing is requested\n(InputStick is used occasionally)\n</item>
+		<item>Smart\n- when KP2A entry is opened\n- disable after connection error\n- re-enable after successful connection\n(InputStick is used frequently)\n</item> 			    
+		<item>Always\n- when KP2A entry is opened\n(InputStick is always used)\n</item>	    	          
+    </string-array>	
+    <string-array name="connection_auto_connect_values">
+		<item>0</item>
+		<item>2</item>               
+        <item>1</item>        
+    </string-array>	 
+	
+	<string name="connection_max_idle_period_title">Max inactivity period</string>
+	<string-array name="connection_max_idle_period_names">
+        <item>1 min</item>
+        <item>2 min</item>
+		<item>3 min</item>
+		<item>5 min</item>
+		<item>10 min</item>		        
+        <item>Unlimited\n- can drain battery!\n- NOT recommended for most users!</item>
+    </string-array>	
+    <string-array name="connection_max_idle_period_values">
+        <item>60000</item>
+        <item>120000</item>
+		<item>180000</item>
+		<item>300000</item>
+		<item>600000</item>		        
+        <item>0</item>
+    </string-array>			            
+    
 </resources>

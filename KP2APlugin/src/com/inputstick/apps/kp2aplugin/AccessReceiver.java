@@ -10,6 +10,7 @@ public class AccessReceiver extends keepass2android.pluginsdk.PluginAccessBroadc
 	public ArrayList<String> getScopes() {
 		ArrayList<String> scopes = new ArrayList<String>();
 		scopes.add(Strings.SCOPE_CURRENT_ENTRY);
+		scopes.add(Strings.SCOPE_DATABASE_ACTIONS);		
 		return scopes;
 	}
 

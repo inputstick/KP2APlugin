@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.inputstick.apps.kp2aplugin.Const;
+import com.inputstick.apps.kp2aplugin.PluginHelper;
 import com.inputstick.apps.kp2aplugin.R;
 
 public class UninstallSlide extends Fragment {
@@ -46,7 +47,7 @@ public class UninstallSlide extends Fragment {
     @Override
     public void  onResume() {
     	super.onResume();
-    	if (SlidesUtils.isPackageInstalled(Const.PACKAGE_PLUGIN_OLD)) {
+    	if (PluginHelper.isPackageInstalled(getActivity(), Const.PACKAGE_PLUGIN_OLD)) {
     		buttonUninstall.setText(R.string.slide_button_uninstall);
     		buttonUninstall.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_uninstall, 0);
     		isInstalled = true;

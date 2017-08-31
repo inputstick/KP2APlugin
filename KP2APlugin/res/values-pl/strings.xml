@@ -18,14 +18,17 @@
 	<string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator NIE jest zainstalowany!</string>
 	<string name="text_custom_app_not_found">InputStick plugin: NIE odnaleziono aplikacji!</string>
     <string name="text_custom_app_not_specified">InputStick plugin: NIE wybrano aplikacji do uruchomienia (napraw w ustawieniach)!</string>
-	<string name="text_connection_failed">InputStick plugin: błąd połaczenia!</string>  
+	<string name="text_connection_failed">InputStick plugin: błąd połaczenia!</string>
+	<string name="text_auto_connect_disabled">InputStick plugin: błąd połaczenia! Auto-łączenie wył</string>
+    <string name="text_auto_connect_reenabled">Auto-łączenie wł</string>
 	<string name="text_clipboard_disabled">InputStick plugin: Pisanie ze schowka zostało wyłączone</string>  
 	<string name="text_clipboard_notification_info">Pisanie ze schowka aktywne</string>
 	<string name="text_clipboard_copy_now">InputStick plugin: Skopiuj kod do schowka (pozostało 30 sekund)</string>  		
     <string name="text_clipboard_too_long">Tekst zbyt długi. Zobacz opcję: Sprawdzaj długość w ustawieniach</string>	
 	<string name="text_capslock_warning">Uwaga: CapsLock JEST WŁĄCZONY!</string>
 	<string name="text_missing_utility_app">Musisz pobrać aplikację InputStickUtility</string>
-	
+	<string name="text_plugin_restarted">Restart pluginu, wybierz akcję ponownie</string>
+	<string name="text_stop_plugin">Zatrzymaj plugin</string>
     <string name="action_type">Wpisz</string>
     <string name="action_type_slow">Wpisz (powoli)</string>
     <string name="action_type_tab">Tab</string>
@@ -59,6 +62,13 @@
     <string name="disable">Wyłącz</string>
     <string name="important_title">Ważne!</string>   
 	<string name="configuration_title">Konfiguracja</string>  	
+    <string name="later">Później</string>
+    <string name="never">Nigdy</string>	
+    
+    <string name="notification_state_ready">InputStick plugin: połączono (USB OK)</string>	    
+	<string name="notification_state_connected">InputStick plugin: połączono (oczekuje na USB)</string>
+	<string name="notification_state_connecting">InputStick plugin: łączenie...</string>
+	<string name="notification_state_not_connected">InputStick plugin: nie połączono</string>    
 	
     <string name="title_activity_about">O aplikacji</string>
     <string name="about_text">Autorzy:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nKod źródłowy:\nhttps://github.com/inputstick\n\nAplikacja korzysta z:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>

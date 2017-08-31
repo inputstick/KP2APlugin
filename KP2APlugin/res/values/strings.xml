@@ -5,9 +5,11 @@
     <string name="kp2aplugin_title">InputStick Plugin</string>
     <string name="kp2aplugin_shortdesc">Allows to send text from KP2A via InputStick to your PC.</string>
     <string name="kp2aplugin_author">Philipp Crocoll and Jakub Zawadzki</string>
+    
     <string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_show_full">more&#8230;</string>
+    
     <string name="title_activity_init">Plugin Init</string>
     <string name="title_activity_all_actions">Select action:</string>
     <string name="title_activity_select_app">Select app:</string>
@@ -17,12 +19,16 @@
     <string name="text_custom_app_not_found">InputStick plugin: application NOT found!</string>
     <string name="text_custom_app_not_specified">InputStick plugin: application to run NOT specified (fix in plugin settings)!</string>
     <string name="text_connection_failed">InputStick plugin: connection failed!</string>
+    <string name="text_auto_connect_disabled">InputStick plugin: connection failed! Auto-connect disabled</string>
+    <string name="text_auto_connect_reenabled">Auto-connect re-enabled</string>
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
     <string name="text_clipboard_notification_info">Clipboard typing active</string>
     <string name="text_clipboard_copy_now">InputStick plugin: Copy code to clipboard (30 seconds remaining)</string>
     <string name="text_clipboard_too_long">Text is too long. See Check Length option in settings</string>
     <string name="text_capslock_warning">Warning: CapsLock IS ON!</string>
     <string name="text_missing_utility_app">You need to download InputStickUtility app</string>
+    <string name="text_plugin_restarted">Plugin restarted, select action again</string>
+    <string name="text_stop_plugin">Stop plugin</string>
     <string name="action_type">Type</string>
     <string name="action_type_slow">Type (slow)</string>
     <string name="action_type_tab">Tab</string>
@@ -40,6 +46,7 @@
     <string name="action_macro_add_edit">Add/Edit macro</string>
     <string name="action_template_manage">Manage templates</string>
     <string name="action_clipboard">Clipboard</string>
+    
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -55,9 +62,18 @@
     <string name="disable">Disable</string>
     <string name="important_title">Important!</string>
     <string name="configuration_title">Configuration</string>
+    <string name="later">Later</string>
+    <string name="never">Never</string>
+    
+    <string name="notification_state_ready">InputStick plugin: connected (USB OK)</string>	    
+	<string name="notification_state_connected">InputStick plugin: connected (waiting for USB)</string>
+	<string name="notification_state_connecting">InputStick plugin: connecting...</string>
+	<string name="notification_state_not_connected">InputStick plugin: not connected</string>       
+    
     <string name="title_activity_about">About application</string>
     <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
+    
     <string name="test_chars">abc123xyz_;![/?@)</string>
-    <string name="hello_world">Hello world!</string>        
+    <string name="hello_world">Hello world!</string>
 
 </resources>

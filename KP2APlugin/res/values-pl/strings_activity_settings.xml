@@ -7,12 +7,21 @@
 	<string name="enabled">Włączony</string>    
 	<string name="not_configured">NIE ustawiono!</string> 
 	
-    <string name="configuration_message">Poświęć moment na konfigurację pluginu.\n\Ustaw jako plugin-> Akceptuj\n\nUpewnij się, że wybrany układ klawiatury odpowiada układowi z którego korzysta host USB (Twój PC).\nWłącz dodatkowy układ klawiatury, jeżeli często korzystasz z różnych układów.\n\nWŁĄCZ automatyczne łączenie, jeżeli korzystasz z InputStick w większości przypadków. Aplikacja rozpocznie nawiązywanie połączenia z InputStick gdy tylko wpis zostanie otwarty.\nWYŁĄCZ automatyczne łączenie, jeżeli planujesz korzystać z InputStick okazjonalnie . Aplikacja nie będzie nawiązywać połączenia dopóki nie wybierzesz opcji wpisywania tekstu.\n\nPamiętaj: aplikacja InputStickUtility musi być zainstalowana.</string>
+    <string name="missing_access_scope_title">Zakres dostępu do KP2A</string>    
+    <string name="missing_access_scope_message">Plugin może rozłączyć się automatycznie gdy baza Keepass2Android zostanie zablokowana lub zamknięta. Wymagamy jest dostęp do zadrzeń związanych z bazą danych KP2A. Zapytać o dostęp teraz?</string>          	
+
     <string name="secondary_layout_action_reminder_message">Pamiętaj aby włączyć wyświetlanie przynajmniej jednej akcji dla dodatkowego układu klawiatury (zobacz \"Widoczne elementy UI\" poniżej)</string>        		
 	
   	<string name="show_changelog_title">Pokaż zmiany</string>
   	<string name="show_help_webpage_title">Otwórz stronę z pomocą</string>
   	<string name="show_about_app_title">O aplikacji</string>    	
+  	
+  	<string name="help_and_info_settings_title">Pomoc i info</string>
+    <string name="general_settings_title">Ogólne</string>
+    
+	<string name="show_notification_title">Pokazuj powiadomienie</string>       
+    <string name="show_notification_summary_on">Pokazuj powiadomienie gdy plugin jest uruchomiony</string>           
+    <string name="show_notification_summary_off">Nie pokazuj powiadomienia</string>	
     
     <string name="typing_settings_title">Układ klawiatury hosta USB</string>
     <string name="connection_settings_title">Połączenie z InputStick</string>    
@@ -26,25 +35,28 @@
     
     <string name="enter_after_url_title">Enter po URL</string>    
     <string name="enter_after_url_summary_on">Dodaj Enter po wpisaniu pola URL</string>
-    <string name="enter_after_url_summary_off">Nic nie rób po wpisaniu pola URL</string>  
+    <string name="enter_after_url_summary_off">Nic nie rób po wpisaniu pola URL</string>      
     
-    <string name="autoconnect_title">Łącz automatycznie</string>
-    <string name="autoconnect_summary_on">Łącz z InputStick za każdym razem gdy otwierany jest wpis. (Korzystasz z InputStick przez większość czasu)</string>
-    <string name="autoconnect_summary_off">Łącz z InputStick dopiero gdy trzeba wpisać tekst LUB gdy wpis otwierany jest przed upływem max okresu bezczynności (zobacz poniżej) od ostatniej akcji pluginu. (Korzystasz z InputStick tylko czasami)</string>
-
-    <string name="autoconnect_timeout_title">Max okres bezczynności</string>
+    <string name="typing_speed_title">Szybkość wpisywania</string> 
+	<string-array name="typing_speed_names">
+	    <item>Najszybsza (>2.0)</item>      
+        <item>Standardowa (1.0)</item>
+        <item>Wolno (0.5)</item>
+        <item>Wolniej (0.2)</item>
+        <item>Najwolniej (0.1)</item>
+    </string-array>    
     
-    <string name="typing_speed_title">Szybkość wpisywania</string>
+	
+	
+	      
     
-    <string name="do_not_disconnect_title">Utrzymuj połączenie</string>
-    <string name="do_not_disconnect_summary_on">Połaczenie NIE zostanie zakończone gdy wpis jest zamykany. Musisz zakończyć połączenie ręcznie lub ustawić maks okres bezczynności w aplikacji InputStickUtility</string>           
-    <string name="do_not_disconnect_summary_off">Połaczenie zostanie zakończone gdy wpis jest zamykany.</string>       
-    
-    <string name="transfer_method_title">Transfer danych</string>       
-    
+	
+	
+	
+	
+	
     <string name="entry_reload_message">Zmiany ustawień interfejsu będą widoczne po przeładowaniu wpisu lub po załadowaniu nowego wpisu</string>
-    
-    
+        
 	<string name="uninstall_title">Odinstaluj</string>  
 	<string name="uninstall_message">Odinstalować poprzednią wersję plugin-u?\n\nPamiętaj o konfiguracji nowej wersji: \"Ustaw jako plugin\", wybierz układ klawiatury, itp.\n\n\"Otwórz stronę z pomocą\" aby dowiedzieć się więcej o nowych funkcjach.</string>  
     <string name="uninstall_toast">Odinstaluj poprzednią wersję plugin-u</string>  
@@ -67,35 +79,12 @@
 	<string name="clipboard_auto_disable_summary_off">Opcja zawsze aktywna przez 30 sekund od uruchomienia</string>
 	<string name="clipboard_check_length_title">Sprawdzaj długość</string>
 	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
-	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>
+	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>		              
 	
-	
-	<string-array name="transfer_method_names">
-        <item>Metoda standardowa</item>
-        <item>Użyj broadcastów (rozwiązuje problemy z połączeniem na części urządzeń)</item>
-    </string-array>	
-    
-	<string-array name="autoconnect_timeout_names">
-        <item>Brak</item>
-        <item>1 min</item>
-        <item>3 min</item>
-        <item>10 min</item>
-        <item>30 min</item>
-        <item>60 min</item>
-    </string-array>	     
-    
-	<string-array name="typing_speed_names">
-	    <item>Najszybsza (>2.0)</item>      
-        <item>Standardowa (1.0)</item>
-        <item>Wolno (0.5)</item>
-        <item>Wolniej (0.2)</item>
-        <item>Najwolniej (0.1)</item>
-    </string-array>    
-    
-    
 	<string name="display_inputstick_text_title">Wyświetlaj \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Pokaż nazwę akcji + (IS), przykład: Wpisz (IS)</string>           
-    <string name="display_inputstick_text_summary_off">Pokaż tylko nazwę akcji, przykład: Wpisz</string>		       
+    <string name="display_inputstick_text_summary_off">Pokaż tylko nazwę akcji, przykład: Wpisz</string>
+    		       
     <string name="ui_settings_title">Widoczne elementy UI:</string>
 	<string name="items_general_title">Ogólne</string>
 	<string name="items_entry_primary_title">Akcje dla wpisu (główny układ klaw.)</string>
@@ -111,6 +100,15 @@
 		<item>Zarządzaj szablonami</item>              
         <item>Klawisze Tab i Enter</item>        
     </string-array>
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <string-array name="entryItemsDisplayList">
         <item>Login/Hasło</item>
         <item>Login/Hasło/Enter</item>
@@ -119,15 +117,60 @@
         <item>Uruchom szablon</item>
 		<item>Schowek/Authenticator</item>        
     </string-array>
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <string-array name="fieldItemsDisplayList">
         <item>Wpisz</item>
         <item>Wpisz (powoli)</item>
     </string-array>
     
+    
+    
+    
+    
     <string name="tip_title">Porada:</string>
     <string name="tip_empty">Błąd: pusta wiadomość</string>
-    <string name="tip_data_transfer_method">Jeżeli występują następujące problemy:\n- błędy połączenia Bluetooth,\n- od czasu do czasu tekst nie jest wpisywany,\nwybierz opcję \"Użyj broadcastów\", na części urządzeń powinna rozwiązać te problemy.\n\nW większości przypadków \"Metoda standardowa\" działa poprawnie i nie powinna być zmieniana.\nZmiany zostaną zastosowane po otwarciu kolejnego wpisu w KP2A.</string>    
-	<string name="tip_typing_speed">Upewnij się, że wybrana opcja działa poprawnie! W niektórych sytuacjach (BIOS) test może nie być wpisywany poprawnie.</string>    
+	<string name="tip_typing_speed">Upewnij się, że wybrana opcja działa poprawnie! W niektórych sytuacjach (BIOS) test może nie być wpisywany poprawnie.</string>
+	
+	<string name="text_notification_info">Powiadomienie wskazuje, że KP2A InputStick plugin działa w tle. Możesz wyłączyć wyświetlanie powiadomienia w ustawieniach. Plugin zostanie zatrzymany automatycznie gdy baza danych KP2A zostanie zablokowana lub zamknięta. Jeżeli nie działa to poprawnie, upewnij się, że plugin ma wymagane uprawnienia KP2A: kliknij Ustaw jako plugin -> Akceptuj</string>
+		    
     
+	
+	<string name="connection_auto_connect_title">Autom.-połącz</string>
+	<string-array name="connection_auto_connect_names">
+		<item>Wył.\n- zaczekaj aż do zarządania pisania\n(InputStick jest używany sporadycznie)\n</item>
+		<item>Smart\n- gdy wpis KP2A jest otwierany\n- wyłącz po nieudanym połączeniu\n- włącz ponownie po udanym połączeniu\n(InputStick jest używany często)\n</item> 			    
+		<item>Zawsze\n- gdy wpis KP2A jest otwierany\n(InputStick jest zawsze używany)\n</item>	    	          
+    </string-array>	
+
+
+
+
+				
+	
+	<string name="connection_max_idle_period_title">Max okres bezczynności</string>
+	<string-array name="connection_max_idle_period_names">
+        <item>1 min</item>
+        <item>2 min</item>
+		<item>3 min</item>
+		<item>5 min</item>
+		<item>10 min</item>		        
+        <item>Bez limitu\n- może szybko rozładować baterię!\n- NIE zalecane dla większości użytkowników!</item>
+    </string-array>	
+
+	
+	
+	
+	
+	
+	
+	
 
 </resources>

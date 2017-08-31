@@ -5,214 +5,200 @@ import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.inputstick.api.basic.InputStickHID;
-import com.inputstick.api.hid.HIDKeycodes;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadcastReceiver {
 	
-	private static final int LAYOUT_NONE = 0;
-	private static final int LAYOUT_PRIMARY = 1;
-	private static final int LAYOUT_SECONDARY = 2;	
-	
-	private static final String ACTION_SHOW_ALL = "com.inputstick.apps.kp2aplugin.show_all";
-	private static final String ACTION_MASKED_PASSWORD = "com.inputstick.apps.kp2aplugin.masked_password";
-	private static final String ACTION_SETTINGS = "com.inputstick.apps.kp2aplugin.settings";
-	private static final String ACTION_CONNECT = "com.inputstick.apps.kp2aplugin.connect";
-	private static final String ACTION_DISCONNECT = "com.inputstick.apps.kp2aplugin.disconnect";
-	private static final String ACTION_USER_PASS = "com.inputstick.apps.kp2aplugin.user_pass";
-	private static final String ACTION_USER_PASS_ENTER = "com.inputstick.apps.kp2aplugin.user_pass_enter";
-	private static final String ACTION_MAC_SETUP = "com.inputstick.apps.kp2aplugin.mac_setup";
-	private static final String ACTION_TAB = "com.inputstick.apps.kp2aplugin.tab";
-	private static final String ACTION_ENTER = "com.inputstick.apps.kp2aplugin.enter";
-	
-	private static final String ACTION_MACRO_ADDEDIT = "com.inputstick.apps.kp2aplugin.macro_addedit";	
-	private static final String ACTION_CLIPBOARD = "com.inputstick.apps.kp2aplugin.clipboard";	
-	private static final String ACTION_MACRO_RUN = "com.inputstick.apps.kp2aplugin.macro_run";
-	private static final String ACTION_TEMPLATE_RUN = "com.inputstick.apps.kp2aplugin.template_run";
-	private static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";	
-	
-	private static final String ACTION_FIELD_TYPE_PRIMARY = "com.inputstick.apps.kp2aplugin.type";
-	private static final String ACTION_FIELD_TYPE_SLOW_PRIMARY = "com.inputstick.apps.kp2aplugin.type_slow";
-	private static final String ACTION_FIELD_TYPE_SECONDARY = "com.inputstick.apps.kp2aplugin.types_econdary";
-	private static final String ACTION_FIELD_TYPE_SLOW_SECONDARY = "com.inputstick.apps.kp2aplugin.type_slow_secondary";
-	
-	private static final int IC = R.drawable.ic_launcher;
+	private static final String _TAG = "KP2AINPUTSTICK ACTIONRECEIVER";			 
 
-	private static ActionManager actionManager;
+	private static boolean displayInputStickText; 
+	private static boolean isSecondaryLayoutEnabled;
+	private static String primaryLayoutCode;
+	private static String secondaryLayoutCode;
+	
+	private void loadPreferences(SharedPreferences prefs) {
+		displayInputStickText = PreferencesHelper.inputStickTextEnabled(prefs);	
+		isSecondaryLayoutEnabled = PreferencesHelper.isSecondaryLayoutEnabled(prefs);			
+		primaryLayoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);
+		secondaryLayoutCode = PreferencesHelper.getSecondaryLayoutCode(prefs);
+	}
 	
 	@Override
 	protected void openEntry(OpenEntryAction oe) {
-		Context ctx = null;
-		UserPreferences userPrefs = null;
+		Context ctx = null;		
+		String scope = null;
+		SharedPreferences prefs = null; 
 		try {			
 			ctx = oe.getContext();
-			actionManager = ActionManager.getInstance(ctx, oe.getEntryId(), oe.getEntryFields());
-			userPrefs = actionManager.getUserPrefs();	
+			prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+			scope = oe.getScope();
+			String tmp, tmpSecondary;			
 			
+			loadPreferences(prefs);
+			String token = oe.getAccessTokenForCurrentEntryScope();
+			
+			//primary layout:			
+			tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);
+			tmpSecondary = PreferencesHelper.getFieldItemsForSecondaryLayout(prefs);
 			for (String field: oe.getEntryFields().keySet()) {
 				//primary layout
-				if (userPrefs.isShowType(true)) {
-					addEntryFieldTypeAction(oe, ACTION_FIELD_TYPE_PRIMARY, Strings.PREFIX_STRING + field, false, LAYOUT_PRIMARY);
+				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_PRIMARY, Strings.PREFIX_STRING + field, false, Const.LAYOUT_PRIMARY, token);
 				}
-				if (userPrefs.isShowTypeSlow(true)) {
-					addEntryFieldTypeAction(oe, ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, true, LAYOUT_PRIMARY);
+				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, true, Const.LAYOUT_PRIMARY, token);
 				}					
 				//secondary layout
-				if (userPrefs.isShowType(false)) {			
-					addEntryFieldTypeAction(oe, ACTION_FIELD_TYPE_SECONDARY, Strings.PREFIX_STRING + field, false, LAYOUT_SECONDARY);
-				}
-				if (userPrefs.isShowTypeSlow(false)) {					
-					addEntryFieldTypeAction(oe, ACTION_FIELD_TYPE_SLOW_SECONDARY, Strings.PREFIX_STRING + field, true, LAYOUT_SECONDARY);
+				if (isSecondaryLayoutEnabled) {
+					if (PreferencesHelper.isTypeActionEnabled(tmpSecondary)) {	
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SECONDARY, Strings.PREFIX_STRING + field, false, Const.LAYOUT_SECONDARY, token);
+					}
+					if (PreferencesHelper.isTypeSlowActionEnabled(tmpSecondary)) {
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, Strings.PREFIX_STRING + field, true, Const.LAYOUT_SECONDARY, token);
+					}
 				}
 			}
 			
 			//always add "all actions"
-			addEntryAction(oe, R.string.action_show_all, ACTION_SHOW_ALL, LAYOUT_NONE);		
+			addEntryAction(oe, R.string.action_show_all, Const.ACTION_SHOW_ALL, Const.LAYOUT_NONE, token);		
+			
 			
 			//general items
-			if (userPrefs.isShowSettings()) {
-				addEntryAction(oe, R.string.action_open_settings, ACTION_SETTINGS, LAYOUT_NONE);		
-			}
-			if (userPrefs.isShowConnectionOptions()) {
-				addEntryAction(oe, R.string.action_connect, ACTION_CONNECT, LAYOUT_NONE);		
-				addEntryAction(oe, R.string.action_disconnect, ACTION_DISCONNECT, LAYOUT_NONE);		
-			}		
+			tmp = PreferencesHelper.getGeneralItems(prefs);
 			
-			if (userPrefs.isShowMacSetup()) {
-				addEntryAction(oe, R.string.action_open_mac_setup, ACTION_MAC_SETUP, LAYOUT_NONE);		
+			if (PreferencesHelper.isSettingsActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_open_settings, Const.ACTION_SETTINGS, Const.LAYOUT_NONE, token);		
+			}
+			if (PreferencesHelper.isConnectionOptionsActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_connect, Const.ACTION_CONNECT, Const.LAYOUT_NONE, token);		
+				addEntryAction(oe, R.string.action_disconnect, Const.ACTION_DISCONNECT, Const.LAYOUT_NONE, token);		
+			}					
+			if (PreferencesHelper.isMacSetupActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_open_mac_setup, Const.ACTION_MAC_SETUP, Const.LAYOUT_NONE, token);		
 			}			
-			if (userPrefs.isShowTabEnter()) {
-				addEntryAction(oe, R.string.action_type_tab, ACTION_TAB, LAYOUT_NONE);						
-				addEntryAction(oe, R.string.action_type_enter, ACTION_ENTER, LAYOUT_NONE);		
+			if (PreferencesHelper.isTabEnterActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_type_tab, Const.ACTION_TAB, Const.LAYOUT_NONE, token);						
+				addEntryAction(oe, R.string.action_type_enter, Const.ACTION_ENTER, Const.LAYOUT_NONE, token);		
 			}
-			if (userPrefs.isShowMacroAddEdit()) {
-				addEntryAction(oe, R.string.action_macro_add_edit, ACTION_MACRO_ADDEDIT, LAYOUT_NONE);		
+			if (PreferencesHelper.isMacroAddEditActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_macro_add_edit, Const.ACTION_MACRO_ADDEDIT, Const.LAYOUT_NONE, token);		
 			}
-			if (userPrefs.isShowTemplateManage()) {
-				addEntryAction(oe, R.string.action_template_manage, ACTION_TEMPLATE_MANAGE, LAYOUT_NONE);		
+			if (PreferencesHelper.isTemplateManageActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_template_manage, Const.ACTION_TEMPLATE_MANAGE, Const.LAYOUT_NONE, token);		
 			}				
 
 			//entry items, primary layout 
-			if (userPrefs.isShowUserPass(true)) {
-				addEntryAction(oe, R.string.action_type_user_tab_pass, ACTION_USER_PASS, LAYOUT_PRIMARY);		
-			}			
-			if (userPrefs.isShowUserPassEnter(true)) {
-				addEntryAction(oe, R.string.action_type_user_tab_pass_enter, ACTION_USER_PASS_ENTER, LAYOUT_PRIMARY);		
-			}				
-			if (userPrefs.isShowMasked(true)) {
-				addEntryAction(oe, R.string.action_masked_password, ACTION_MASKED_PASSWORD, LAYOUT_PRIMARY);		
-			}	
-			if (userPrefs.isShowMacro(true)) {
-				addEntryAction(oe, R.string.action_macro_run, ACTION_MACRO_RUN, LAYOUT_PRIMARY);		
-			}
-			if (userPrefs.isShowRunTemplate(true)) {
-				addEntryAction(oe, R.string.action_template_run, ACTION_TEMPLATE_RUN, LAYOUT_PRIMARY);		
-			} 
+			tmp = PreferencesHelper.getEntryItemsForPrimaryLayout(prefs);
 			
-			if (userPrefs.isShowClipboard(true)) {
-				addEntryAction(oe, getTextForClipboardAction(ctx, userPrefs), ACTION_CLIPBOARD, LAYOUT_PRIMARY);		
+			if (PreferencesHelper.isUserPassActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_type_user_tab_pass, Const.ACTION_USER_PASS, Const.LAYOUT_PRIMARY, token);		
+			}			
+			if (PreferencesHelper.isUserPassEnterActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_type_user_tab_pass_enter, Const.ACTION_USER_PASS_ENTER, Const.LAYOUT_PRIMARY, token);		
+			}				
+			if (PreferencesHelper.isMaskedActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_masked_password, Const.ACTION_MASKED_PASSWORD, Const.LAYOUT_PRIMARY, token);		
+			}	
+			if (PreferencesHelper.isMacroActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_macro_run, Const.ACTION_MACRO_RUN, Const.LAYOUT_PRIMARY, token);		
+			}
+			if (PreferencesHelper.isRunTemplateActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_template_run, Const.ACTION_TEMPLATE_RUN, Const.LAYOUT_PRIMARY, token);		
+			} 
+			if (PreferencesHelper.isClipboardActionEnabled(tmp)) {
+				addEntryAction(oe, getTextForClipboardAction(ctx, prefs), Const.ACTION_CLIPBOARD, Const.LAYOUT_PRIMARY, token);		
 			}				
 			
 			//entry items, secondary layout 
-			if (userPrefs.isShowUserPass(false)) {
-				addEntryAction(oe, R.string.action_type_user_tab_pass, ACTION_USER_PASS, LAYOUT_SECONDARY);				
+			if (isSecondaryLayoutEnabled) {
+			tmpSecondary = PreferencesHelper.getEntryItemsForSecondaryLayout(prefs);			
+				if (PreferencesHelper.isUserPassActionEnabled(tmpSecondary)) {
+					addEntryAction(oe, R.string.action_type_user_tab_pass, Const.ACTION_USER_PASS, Const.LAYOUT_SECONDARY, token);				
+				}
+				if (PreferencesHelper.isUserPassEnterActionEnabled(tmpSecondary)) {
+					addEntryAction(oe, R.string.action_type_user_tab_pass_enter, Const.ACTION_USER_PASS_ENTER, Const.LAYOUT_SECONDARY, token);	
+				}				
+				if (PreferencesHelper.isMaskedActionEnabled(tmpSecondary)) {
+					addEntryAction(oe, R.string.action_masked_password, Const.ACTION_MASKED_PASSWORD, Const.LAYOUT_SECONDARY, token);			
+				}		
+				if (PreferencesHelper.isMacroActionEnabled(tmpSecondary)) {
+					addEntryAction(oe, R.string.action_macro_run, Const.ACTION_MACRO_RUN, Const.LAYOUT_SECONDARY, token);
+				}	
+				if (PreferencesHelper.isRunTemplateActionEnabled(tmpSecondary)) {
+					addEntryAction(oe, R.string.action_template_run, Const.ACTION_TEMPLATE_RUN, Const.LAYOUT_SECONDARY, token);
+				}			
+				if (PreferencesHelper.isClipboardActionEnabled(tmpSecondary)) {			
+					addEntryAction(oe, getTextForClipboardAction(ctx, prefs), Const.ACTION_CLIPBOARD, Const.LAYOUT_SECONDARY, token);	
+				}			
 			}
-			if (userPrefs.isShowUserPassEnter(false)) {
-				addEntryAction(oe, R.string.action_type_user_tab_pass_enter, ACTION_USER_PASS_ENTER, LAYOUT_SECONDARY);	
-			}				
-			if (userPrefs.isShowMasked(false)) {
-				addEntryAction(oe, R.string.action_masked_password, ACTION_MASKED_PASSWORD, LAYOUT_SECONDARY);			
-			}		
-			if (userPrefs.isShowMacro(false)) {
-				addEntryAction(oe, R.string.action_macro_run, ACTION_MACRO_RUN, LAYOUT_SECONDARY);
-			}	
-			if (userPrefs.isShowRunTemplate(false)) {
-				addEntryAction(oe, R.string.action_template_run, ACTION_TEMPLATE_RUN, LAYOUT_SECONDARY);
-			}			
-			if (userPrefs.isShowClipboard(false)) {				
-				addEntryAction(oe, getTextForClipboardAction(ctx, userPrefs), ACTION_CLIPBOARD, LAYOUT_SECONDARY);	
-			}			
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
 		}				
 
-		if (ctx != null) {
-			if (userPrefs != null) {
-				if (userPrefs.isAutoConnect()) {
-					actionManager.connect();
-				} else {	
-					if ((ActionManager.lastActivityTime != 0) && ((System.currentTimeMillis() - userPrefs.getAutoConnectTimeout()) < ActionManager.lastActivityTime)) {
-						actionManager.connect();
-					} 
-				}				
+		if (ctx != null) {					
+			if ( !InputStickService.isRunning) {
+				Intent serviceIntent = new Intent(ctx, InputStickService.class);
+				serviceIntent.setAction(Const.SERVICE_START);
+				serviceIntent.putExtras(EntryData.getBundle(oe.getEntryId(), oe.getEntryFields()));
+				ctx.startService(serviceIntent);
 			}
-			
-			
-			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
+
+			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());			
 			if (cl.firstRun()) {
 				Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
 				i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				ctx.getApplicationContext().startActivity(i);			
+		    } else {
+		    	//missing DB actions scope?
+		    	if ((scope != null) && ( !scope.contains(Strings.SCOPE_DATABASE_ACTIONS))) {
+		    		if (PreferencesHelper.canShowDbScopeDialog(prefs)) {
+						Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
+						i.putExtra(Const.EXTRA_SHOW_SCOPE, true);
+						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						ctx.getApplicationContext().startActivity(i);	
+		    		}
+		    		
+	
+		    	}
 		    }
-		}
+		}		
 	}	
 	
-	private String getTextForClipboardAction(Context ctx, UserPreferences userPrefs) {
+	private String getTextForClipboardAction(Context ctx, SharedPreferences prefs) {
 		String actionName = ctx.getString(R.string.action_clipboard);
-		if (userPrefs.isClipboardLaunchAuthenticator()) {
+		if (PreferencesHelper.isClipboardLaunchAuthenticator(prefs)) {
 			actionName += "/Authenticator";
-		} else if (userPrefs.isClipboardLaunchCustomApp()) {
-			actionName += "/" + userPrefs.getClipboardCustomAppName();
+		} else if (PreferencesHelper.isClipboardLaunchCustomApp(prefs)) {
+			actionName += "/" + PreferencesHelper.getClipboardCustomAppName(prefs);
 		}
 		return actionName;
 	}
 
-	private void addEntryAction(OpenEntryAction oe, String actionText, String action, int layoutType) throws PluginAccessException {
-		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
-		UserPreferences userPrefs = actionManager.getUserPrefs();
-		
+	private void addEntryAction(OpenEntryAction oe, String actionText, String action, int layoutType, String accessToken) throws PluginAccessException {		
 		Bundle b = new Bundle();
-		b.putString(Const.SELECTED_UI_ACTION, action);		
+		b.putString(Const.EXTRA_ACTION, action);		
 		String displayText;
-		if (layoutType == LAYOUT_PRIMARY) {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
-			displayText = actionManager.getActionStringForPrimaryLayout(actionText, true);
-		} else if (layoutType == LAYOUT_SECONDARY) {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
-			displayText = actionManager.getActionStringForSecondaryLayout(actionText, true);
+		if (layoutType == Const.LAYOUT_PRIMARY) {
+			b.putString(Const.EXTRA_LAYOUT, primaryLayoutCode);
+			displayText = getActionString(actionText, Const.LAYOUT_PRIMARY, true);
+		} else if (layoutType == Const.LAYOUT_SECONDARY) {
+			b.putString(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+			displayText = getActionString(actionText, Const.LAYOUT_SECONDARY, true);
 		} else {
-			displayText = actionManager.getActionString(actionText, true);
+			displayText = getActionString(actionText, Const.LAYOUT_NONE, true);
 		}
-		oe.addEntryAction(displayText, IC, b);
+		oe.addEntryAction(displayText, Const.IC, b, accessToken);
 	}
 	
-	private void addEntryAction(OpenEntryAction oe, int nameResId, String action, int layoutType) throws PluginAccessException {
-		addEntryAction(oe, oe.getContext().getString(nameResId), action, layoutType);
-		/*actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
-		UserPreferences userPrefs = actionManager.getUserPrefs();
-		
-		Bundle b = new Bundle();
-		b.putString(Const.SELECTED_UI_ACTION, action);		
-		String displayText;
-		if (layoutType == LAYOUT_PRIMARY) {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
-			displayText = actionManager.getActionStringForPrimaryLayout(nameResId, true);
-		} else if (layoutType == LAYOUT_SECONDARY) {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
-			displayText = actionManager.getActionStringForSecondaryLayout(nameResId, true);
-		} else {
-			displayText = actionManager.getActionString(nameResId, true);
-		}
-		oe.addEntryAction(displayText, IC, b);	*/
+	private void addEntryAction(OpenEntryAction oe, int nameResId, String action, int layoutType, String accessToken) throws PluginAccessException {
+		addEntryAction(oe, oe.getContext().getString(nameResId), action, layoutType, accessToken);
 	}
 	
-	private void addEntryFieldTypeAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType) throws PluginAccessException {
-		actionManager = ActionManager.getInstance(oe.getContext(), oe.getEntryId(), oe.getEntryFields());
-		UserPreferences userPrefs = actionManager.getUserPrefs();		
-		
+	private void addFieldAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType, String accessToken) throws PluginAccessException {
 		int nameResId;		
 		Bundle b = new Bundle();	
 		if (slowTyping) {
@@ -221,115 +207,71 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} else {
 			nameResId = R.string.action_type;
 		}
-		String displayText;
-		if (layoutType == LAYOUT_SECONDARY) {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutSecondary());
-			displayText = actionManager.getActionStringForSecondaryLayout(nameResId, true);
-		} else {
-			b.putString(Const.EXTRA_LAYOUT, userPrefs.getLayoutPrimary());
-			displayText = actionManager.getActionStringForPrimaryLayout(nameResId, true);
+		String actionText = oe.getContext().getString(nameResId);
+		String displayText = null;		
+		if (layoutType == Const.LAYOUT_PRIMARY) {
+			b.putString(Const.EXTRA_LAYOUT, primaryLayoutCode);
+			displayText = getActionString(actionText, Const.LAYOUT_PRIMARY, true);
+		} else if (layoutType == Const.LAYOUT_SECONDARY) {
+			b.putString(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+			displayText = getActionString(actionText, Const.LAYOUT_SECONDARY, true);
 		}
-		oe.addEntryFieldAction(actionId, fieldId, displayText, IC, b);
+		oe.addEntryFieldAction(actionId, fieldId, displayText, Const.IC, b, accessToken);
 	}
 	
 	
-	
-	@Override 
-	protected void closeEntryView(CloseEntryViewAction closeEntryView) {
-		actionManager = ActionManager.getInstance(closeEntryView.getContext());
-		try {
-			if ( !InputStickHID.isConnected()) {
-				ActionManager.lastActivityTime = 0;			
-			} 
-			
-			UserPreferences userPrefs = actionManager.getUserPrefs();		
-			if ((userPrefs != null) && (userPrefs.isDisconnectOnClose())) {		
-				actionManager.disconnect();
-			}	
-		} catch (Exception e) {			
+	private String getActionString(String actionText, int actionLayoutType, boolean allowInputStickText) {
+		String s = actionText;		
+		if (actionLayoutType == Const.LAYOUT_PRIMARY && isSecondaryLayoutEnabled) {
+			s += " (" + primaryLayoutCode + ")";
 		}
-		actionManager.onEntryClosed();
-	};
+		if (actionLayoutType == Const.LAYOUT_SECONDARY) {
+			s += " (" + secondaryLayoutCode + ")";
+		}
+		if (allowInputStickText && displayInputStickText) {
+			s += " (IS)";
+		}
+		return s;
+	}
+	
 	
 	@Override
 	protected void actionSelected(ActionSelectedAction actionSelected) {
-		actionManager = ActionManager.getInstance(actionSelected.getContext(), actionSelected.getEntryId(), actionSelected.getEntryFields());
-		UserPreferences userPrefs = actionManager.getUserPrefs();
-		
-		String layoutName = actionSelected.getActionData().getString(Const.EXTRA_LAYOUT, "en-US");		
-		if (actionSelected.isEntryAction()) {
-			String text = actionSelected.getActionData().getString(Const.SELECTED_UI_ACTION);
-						
-			if (ACTION_MASKED_PASSWORD.equals(text)) {
-				actionManager.openMaskedPassword(layoutName, true);
-			} else if (ACTION_SETTINGS.equals(text)) {
-				actionManager.startSettingsActivity();
-			} else if (ACTION_SHOW_ALL.equals(text)) {
-				actionManager.startShowAllActivity();
-			} else if (ACTION_USER_PASS.equals(text)) {
-				actionManager.typeUsernameAndPassword(layoutName, false);
-			} else if (ACTION_USER_PASS_ENTER.equals(text)) {
-				actionManager.typeUsernameAndPassword(layoutName, true);
-			} else if (ACTION_MAC_SETUP.equals(text)) {
-				actionManager.startMacSetupActivity();
-			} else if (ACTION_MACRO_ADDEDIT.equals(text)) {	
-				actionManager.addEditMacro(false, false, 0);
-			} else if (ACTION_CLIPBOARD.equals(text)) {	
-				actionManager.clipboardTyping(layoutName);
-			} else if (ACTION_MACRO_RUN.equals(text)) {
-				actionManager.runMacro(layoutName);
-			} else if (ACTION_TAB.equals(text)) {
-				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB);
-			} else if (ACTION_ENTER.equals(text)) {
-				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
-			} else if (ACTION_CONNECT.equals(text)) {
-				actionManager.connect();
-			} else if (ACTION_DISCONNECT.equals(text)) {
-				actionManager.disconnect();
-			} else if (ACTION_TEMPLATE_RUN.equals(text)) {
-				actionManager.startSelectTemplateActivity(layoutName, false);
-			} else if (ACTION_TEMPLATE_MANAGE.equals(text)) {
-				actionManager.startSelectTemplateActivity(layoutName, true);
-			} 
-			
-		} else {
-			//field actions: type/type slow
-			boolean typeSlow = actionSelected.getActionData().getBoolean(Const.EXTRA_TYPE_SLOW, false);
-			String fieldKey = actionSelected.getFieldId().substring(Strings.PREFIX_STRING.length());
-			String text = actionSelected.getEntryFields().get(fieldKey);
-			if (typeSlow) {
-				actionManager.queueText(text, layoutName, Const.SLOW_TYPING_MULTIPLIER);
-			} else {
-				actionManager.queueText(text, layoutName);
-			}
-			
-			if ((userPrefs.isEnterAfterURL()) && ("URL".equals(fieldKey))) {
-				actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER);
-			}			
+		//in case service was stopped after opening entry but before selecting an action
+		Log.d(_TAG, "actionSelected");
+		if ( !InputStickService.isRunning) {
+			Intent serviceIntent = new Intent(actionSelected.getContext(), InputStickService.class);
+			serviceIntent.setAction(Const.SERVICE_RESTART);
+			actionSelected.getContext().startService(serviceIntent);		
 		}
 	}		
 
 		
 
 	@Override
-	protected void entryOutputModified(EntryOutputModifiedAction eom) {	
-		actionManager = ActionManager.getInstance(eom.getContext(), eom.getEntryId(), eom.getEntryFields());
-		UserPreferences userPrefs = actionManager.getUserPrefs();
-		
-		try {						
-			//primary layout:
-			if (userPrefs.isShowType(true)) {
-				addEntryFieldTypeAction(eom, ACTION_FIELD_TYPE_PRIMARY, eom.getModifiedFieldId(), false, LAYOUT_PRIMARY);
+	protected void entryOutputModified(EntryOutputModifiedAction eom) {
+		try {				
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(eom.getContext());			
+			loadPreferences(prefs);
+			String token = eom.getAccessTokenForCurrentEntryScope();
+			
+			//primary layout:			
+			String tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);
+			if (PreferencesHelper.isTypeActionEnabled(tmp)) {
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_PRIMARY, eom.getModifiedFieldId(), false, Const.LAYOUT_PRIMARY, token);
 			}			
-			if (userPrefs.isShowTypeSlow(true)) {
-				addEntryFieldTypeAction(eom, ACTION_FIELD_TYPE_SLOW_PRIMARY, eom.getModifiedFieldId(), true, LAYOUT_PRIMARY);
+			if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, eom.getModifiedFieldId(), true, Const.LAYOUT_PRIMARY, token);
 			}
 			//secondary layout:
-			if (userPrefs.isShowType(false)) {
-				addEntryFieldTypeAction(eom, ACTION_FIELD_TYPE_SECONDARY, eom.getModifiedFieldId(), false, LAYOUT_SECONDARY);
-			}
-			if (userPrefs.isShowTypeSlow(false)) {
-				addEntryFieldTypeAction(eom, ACTION_FIELD_TYPE_SLOW_SECONDARY, eom.getModifiedFieldId(), true, LAYOUT_SECONDARY);				
+			if (isSecondaryLayoutEnabled) {
+				tmp = PreferencesHelper.getFieldItemsForSecondaryLayout(prefs);
+				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SECONDARY, eom.getModifiedFieldId(), false, Const.LAYOUT_SECONDARY, token);
+				}
+				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, eom.getModifiedFieldId(), true, Const.LAYOUT_SECONDARY, token);				
+				}
 			}
 		} catch (PluginAccessException e) {
 			e.printStackTrace();

@@ -1,7 +1,9 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,12 +25,13 @@ public class MacSetupActivity extends Activity {
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_mac_setup);
 
-		final ActionManager actionManager = ActionManager.getInstance(this);
-		String layoutName = actionManager.getUserPrefs().getLayoutPrimary();				
-		KeyboardLayout layout = KeyboardLayout.getLayout(layoutName);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String primaryLayoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);				
+		KeyboardLayout primaryLayout = KeyboardLayout.getLayout(primaryLayoutCode);
+		final TypingParams params = new TypingParams(primaryLayoutCode, Const.TYPING_SPEED_DEFAULT);		
 		
 		TextView textViewLayoutInfo = (TextView)findViewById(R.id.textViewLayoutInfo);
-		textViewLayoutInfo.append(" " + layoutName);
+		textViewLayoutInfo.append(" " + primaryLayoutCode);
 		
 		Button buttonNextToShiftLeft;
 		Button buttonNextToShiftRight;
@@ -37,9 +40,9 @@ public class MacSetupActivity extends Activity {
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
 					if (nonUS) {
-						actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US);
+						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US, params).sendToService(MacSetupActivity.this);
 					} else {
-						actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_Z);
+						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_Z, params).sendToService(MacSetupActivity.this);
 					}
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
@@ -50,16 +53,15 @@ public class MacSetupActivity extends Activity {
 		buttonNextToShiftRight.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
-					actionManager.queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH);
+					new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH, params).sendToService(MacSetupActivity.this);
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
 				}
 			}
-		});
-		
+		});		
 		
 		//check if non-us backslash key is used by this layout:				
-		int[][] lut = layout.getLUT();
+		int[][] lut = primaryLayout.getLUT();
 		int tmp = lut[0x56][1];
 		nonUS = true;
 		for (int i = 0; i < 0x40; i++) {
@@ -72,12 +74,12 @@ public class MacSetupActivity extends Activity {
 		}
 		if (nonUS) {
 			//non-US ISO
-			buttonNextToShiftLeft.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_BACKSLASH_NON_US), false, false, false)));
+			buttonNextToShiftLeft.setText(String.valueOf(primaryLayout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_BACKSLASH_NON_US), false, false, false)));
 		} else {
 			//US ANSI
-			buttonNextToShiftLeft.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_Z), false, false, false)));
+			buttonNextToShiftLeft.setText(String.valueOf(primaryLayout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_Z), false, false, false)));
 		}
-		buttonNextToShiftRight.setText(String.valueOf(layout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_SLASH), false, false, false)));
+		buttonNextToShiftRight.setText(String.valueOf(primaryLayout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_SLASH), false, false, false)));
 	}
 
 
