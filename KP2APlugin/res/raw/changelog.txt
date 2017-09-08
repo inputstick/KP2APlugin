@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.11
+  % Version 1.11  	  
+  	* fixed bug that caused the app to crash when changing UI actions preferences
 $ 1.10
   % Version 1.10
   	_ <a href="http://blog.inputstick.com/2017/09/kp2a-plugin-v110.html">(More info)</a>
