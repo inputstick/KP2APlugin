@@ -327,6 +327,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		Preference pref;		
 		ListPreference listPref;
 		pref = findPreference(key);
+		if (pref instanceof MultiSelectListPreference) {
+			return;
+		}
 		if (pref instanceof ListPreference) {
 			listPref = (ListPreference) pref;
 			String summary = listPref.getEntry().toString();
@@ -335,7 +338,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				summary = summary.substring(0, tmp);
 			}			
 			pref.setSummary(summary);
-			//pref.setSummary(listPref.getEntry());
 		}
 	}
 	
