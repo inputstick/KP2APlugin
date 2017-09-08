@@ -3,6 +3,8 @@ package com.inputstick.apps.kp2aplugin;
 
 public class Const {
 	
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.11";
+	
 	public static final int IC = R.drawable.ic_launcher;
 	
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;

@@ -146,12 +146,14 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				ctx.startService(serviceIntent);
 			}
 
-			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());			
-			if (cl.firstRun()) {
-				Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
-				i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
-				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				ctx.getApplicationContext().startActivity(i);			
+			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
+			if (cl.firstRun()) {				
+				if ( !cl.getThisVersion().equals(Const.SKIP_CHANGELOG_APP_VERSION)) {
+					Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
+					i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
+					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					ctx.getApplicationContext().startActivity(i);			
+				}
 		    } else {
 		    	//missing DB actions scope?
 		    	if ((scope != null) && ( !scope.contains(Strings.SCOPE_DATABASE_ACTIONS))) {
