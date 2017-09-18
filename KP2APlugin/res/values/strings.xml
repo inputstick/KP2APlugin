@@ -19,7 +19,8 @@
     <string name="text_custom_app_not_found">InputStick plugin: application NOT found!</string>
     <string name="text_custom_app_not_specified">InputStick plugin: application to run NOT specified (fix in plugin settings)!</string>
     <string name="text_connection_failed">InputStick plugin: connection failed!</string>
-    <string name="text_auto_connect_disabled">InputStick plugin: connection failed! Auto-connect disabled</string>
+    <string name="text_auto_connect_msg_failed">InputStick plugin: connection failed! Auto-connect disabled</string>
+    <string name="text_auto_connect_msg_cancelled">InputStick plugin: connection cancelled! Auto-connect disabled</string>
     <string name="text_auto_connect_reenabled">Auto-connect re-enabled</string>
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
     <string name="text_clipboard_notification_info">Clipboard typing active</string>

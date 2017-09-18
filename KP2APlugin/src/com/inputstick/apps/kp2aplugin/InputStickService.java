@@ -393,6 +393,14 @@ public class InputStickService extends Service implements InputStickStateListene
 
 			break;
 		case ConnectionManager.STATE_DISCONNECTED:
+			if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
+				int reasonCode = InputStickHID.getDisconnectReason();
+				// disable smart auto-connect? yes, if user was asked to select device, but dismissed/cancelled dialog or cancelled connection attempt
+				if (reasonCode == ConnectionManager.DISC_REASON_UTILITY_CANCELLED) {
+					PreferencesHelper.setSmartAutoConnect(prefs, false);
+					messageResId = R.string.text_auto_connect_msg_cancelled;
+				}		
+			}
 			break;
 		case ConnectionManager.STATE_FAILURE:
 			int errorCode = InputStickHID.getErrorCode();
@@ -401,10 +409,17 @@ public class InputStickService extends Service implements InputStickStateListene
 				messageResId = R.string.text_missing_utility_app;
 			} else {
 				messageResId = R.string.text_connection_failed;
-				// disable smart auto-connect?
-				if (errorCode == InputStickError.ERROR_BLUETOOTH_CONNECTION_FAILED && autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
-					PreferencesHelper.setSmartAutoConnect(prefs, false);
-					messageResId = R.string.text_auto_connect_disabled;
+				
+				// disable smart auto-connect? yes, if connection failed or user did not allow to turn on BT
+				if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
+					if (errorCode == InputStickError.ERROR_BLUETOOTH_CONNECTION_FAILED) {
+						PreferencesHelper.setSmartAutoConnect(prefs, false);
+						messageResId = R.string.text_auto_connect_msg_failed;
+					}
+					if (errorCode == InputStickError.ERROR_BLUETOOTH_NOT_ENABLED) {
+						PreferencesHelper.setSmartAutoConnect(prefs, false);
+						messageResId = R.string.text_auto_connect_msg_cancelled;
+					}
 				}
 			}
 			items.clear();
@@ -412,11 +427,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		default:
 			break;
 		}
-
+		
 		if (messageResId != 0) {
 			Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
 		}
-		showNotification(canShowNotification);
+		showNotification(canShowNotification);		
 	}
 
 	public void queueText(String text, TypingParams params) {
@@ -441,25 +456,26 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private void queueItem(ItemToExecute item) {
 		int state = InputStickHID.getState();
+				
 		switch (state) {
-		case ConnectionManager.STATE_CONNECTED:
-		case ConnectionManager.STATE_CONNECTING:
-			synchronized (items) {
-				items.add(item);
-			}
-			break;
-		case ConnectionManager.STATE_READY:
-			item.execute(this);
-			lastActionTime = System.currentTimeMillis();
-			break;
-		case ConnectionManager.STATE_DISCONNECTED:
-		case ConnectionManager.STATE_FAILURE:
-			synchronized (items) {
-				items.add(item);
-			}
-			Log.d(_TAG, "trigger connect");
-			InputStickHID.connect(getApplication());
-			break;
+			case ConnectionManager.STATE_CONNECTED:
+			case ConnectionManager.STATE_CONNECTING:
+				synchronized (items) {
+					items.add(item);
+				}
+				break;
+			case ConnectionManager.STATE_READY:
+				item.execute(this);
+				lastActionTime = System.currentTimeMillis();
+				break;
+			case ConnectionManager.STATE_DISCONNECTED:
+			case ConnectionManager.STATE_FAILURE:
+				synchronized (items) {
+					items.add(item);
+				}
+				Log.d(_TAG, "trigger connect");
+				InputStickHID.connect(getApplication());
+				break;
 		}
 	}
 

@@ -146,7 +146,7 @@
 	<string name="connection_auto_connect_title">Autom.-połącz</string>
 	<string-array name="connection_auto_connect_names">
 		<item>Wył.\n- zaczekaj aż do zarządania pisania\n(InputStick jest używany sporadycznie)\n</item>
-		<item>Smart\n- gdy wpis KP2A jest otwierany\n- wyłącz po nieudanym połączeniu\n- włącz ponownie po udanym połączeniu\n(InputStick jest używany często)\n</item> 			    
+		<item>Smart\n- gdy wpis KP2A jest otwierany\n- tymczasowo wyłącz po anulowanym lub nieudanym połączeniu\n- włącz ponownie po udanym połączeniu\n(InputStick jest używany często)\n</item> 			    
 		<item>Zawsze\n- gdy wpis KP2A jest otwierany\n(InputStick jest zawsze używany)\n</item>	    	          
     </string-array>	
 

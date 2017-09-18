@@ -145,7 +145,7 @@
 	<string name="connection_auto_connect_title">Auto-connect</string>
 	<string-array name="connection_auto_connect_names">
 		<item>Disabled\n- wait until typing is requested\n(InputStick is used occasionally)\n</item>
-		<item>Smart\n- when KP2A entry is opened\n- disable after connection error\n- re-enable after successful connection\n(InputStick is used frequently)\n</item> 			    
+		<item>Smart\n- when KP2A entry is opened\n- temporarily disable after connection error (or cancelled)\n- re-enable after successful connection\n(InputStick is used frequently)\n</item> 			    
 		<item>Always\n- when KP2A entry is opened\n(InputStick is always used)\n</item>	    	          
     </string-array>	
     <string-array name="connection_auto_connect_values">
