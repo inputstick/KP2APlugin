@@ -456,26 +456,22 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private void queueItem(ItemToExecute item) {
 		int state = InputStickHID.getState();
-				
-		switch (state) {
-			case ConnectionManager.STATE_CONNECTED:
-			case ConnectionManager.STATE_CONNECTING:
-				synchronized (items) {
-					items.add(item);
-				}
-				break;
-			case ConnectionManager.STATE_READY:
-				item.execute(this);
-				lastActionTime = System.currentTimeMillis();
-				break;
-			case ConnectionManager.STATE_DISCONNECTED:
-			case ConnectionManager.STATE_FAILURE:
-				synchronized (items) {
-					items.add(item);
-				}
+		
+		//if not ready, queue only last action - clear all previous actions
+		if (state != ConnectionManager.STATE_READY) {
+			synchronized (items) {
+				items.clear();
+				items.add(item);
+			}
+			
+			if (state == ConnectionManager.STATE_DISCONNECTED || state == ConnectionManager.STATE_FAILURE) {
 				Log.d(_TAG, "trigger connect");
 				InputStickHID.connect(getApplication());
-				break;
+			}
+		} else {
+			//connected & ready
+			item.execute(this);
+			lastActionTime = System.currentTimeMillis();
 		}
 	}
 
