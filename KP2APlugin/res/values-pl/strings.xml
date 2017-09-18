@@ -21,7 +21,7 @@
 	<string name="text_connection_failed">InputStick plugin: błąd połaczenia!</string>
 	<string name="text_auto_connect_msg_failed">InputStick plugin: błąd połaczenia! Auto-łączenie wył</string>
     <string name="text_auto_connect_msg_cancelled">InputStick plugin: anulowano połaczenie! Auto-łączenie wył</string>	
-    <string name="text_auto_connect_reenabled">Auto-łączenie wł</string>
+    <string name="text_auto_connect_reenabled">InputStick plugin: Auto-łączenie wł</string>
 	<string name="text_clipboard_disabled">InputStick plugin: Pisanie ze schowka zostało wyłączone</string>  
 	<string name="text_clipboard_notification_info">Pisanie ze schowka aktywne</string>
 	<string name="text_clipboard_copy_now">InputStick plugin: Skopiuj kod do schowka (pozostało 30 sekund)</string>  		
