@@ -30,8 +30,10 @@
     <string name="text_missing_utility_app">You need to download InputStickUtility app</string>
     <string name="text_plugin_restarted">Plugin restarted, select action again</string>
     <string name="text_stop_plugin">Stop plugin</string>
-    <string name="action_type">Type</string>
-    <string name="action_type_slow">Type (slow)</string>
+    <string name="action_field_type">Type</string>
+    <string name="action_field_type_enter">Type+Enter</string>
+    <string name="action_field_type_tab">Type+Tab</string>
+    <string name="action_field_type_slow">Type (slow)</string>
     <string name="action_type_tab">Tab</string>
     <string name="action_type_enter">Enter</string>
     <string name="action_type_user_tab_pass">Username/password</string>

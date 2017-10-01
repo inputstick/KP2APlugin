@@ -127,7 +127,8 @@ public class InputStickService extends Service implements InputStickStateListene
 			// FIELD ACTION
 			boolean typeSlow = actionDataBundle.getBoolean(Const.EXTRA_TYPE_SLOW, false);
 			String fieldKey = fieldId.substring(Strings.PREFIX_STRING.length());
-
+			byte keyAfterTyping = actionDataBundle.getByte(Const.EXTRA_ADD_KEY, (byte)0);
+			
 			HashMap<String, String> res = new HashMap<String, String>();
 			try {
 				JSONObject json = new JSONObject(intent.getStringExtra(Strings.EXTRA_ENTRY_OUTPUT_DATA));
@@ -146,10 +147,15 @@ public class InputStickService extends Service implements InputStickStateListene
 				params = new TypingParams(layoutCode, Const.TYPING_SPEED_SLOW);
 			}
 			queueText(text, params);
-
-			if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
+			
+			if (keyAfterTyping != 0) {
 				queueDelay(5);
-				queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+				queueKey(HIDKeycodes.NONE, keyAfterTyping, params);
+			} else {
+				if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
+					queueDelay(5);
+					queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+				}
 			}
 		}
 	}

@@ -128,6 +128,8 @@
     
     <string-array name="fieldItemsDisplayList">
         <item>Wpisz</item>
+        <item>Wpisz+Enter</item>
+        <item>Wpisz+Tab</item>        
         <item>Wpisz (powoli)</item>
     </string-array>
     

@@ -168,6 +168,14 @@ public abstract class PreferencesHelper {
 	public static boolean isTypeSlowActionEnabled(String enabledActions) {
 		return enabledActions.contains(Const.ITEM_TYPE_SLOW);
 	}
+	
+	public static boolean isTypeAndEnterActionEnabled(String enabledActions) {
+		return enabledActions.contains(Const.ITEM_TYPE_ENTER);
+	}
+	
+	public static boolean isTypeAndTabActionEnabled(String enabledActions) {
+		return enabledActions.contains(Const.ITEM_TYPE_TAB);
+	}
 
 	
 	

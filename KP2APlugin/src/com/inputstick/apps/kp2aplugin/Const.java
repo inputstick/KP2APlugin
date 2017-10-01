@@ -60,9 +60,11 @@ public class Const {
 	public static final String EXTRA_NOTIFICATION_ACTION = "notification_action";  //clipboardservice
 		
 	public static final String EXTRA_TYPE_SLOW = "type_slow";
+	public static final String EXTRA_ADD_KEY = "add_key";
 	public static final String EXTRA_SHOW_CHANGELOG = "show_changelog";
 	public static final String EXTRA_SHOW_SCOPE = "show_scope"; 
 	public static final String EXTRA_SHOW_NOTIFICATION_INFO = "show_notification_info";
+	
 	
 	
 	public static final int TYPING_SPEED_DEFAULT= 1;
@@ -94,7 +96,9 @@ public class Const {
 	public static final String ITEM_CLIPBOARD = "clipboard";
 	
 	//field
-	public static final String ITEM_TYPE = "type_normal";
+	public static final String ITEM_TYPE = "type_normal";	
+	public static final String ITEM_TYPE_ENTER = "type_enter";
+	public static final String ITEM_TYPE_TAB = "type_tab";
 	public static final String ITEM_TYPE_SLOW = "type_slow";
 	
 	
@@ -116,13 +120,15 @@ public class Const {
 	public static final String ACTION_TEMPLATE_RUN = "com.inputstick.apps.kp2aplugin.template_run";
 	public static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";	
 	
-	public static final String ACTION_FIELD_TYPE_PRIMARY = "com.inputstick.apps.kp2aplugin.type";
+	public static final String ACTION_FIELD_TYPE_PRIMARY = "com.inputstick.apps.kp2aplugin.type";	
+	public static final String ACTION_FIELD_TYPE_ENTER_PRIMARY = "com.inputstick.apps.kp2aplugin.type_enter";
+	public static final String ACTION_FIELD_TYPE_TAB_PRIMARY = "com.inputstick.apps.kp2aplugin.type_tab";
 	public static final String ACTION_FIELD_TYPE_SLOW_PRIMARY = "com.inputstick.apps.kp2aplugin.type_slow";
-	public static final String ACTION_FIELD_TYPE_SECONDARY = "com.inputstick.apps.kp2aplugin.types_econdary";
+	
+	public static final String ACTION_FIELD_TYPE_SECONDARY = "com.inputstick.apps.kp2aplugin.type_secondary";	
+	public static final String ACTION_FIELD_TYPE_ENTER_SECONDARY = "com.inputstick.apps.kp2aplugin.type_enter_secondary";
+	public static final String ACTION_FIELD_TYPE_TAB_SECONDARY = "com.inputstick.apps.kp2aplugin.type_tab_secondary";
 	public static final String ACTION_FIELD_TYPE_SLOW_SECONDARY = "com.inputstick.apps.kp2aplugin.type_slow_secondary";
-	
-	
-	
 	
 	
 	//PREFERENCES:	

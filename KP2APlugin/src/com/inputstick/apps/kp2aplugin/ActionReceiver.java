@@ -1,5 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
+import com.inputstick.api.hid.HIDKeycodes;
+
 import keepass2android.pluginsdk.PluginAccessException;
 import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
@@ -46,18 +48,30 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			for (String field: oe.getEntryFields().keySet()) {
 				//primary layout
 				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
-					addFieldAction(oe, Const.ACTION_FIELD_TYPE_PRIMARY, Strings.PREFIX_STRING + field, false, Const.LAYOUT_PRIMARY, token);
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE, Const.LAYOUT_PRIMARY, token);
 				}
+				if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_ENTER_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_ENTER, Const.LAYOUT_PRIMARY, token);
+				}	
+				if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_TAB_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_TAB, Const.LAYOUT_PRIMARY, token);
+				}				
 				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
-					addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, true, Const.LAYOUT_PRIMARY, token);
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
 				}					
 				//secondary layout
 				if (isSecondaryLayoutEnabled) {
 					if (PreferencesHelper.isTypeActionEnabled(tmpSecondary)) {	
-						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SECONDARY, Strings.PREFIX_STRING + field, false, Const.LAYOUT_SECONDARY, token);
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE, Const.LAYOUT_SECONDARY, token);
 					}
+					if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_ENTER_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_ENTER, Const.LAYOUT_SECONDARY, token);
+					}	
+					if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_TAB_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_TAB, Const.LAYOUT_SECONDARY, token);
+					}					
 					if (PreferencesHelper.isTypeSlowActionEnabled(tmpSecondary)) {
-						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, Strings.PREFIX_STRING + field, true, Const.LAYOUT_SECONDARY, token);
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_SLOW, Const.LAYOUT_SECONDARY, token);
 					}
 				}
 			}
@@ -200,15 +214,25 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		addEntryAction(oe, oe.getContext().getString(nameResId), action, layoutType, accessToken);
 	}
 	
-	private void addFieldAction(OpenEntryAction oe, String actionId, String fieldId, boolean slowTyping, int layoutType, String accessToken) throws PluginAccessException {
+	private void addFieldAction(OpenEntryAction oe, String actionId, String fieldId, String fieldItemType, int layoutType, String accessToken) throws PluginAccessException {
 		int nameResId;		
-		Bundle b = new Bundle();	
-		if (slowTyping) {
+		Bundle b = new Bundle();
+		
+		if (fieldItemType.equals(Const.ITEM_TYPE)) {
+			nameResId = R.string.action_field_type;
+		} else if (fieldItemType.equals(Const.ITEM_TYPE_ENTER)) {			
+			b.putByte(Const.EXTRA_ADD_KEY, HIDKeycodes.KEY_ENTER);
+			nameResId = R.string.action_field_type_enter;
+		} else if (fieldItemType.equals(Const.ITEM_TYPE_TAB)) {
+			b.putByte(Const.EXTRA_ADD_KEY, HIDKeycodes.KEY_TAB);
+			nameResId = R.string.action_field_type_tab;			
+		} else if (fieldItemType.equals(Const.ITEM_TYPE_SLOW)) {
 			b.putBoolean(Const.EXTRA_TYPE_SLOW, true);
-			nameResId = R.string.action_type_slow;
+			nameResId = R.string.action_field_type_slow;
 		} else {
-			nameResId = R.string.action_type;
+			nameResId = R.string.action_field_type;
 		}
+		
 		String actionText = oe.getContext().getString(nameResId);
 		String displayText = null;		
 		if (layoutType == Const.LAYOUT_PRIMARY) {
@@ -260,19 +284,31 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			//primary layout:			
 			String tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);
 			if (PreferencesHelper.isTypeActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_PRIMARY, eom.getModifiedFieldId(), false, Const.LAYOUT_PRIMARY, token);
-			}			
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE, Const.LAYOUT_PRIMARY, token);
+			}		
+			if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_ENTER, Const.LAYOUT_PRIMARY, token);
+			}	
+			if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_TAB, Const.LAYOUT_PRIMARY, token);
+			}	
 			if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, eom.getModifiedFieldId(), true, Const.LAYOUT_PRIMARY, token);
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
 			}
 			//secondary layout:
 			if (isSecondaryLayoutEnabled) {
 				tmp = PreferencesHelper.getFieldItemsForSecondaryLayout(prefs);
 				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SECONDARY, eom.getModifiedFieldId(), false, Const.LAYOUT_SECONDARY, token);
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE, Const.LAYOUT_SECONDARY, token);
+				}
+				if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_ENTER, Const.LAYOUT_SECONDARY, token);
+				}	
+				if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_TAB, Const.LAYOUT_SECONDARY, token);
 				}
 				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, eom.getModifiedFieldId(), true, Const.LAYOUT_SECONDARY, token);				
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_SLOW, Const.LAYOUT_SECONDARY, token);				
 				}
 			}
 		} catch (PluginAccessException e) {
