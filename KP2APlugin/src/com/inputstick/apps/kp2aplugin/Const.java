@@ -168,7 +168,7 @@ public class Const {
 	public static final String PREF_ITEMS_ENTRY_PRIMARY_VALUE = "username_and_password|username_password_enter|masked_password|macro|run_template|clipboard";
 	
 	public static final String PREF_ITEMS_FIELD_PRIMARY = "items_field_primary";
-	public static final String PREF_ITEMS_FIELD_PRIMARY_VALUE = "type_normal|type_slow";
+	public static final String PREF_ITEMS_FIELD_PRIMARY_VALUE = "type_normal|type_enter|type_slow";
 	
 	public static final String PREF_ITEMS_ENTRY_SECONDARY = "items_entry_secondary";
 	public static final String PREF_ITEMS_ENTRY_SECONDARY_VALUE = "username_and_password";
