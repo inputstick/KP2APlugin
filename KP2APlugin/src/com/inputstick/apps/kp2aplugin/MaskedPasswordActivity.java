@@ -1,5 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
+import com.inputstick.api.hid.HIDKeycodes;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -50,6 +52,12 @@ public class MaskedPasswordActivity extends Activity {
 			R.id.buttonChar15,
 			R.id.buttonChar16,
 	};	
+	
+	private Button buttonMaskedPassEsc;
+	private Button buttonMaskedPassTab;
+	private Button buttonMaskedPassLeft;
+	private Button buttonMaskedPassRight;
+	private Button buttonMaskedPassEnter;
 	
 	private String timeLeftMessage;
 	private static int remainingTime;
@@ -118,6 +126,39 @@ public class MaskedPasswordActivity extends Activity {
 			buttons[i] = (Button)findViewById(buttonIds[i]);
 			buttons[i].setOnClickListener(listener);
 		}
+		
+		
+		buttonMaskedPassEsc = (Button)findViewById(R.id.buttonMaskedPassEsc);
+		buttonMaskedPassTab = (Button)findViewById(R.id.buttonMaskedPassTab);
+		buttonMaskedPassLeft = (Button)findViewById(R.id.buttonMaskedPassLeft);
+		buttonMaskedPassRight = (Button)findViewById(R.id.buttonMaskedPassRight);
+		buttonMaskedPassEnter = (Button)findViewById(R.id.buttonMaskedPassEnter);
+		
+		buttonMaskedPassEsc.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ESCAPE, params).sendToService(MaskedPasswordActivity.this);			
+			}
+		});	
+		buttonMaskedPassTab.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_TAB, params).sendToService(MaskedPasswordActivity.this);			
+			}
+		});	
+		buttonMaskedPassLeft.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_LEFT, params).sendToService(MaskedPasswordActivity.this);			
+			}
+		});	
+		buttonMaskedPassRight.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_RIGHT, params).sendToService(MaskedPasswordActivity.this);			
+			}
+		});	
+		buttonMaskedPassEnter.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(MaskedPasswordActivity.this);			
+			}
+		});	
 	
 		if (savedInstanceState == null) {			
 			remainingTime = Const.MASKED_PASSWORD_TIMEOUT_MS;

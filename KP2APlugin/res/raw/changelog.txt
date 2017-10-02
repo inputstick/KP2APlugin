@@ -22,7 +22,8 @@
 $ 1.12
   % Version 1.12
   	_ <a href="http://blog.inputstick.com/2017/10/kp2a-plugin-v112.html">(More info)</a>
-  	* new field actions: Type+Enter, Type+Tab (must be enabled in Settings → Displayed UI Actions)  
+  	* new field actions: Type+Enter, Type+Tab (enable in Settings → Displayed UI Actions)
+  	* added keys for Masked Password (esc, tab, arrows, enter) 
   	* only single action will be queued if not connected (avoid executing multiple actions once connected)
   	* smart auto-connect will be also temporarily disabled when you do not allow to turn on BT or cancel device selection dialog  	 
   	* bug fixes  
