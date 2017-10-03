@@ -80,7 +80,7 @@ public class LayoutSlide extends Fragment {
 				getActivity().startService(serviceIntent); 	*/
 				TypingParams params = new TypingParams(layoutValues[spinnerLayout.getSelectedItemPosition()], Const.TYPING_SPEED_DEFAULT);
 				//ItemToExecute.sendTextToService(getActivity(), editTextTest.getText().toString(), params); //TODO
-				new ItemToExecute(editTextTest.getText().toString(), params).sendToService(getActivity());
+				new ItemToExecute(editTextTest.getText().toString(), params).sendToService(getActivity(), true);
 			}			
 		});		
 		

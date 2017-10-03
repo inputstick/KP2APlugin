@@ -40,9 +40,9 @@ public class MacSetupActivity extends Activity {
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
 					if (nonUS) {
-						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US, params).sendToService(MacSetupActivity.this);
+						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_BACKSLASH_NON_US, params).sendToService(MacSetupActivity.this, true);
 					} else {
-						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_Z, params).sendToService(MacSetupActivity.this);
+						new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_Z, params).sendToService(MacSetupActivity.this, true);
 					}
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
@@ -53,7 +53,7 @@ public class MacSetupActivity extends Activity {
 		buttonNextToShiftRight.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
-					new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH, params).sendToService(MacSetupActivity.this);
+					new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_SLASH, params).sendToService(MacSetupActivity.this, true);
 				} else {				
 					Toast.makeText(MacSetupActivity.this, R.string.not_ready, Toast.LENGTH_SHORT).show();
 				}

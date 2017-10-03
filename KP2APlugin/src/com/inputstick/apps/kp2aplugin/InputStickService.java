@@ -145,17 +145,16 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (typeSlow) {
 				params = new TypingParams(layoutCode, Const.TYPING_SPEED_SLOW);
 			}
-			
-			clearQueueIfNotReady();
-			queueText(text, params);
+						
+			queueText(text, params, true);
 			
 			if (keyAfterTyping != 0) {
-				queueDelay(5);
-				queueKey(HIDKeycodes.NONE, keyAfterTyping, params);
+				queueDelay(5, false);
+				queueKey(HIDKeycodes.NONE, keyAfterTyping, params, false);
 			} else {
 				if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
-					queueDelay(5);
-					queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+					queueDelay(5, false);
+					queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
 				}
 			}
 		}
@@ -189,11 +188,9 @@ public class InputStickService extends Service implements InputStickStateListene
 				lastActionTime = System.currentTimeMillis(); // macro was  executed
 			}
 		} else if (Const.ACTION_TAB.equals(uiAction)) {
-			clearQueueIfNotReady();
-			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params);
+			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, true);
 		} else if (Const.ACTION_ENTER.equals(uiAction)) {
-			clearQueueIfNotReady();
-			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, true);
 		} else if (Const.ACTION_CONNECT.equals(uiAction)) {
 			connectAction();
 		} else if (Const.ACTION_DISCONNECT.equals(uiAction)) {
@@ -207,15 +204,14 @@ public class InputStickService extends Service implements InputStickStateListene
 	}
 
 	private void typeUserNameAndPasswordFields(EntryData entryData, TypingParams params, boolean addEnter) {
-		clearQueueIfNotReady();
-		queueText(entryData.getUserName(), params);
-		queueDelay(15);
-		queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params);
-		queueDelay(15);
-		queueText(entryData.getPassword(), params);
+		queueText(entryData.getUserName(), params, true);
+		queueDelay(15, false);
+		queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, false);
+		queueDelay(15, false);
+		queueText(entryData.getPassword(), params, false);
 		if (addEnter) {
-			queueDelay(15);
-			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
+			queueDelay(15, false);
+			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
 		}
 	}
 
@@ -444,8 +440,10 @@ public class InputStickService extends Service implements InputStickStateListene
 		showNotification(canShowNotification);		
 	}
 
-	public void queueText(String text, TypingParams params) {
-		queueItem(new ItemToExecute(text, params));
+	private void queueText(String text, TypingParams params, boolean canClearQueue) {
+		ItemToExecute item = new ItemToExecute(text, params);
+		item.setCanClearQueue(canClearQueue);
+		queueItem(item);
 		if (InputStickKeyboard.isCapsLock()) {
 			long now = System.currentTimeMillis();
 			if (now > lastCapsLockWarningTime + CAPSLOCK_WARNING_TIMEOUT) {
@@ -455,13 +453,16 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 
-	public void queueKey(byte modifiers, byte key, TypingParams params) {
-		queueItem(new ItemToExecute(modifiers, key, params));
+	private void queueKey(byte modifiers, byte key, TypingParams params, boolean canClearQueue) {		
+		ItemToExecute item = new ItemToExecute(modifiers, key, params);
+		item.setCanClearQueue(canClearQueue);
+		queueItem(item);
 	}
 
-	public void queueDelay(int value) {
-		queueItem(new ItemToExecute(value));
-
+	private void queueDelay(int value, boolean canClearQueue) {
+		ItemToExecute item = new ItemToExecute(value);
+		item.setCanClearQueue(canClearQueue);
+		queueItem(item);		
 	}
 
 	private void queueItem(ItemToExecute item) {
@@ -470,7 +471,10 @@ public class InputStickService extends Service implements InputStickStateListene
 		//if not ready, queue only last action - clear all previous actions
 		if (state != ConnectionManager.STATE_READY) {
 			synchronized (items) {
-				//items.clear(); 
+				//does not allow to queue multiple actions when not ready to type - that could lead to executing an action multiple times (example: type password twice etc.) 
+				if (item.canClearQueue()) {
+					items.clear();
+				}
 				items.add(item);
 			}
 			
@@ -485,15 +489,6 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 	
-	//does not allow to queue multiple actions when not ready to type - that could lead to executing an action multiple times (example: type password twice etc.) 
-	private void clearQueueIfNotReady() {
-		int state = InputStickHID.getState();
-		if (state != ConnectionManager.STATE_READY) {
-			synchronized (items) {
-				items.clear(); 
-			}
-		}
-	}
 
 	private void executeQueue() {
 		Log.d(_TAG, "executeQueue");

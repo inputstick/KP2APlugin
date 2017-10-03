@@ -29,6 +29,7 @@ public class ItemToExecute {
 	public static final String KEY_KEY = 			"ite_KEY_KEY";
 	public static final String KEY_MODIFIERS = 		"ite_KEY_MODIFIERS";
 	public static final String KEY_DELAY_KEYS = 	"ite_KEY_DELAY_KEYS";
+	public static final String KEY_CLEAR_QUEUE = 	"ite_KEY_CLEAR_QUEUE";
 
 	private int mType;
 	private TypingParams mParams;
@@ -39,6 +40,8 @@ public class ItemToExecute {
 	private byte mModifiers;
 	
 	private int mDelayKeys;
+	
+	private boolean canClearQueue;
 	
 	public ItemToExecute(String text, TypingParams params) {
 		this(ITEM_TYPE_TEXT, params, text, (byte)0, (byte)0, 0);
@@ -70,6 +73,7 @@ public class ItemToExecute {
 			mKey = b.getByte(KEY_KEY);
 			mModifiers = b.getByte(KEY_MODIFIERS);			
 			mDelayKeys = b.getInt(KEY_DELAY_KEYS, 0);
+			canClearQueue = b.getBoolean(KEY_CLEAR_QUEUE, false);
 		}
 	}
 	
@@ -112,10 +116,21 @@ public class ItemToExecute {
 		b.putByte(KEY_MODIFIERS, mModifiers);
 		b.putByte(KEY_KEY, mKey);		
 		b.putInt(KEY_DELAY_KEYS, mDelayKeys);
+		b.putBoolean(KEY_CLEAR_QUEUE, canClearQueue);
 		return b;
 	}
 	
-	public void sendToService(Context ctx) {
+	public boolean canClearQueue() {
+		return canClearQueue;
+	}
+	
+	public void setCanClearQueue(boolean canClearQueue) {
+		this.canClearQueue = canClearQueue;
+	}
+	
+	//canClearQueue - clears queue when not connected (to avoid executing multiple actions)
+	public void sendToService(Context ctx, boolean canClearQueue) {
+		this.canClearQueue = canClearQueue;
 		Intent serviceIntent = new Intent(ctx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_QUEUE_ITEM); 
 		serviceIntent.putExtras(getBundle());   

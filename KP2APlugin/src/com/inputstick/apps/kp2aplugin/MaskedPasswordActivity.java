@@ -136,27 +136,27 @@ public class MaskedPasswordActivity extends Activity {
 		
 		buttonMaskedPassEsc.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
-				new ItemToExecute((byte)0, HIDKeycodes.KEY_ESCAPE, params).sendToService(MaskedPasswordActivity.this);			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ESCAPE, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
 		buttonMaskedPassTab.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
-				new ItemToExecute((byte)0, HIDKeycodes.KEY_TAB, params).sendToService(MaskedPasswordActivity.this);			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_TAB, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
 		buttonMaskedPassLeft.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
-				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_LEFT, params).sendToService(MaskedPasswordActivity.this);			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_LEFT, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
 		buttonMaskedPassRight.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
-				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_RIGHT, params).sendToService(MaskedPasswordActivity.this);			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_RIGHT, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
 		buttonMaskedPassEnter.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
-				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(MaskedPasswordActivity.this);			
+				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
 	
@@ -240,7 +240,7 @@ public class MaskedPasswordActivity extends Activity {
 			if (index < 0) return;
 			char c = password.charAt(index);
 			String toType = String.valueOf(c);
-			new ItemToExecute(toType, params).sendToService(this);
+			new ItemToExecute(toType, params).sendToService(this, true);
 		}
 	}
 	

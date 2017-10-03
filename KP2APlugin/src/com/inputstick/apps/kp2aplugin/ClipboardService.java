@@ -114,12 +114,11 @@ public class ClipboardService extends Service {
 	           if (text != null) {
 	        	   if ((text.length() > MAX_TEXT_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
 	        		   Toast.makeText(ClipboardService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
-	        	   } else {
-	        		   //ItemToExecute.sendTextToService(ClipboardService.this, text, params);
-	        		   new ItemToExecute(text, params).sendToService(ClipboardService.this);
+	        	   } else {	        		   
+	        		   new ItemToExecute(text, params).sendToService(ClipboardService.this, true);
 		        	   if (PreferencesHelper.isClipboardAutoEnter(prefs)) {
-		        		   //ItemToExecute.sendKeyToService(ClipboardService.this, HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
-		        		   new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardService.this);
+		        		   //do not clear queue - this would remove previous item (typing text form clipboard)!
+		        		   new ItemToExecute(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardService.this, false);
 		        	   }
 		        	   if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
 		        		   delayhandler.removeCallbacksAndMessages(null);
