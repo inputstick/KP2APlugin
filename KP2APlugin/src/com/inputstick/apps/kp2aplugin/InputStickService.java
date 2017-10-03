@@ -63,8 +63,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		public void run() {
 			final long time = System.currentTimeMillis();
 			if (InputStickHID.isConnected()) {
-				if ((maxIdlePeriod > 0) && (lastActionTime > 0)
-						&& (time > lastActionTime + maxIdlePeriod)) {
+				if ((maxIdlePeriod > 0) && (lastActionTime > 0) && (time > lastActionTime + maxIdlePeriod)) {
 					Log.d(_TAG, "disconnect (inactivity)");
 					InputStickHID.disconnect();
 				}
@@ -146,6 +145,8 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (typeSlow) {
 				params = new TypingParams(layoutCode, Const.TYPING_SPEED_SLOW);
 			}
+			
+			clearQueueIfNotReady();
 			queueText(text, params);
 			
 			if (keyAfterTyping != 0) {
@@ -188,8 +189,10 @@ public class InputStickService extends Service implements InputStickStateListene
 				lastActionTime = System.currentTimeMillis(); // macro was  executed
 			}
 		} else if (Const.ACTION_TAB.equals(uiAction)) {
+			clearQueueIfNotReady();
 			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params);
 		} else if (Const.ACTION_ENTER.equals(uiAction)) {
+			clearQueueIfNotReady();
 			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params);
 		} else if (Const.ACTION_CONNECT.equals(uiAction)) {
 			connectAction();
@@ -204,6 +207,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	}
 
 	private void typeUserNameAndPasswordFields(EntryData entryData, TypingParams params, boolean addEnter) {
+		clearQueueIfNotReady();
 		queueText(entryData.getUserName(), params);
 		queueDelay(15);
 		queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params);
@@ -466,7 +470,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		//if not ready, queue only last action - clear all previous actions
 		if (state != ConnectionManager.STATE_READY) {
 			synchronized (items) {
-				items.clear();
+				//items.clear(); 
 				items.add(item);
 			}
 			
@@ -478,6 +482,16 @@ public class InputStickService extends Service implements InputStickStateListene
 			//connected & ready
 			item.execute(this);
 			lastActionTime = System.currentTimeMillis();
+		}
+	}
+	
+	//does not allow to queue multiple actions when not ready to type - that could lead to executing an action multiple times (example: type password twice etc.) 
+	private void clearQueueIfNotReady() {
+		int state = InputStickHID.getState();
+		if (state != ConnectionManager.STATE_READY) {
+			synchronized (items) {
+				items.clear(); 
+			}
 		}
 	}
 
