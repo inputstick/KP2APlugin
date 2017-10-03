@@ -60,14 +60,14 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 					addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
 				}					
 				//secondary layout
-				if (isSecondaryLayoutEnabled) {
+				if (isSecondaryLayoutEnabled) {					
 					if (PreferencesHelper.isTypeActionEnabled(tmpSecondary)) {	
 						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE, Const.LAYOUT_SECONDARY, token);
 					}
-					if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
+					if (PreferencesHelper.isTypeAndEnterActionEnabled(tmpSecondary)) {
 						addFieldAction(oe, Const.ACTION_FIELD_TYPE_ENTER_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_ENTER, Const.LAYOUT_SECONDARY, token);
 					}	
-					if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
+					if (PreferencesHelper.isTypeAndTabActionEnabled(tmpSecondary)) {
 						addFieldAction(oe, Const.ACTION_FIELD_TYPE_TAB_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_TAB, Const.LAYOUT_SECONDARY, token);
 					}					
 					if (PreferencesHelper.isTypeSlowActionEnabled(tmpSecondary)) {
