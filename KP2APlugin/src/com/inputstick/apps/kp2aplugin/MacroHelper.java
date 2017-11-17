@@ -46,6 +46,7 @@ public class MacroHelper {
 	};
 	
 	private static final KeyLabel[] keyLUT = {
+			new KeyLabel(HIDKeycodes.NONE, 			"none", null),
 								
 			new KeyLabel(HIDKeycodes.KEY_Q, 		"q", null),
 			new KeyLabel(HIDKeycodes.KEY_W, 		"w", null),
@@ -147,10 +148,10 @@ public class MacroHelper {
 			new KeyLabel(HIDKeycodes.KEY_NUM_0, 	"num_0", "num_insert"),			
 			new KeyLabel(HIDKeycodes.KEY_NUM_ENTER, "num_enter", null),
 			new KeyLabel(HIDKeycodes.KEY_NUM_DOT, 	"num_dot", "num_delete"),
-			new KeyLabel(HIDKeycodes.KEY_NUM_PLUS, 	"num_3", null),
-			new KeyLabel(HIDKeycodes.KEY_NUM_MINUS, "num_4", null),
-			new KeyLabel(HIDKeycodes.KEY_NUM_STAR, 	"num_5", null),
-			new KeyLabel(HIDKeycodes.KEY_NUM_SLASH, "num_6", null),
+			new KeyLabel(HIDKeycodes.KEY_NUM_PLUS, 	"num_plus", null),
+			new KeyLabel(HIDKeycodes.KEY_NUM_MINUS, "num_minus", null),
+			new KeyLabel(HIDKeycodes.KEY_NUM_STAR, 	"num_star", null),
+			new KeyLabel(HIDKeycodes.KEY_NUM_SLASH, "num_slash", null),
 	};
 
 
