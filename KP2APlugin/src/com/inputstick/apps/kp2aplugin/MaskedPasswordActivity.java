@@ -59,6 +59,8 @@ public class MaskedPasswordActivity extends Activity {
 	private Button buttonMaskedPassRight;
 	private Button buttonMaskedPassEnter;
 	
+	private Button buttonMaskedClose;
+	
 	private String timeLeftMessage;
 	private static int remainingTime;
 	
@@ -159,6 +161,14 @@ public class MaskedPasswordActivity extends Activity {
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
+		
+		buttonMaskedClose = (Button)findViewById(R.id.buttonMaskedClose);
+		buttonMaskedClose.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {			
+				finish();		
+			}
+		});	
+		
 	
 		if (savedInstanceState == null) {			
 			remainingTime = Const.MASKED_PASSWORD_TIMEOUT_MS;
