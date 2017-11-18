@@ -125,6 +125,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		} else {
 			// FIELD ACTION
 			boolean typeSlow = actionDataBundle.getBoolean(Const.EXTRA_TYPE_SLOW, false);
+			boolean typeMasked = actionDataBundle.getBoolean(Const.EXTRA_TYPE_MASKED, false);
 			String fieldKey = fieldId.substring(Strings.PREFIX_STRING.length());
 			byte keyAfterTyping = actionDataBundle.getByte(Const.EXTRA_ADD_KEY, (byte)0);
 			
@@ -145,16 +146,19 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (typeSlow) {
 				params = new TypingParams(layoutCode, Const.TYPING_SPEED_SLOW);
 			}
-						
-			queueText(text, params, true);
-			
-			if (keyAfterTyping != 0) {
-				queueDelay(5, false);
-				queueKey(HIDKeycodes.NONE, keyAfterTyping, params, false);
-			} else {
-				if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
+			if (typeMasked) {				
+				connectAction();
+				ActionHelper.startMaskedPasswordActivity(this, text, params, true);
+			} else {						
+				queueText(text, params, true);				
+				if (keyAfterTyping != 0) {
 					queueDelay(5, false);
-					queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
+					queueKey(HIDKeycodes.NONE, keyAfterTyping, params, false);
+				} else {
+					if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
+						queueDelay(5, false);
+						queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
+					}
 				}
 			}
 		}

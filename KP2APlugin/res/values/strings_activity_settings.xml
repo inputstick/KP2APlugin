@@ -130,13 +130,15 @@
         <item>Type</item>
         <item>Type+Enter</item>
         <item>Type+Tab</item>
-        <item>Type (slow)</item>        
+        <item>Type (slow)</item>
+        <item>Masked (passwords only)</item>                   
     </string-array>
     <string-array name="fieldItemsReturnList">
         <item>type_normal</item>
         <item>type_enter</item>
         <item>type_tab</item>
         <item>type_slow</item>
+        <item>type_masked</item>        
     </string-array>     
     
     <string name="tip_title">Tip:</string>

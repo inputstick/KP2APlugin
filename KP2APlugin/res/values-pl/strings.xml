@@ -34,6 +34,7 @@
     <string name="action_field_enter">Wpisz+Enter</string>
     <string name="action_field_tab">Wpisz+Tab</string>    
     <string name="action_field_slow">Wpisz (powoli)</string>
+    <string name="action_field_type_masked">Wpisz (maskowane)</string>    
     <string name="action_type_tab">Tab</string>
     <string name="action_type_enter">Enter</string>
     <string name="action_type_user_tab_pass">Login/hasło</string>

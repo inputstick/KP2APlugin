@@ -176,6 +176,10 @@ public abstract class PreferencesHelper {
 	public static boolean isTypeAndTabActionEnabled(String enabledActions) {
 		return enabledActions.contains(Const.ITEM_TYPE_TAB);
 	}
+	
+	public static boolean isTypeMaskedActionEnabled(String enabledActions) {
+		return enabledActions.contains(Const.ITEM_TYPE_MASKED);
+	}
 
 	
 	

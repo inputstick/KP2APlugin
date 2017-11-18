@@ -1,7 +1,10 @@
 package com.inputstick.apps.kp2aplugin;
 
-import com.inputstick.api.hid.HIDKeycodes;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import keepass2android.pluginsdk.KeepassDefs;
 import keepass2android.pluginsdk.PluginAccessException;
 import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
@@ -11,6 +14,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.inputstick.api.hid.HIDKeycodes;
 
 public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadcastReceiver {
 	
@@ -45,7 +50,8 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			//primary layout:			
 			tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);
 			tmpSecondary = PreferencesHelper.getFieldItemsForSecondaryLayout(prefs);
-			for (String field: oe.getEntryFields().keySet()) {
+
+			for (String field : oe.getEntryFields().keySet()) {
 				//primary layout
 				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
 					addFieldAction(oe, Const.ACTION_FIELD_TYPE_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE, Const.LAYOUT_PRIMARY, token);
@@ -58,7 +64,11 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				}				
 				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
 					addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
-				}					
+				}		
+				//for password field only
+				if (KeepassDefs.PasswordField.equals(field) && PreferencesHelper.isTypeMaskedActionEnabled(tmp)) {
+					addFieldAction(oe, Const.ACTION_FIELD_TYPE_MASKED_PRIMARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_MASKED, Const.LAYOUT_PRIMARY, token);
+				}
 				//secondary layout
 				if (isSecondaryLayoutEnabled) {					
 					if (PreferencesHelper.isTypeActionEnabled(tmpSecondary)) {	
@@ -72,6 +82,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 					}					
 					if (PreferencesHelper.isTypeSlowActionEnabled(tmpSecondary)) {
 						addFieldAction(oe, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_SLOW, Const.LAYOUT_SECONDARY, token);
+					}
+					//for password field only
+					if (KeepassDefs.PasswordField.equals(field) && PreferencesHelper.isTypeMaskedActionEnabled(tmpSecondary)) {
+						addFieldAction(oe, Const.ACTION_FIELD_TYPE_MASKED_SECONDARY, Strings.PREFIX_STRING + field, Const.ITEM_TYPE_MASKED, Const.LAYOUT_SECONDARY, token);
 					}
 				}
 			}
@@ -229,6 +243,9 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} else if (fieldItemType.equals(Const.ITEM_TYPE_SLOW)) {
 			b.putBoolean(Const.EXTRA_TYPE_SLOW, true);
 			nameResId = R.string.action_field_type_slow;
+		} else if (fieldItemType.equals(Const.ITEM_TYPE_MASKED)) { 
+			b.putBoolean(Const.EXTRA_TYPE_MASKED, true);
+			nameResId = R.string.action_field_type_masked;
 		} else {
 			nameResId = R.string.action_field_type;
 		}
@@ -280,35 +297,43 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(eom.getContext());			
 			loadPreferences(prefs);
 			String token = eom.getAccessTokenForCurrentEntryScope();
-			
+			String fieldId = eom.getModifiedFieldId();
 			//primary layout:			
 			String tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);
 			if (PreferencesHelper.isTypeActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE, Const.LAYOUT_PRIMARY, token);
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_PRIMARY, fieldId, Const.ITEM_TYPE, Const.LAYOUT_PRIMARY, token);
 			}		
 			if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_ENTER, Const.LAYOUT_PRIMARY, token);
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_PRIMARY, fieldId, Const.ITEM_TYPE_ENTER, Const.LAYOUT_PRIMARY, token);
 			}	
 			if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_TAB, Const.LAYOUT_PRIMARY, token);
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_PRIMARY, fieldId, Const.ITEM_TYPE_TAB, Const.LAYOUT_PRIMARY, token);
 			}	
 			if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
-				addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_PRIMARY, fieldId, Const.ITEM_TYPE_SLOW, Const.LAYOUT_PRIMARY, token);
+			}
+			//for password field only
+			if (KeepassDefs.PasswordField.equals(fieldId) && PreferencesHelper.isTypeMaskedActionEnabled(tmp)) {
+				addFieldAction(eom, Const.ACTION_FIELD_TYPE_MASKED_PRIMARY, fieldId, Const.ITEM_TYPE_MASKED, Const.LAYOUT_PRIMARY, token);
 			}
 			//secondary layout:
 			if (isSecondaryLayoutEnabled) {
 				tmp = PreferencesHelper.getFieldItemsForSecondaryLayout(prefs);
 				if (PreferencesHelper.isTypeActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE, Const.LAYOUT_SECONDARY, token);
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SECONDARY, fieldId, Const.ITEM_TYPE, Const.LAYOUT_SECONDARY, token);
 				}
 				if (PreferencesHelper.isTypeAndEnterActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_ENTER, Const.LAYOUT_SECONDARY, token);
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_ENTER_SECONDARY, fieldId, Const.ITEM_TYPE_ENTER, Const.LAYOUT_SECONDARY, token);
 				}	
 				if (PreferencesHelper.isTypeAndTabActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_TAB, Const.LAYOUT_SECONDARY, token);
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_TAB_SECONDARY, fieldId, Const.ITEM_TYPE_TAB, Const.LAYOUT_SECONDARY, token);
 				}
 				if (PreferencesHelper.isTypeSlowActionEnabled(tmp)) {
-					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, eom.getModifiedFieldId(), Const.ITEM_TYPE_SLOW, Const.LAYOUT_SECONDARY, token);				
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_SLOW_SECONDARY, fieldId, Const.ITEM_TYPE_SLOW, Const.LAYOUT_SECONDARY, token);				
+				}
+				//for password field only
+				if (KeepassDefs.PasswordField.equals(fieldId) && PreferencesHelper.isTypeMaskedActionEnabled(tmp)) {
+					addFieldAction(eom, Const.ACTION_FIELD_TYPE_MASKED_SECONDARY, fieldId, Const.ITEM_TYPE_MASKED, Const.LAYOUT_SECONDARY, token);
 				}
 			}
 		} catch (PluginAccessException e) {

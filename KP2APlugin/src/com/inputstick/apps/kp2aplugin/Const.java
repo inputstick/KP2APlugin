@@ -60,6 +60,7 @@ public class Const {
 	public static final String EXTRA_NOTIFICATION_ACTION = "notification_action";  //clipboardservice
 		
 	public static final String EXTRA_TYPE_SLOW = "type_slow";
+	public static final String EXTRA_TYPE_MASKED = "type_masked";
 	public static final String EXTRA_ADD_KEY = "add_key";
 	public static final String EXTRA_SHOW_CHANGELOG = "show_changelog";
 	public static final String EXTRA_SHOW_SCOPE = "show_scope"; 
@@ -100,6 +101,7 @@ public class Const {
 	public static final String ITEM_TYPE_ENTER = "type_enter";
 	public static final String ITEM_TYPE_TAB = "type_tab";
 	public static final String ITEM_TYPE_SLOW = "type_slow";
+	public static final String ITEM_TYPE_MASKED = "type_masked";
 	
 	
 	//ACTIONS	
@@ -124,12 +126,13 @@ public class Const {
 	public static final String ACTION_FIELD_TYPE_ENTER_PRIMARY = "com.inputstick.apps.kp2aplugin.type_enter";
 	public static final String ACTION_FIELD_TYPE_TAB_PRIMARY = "com.inputstick.apps.kp2aplugin.type_tab";
 	public static final String ACTION_FIELD_TYPE_SLOW_PRIMARY = "com.inputstick.apps.kp2aplugin.type_slow";
+	public static final String ACTION_FIELD_TYPE_MASKED_PRIMARY = "com.inputstick.apps.kp2aplugin.type_masked";	
 	
 	public static final String ACTION_FIELD_TYPE_SECONDARY = "com.inputstick.apps.kp2aplugin.type_secondary";	
 	public static final String ACTION_FIELD_TYPE_ENTER_SECONDARY = "com.inputstick.apps.kp2aplugin.type_enter_secondary";
 	public static final String ACTION_FIELD_TYPE_TAB_SECONDARY = "com.inputstick.apps.kp2aplugin.type_tab_secondary";
 	public static final String ACTION_FIELD_TYPE_SLOW_SECONDARY = "com.inputstick.apps.kp2aplugin.type_slow_secondary";
-	
+	public static final String ACTION_FIELD_TYPE_MASKED_SECONDARY = "com.inputstick.apps.kp2aplugin.type_masked_secondary";	
 	
 	//PREFERENCES:	
 	
@@ -168,7 +171,7 @@ public class Const {
 	public static final String PREF_ITEMS_ENTRY_PRIMARY_VALUE = "username_and_password|username_password_enter|masked_password|macro|run_template|clipboard";
 	
 	public static final String PREF_ITEMS_FIELD_PRIMARY = "items_field_primary";
-	public static final String PREF_ITEMS_FIELD_PRIMARY_VALUE = "type_normal|type_enter|type_slow";
+	public static final String PREF_ITEMS_FIELD_PRIMARY_VALUE = "type_normal|type_enter|type_slow|type_masked";
 	
 	public static final String PREF_ITEMS_ENTRY_SECONDARY = "items_entry_secondary";
 	public static final String PREF_ITEMS_ENTRY_SECONDARY_VALUE = "username_and_password";

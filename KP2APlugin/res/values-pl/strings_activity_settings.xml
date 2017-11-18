@@ -131,6 +131,7 @@
         <item>Wpisz+Enter</item>
         <item>Wpisz+Tab</item>        
         <item>Wpisz (powoli)</item>
+        <item>Maskowane (tylko dla haseł)</item>                 
     </string-array>
     
     
