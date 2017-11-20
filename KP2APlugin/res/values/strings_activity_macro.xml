@@ -23,6 +23,7 @@
     <string name="delete_message">Delete the macro?</string>
     <string name="custom_key_title">Custom key</string>
     <string name="custom_key_message">Select key combination:</string>
+    <string name="custom_key_layout_message">Important! Key labels refer to US keyboard layout and are not affected by keyboard layout selected in app settings!</string>
     <string name="illegal_character_toast">Illegal character: %</string>
     <string name="no_macro_create_new">No macro assigned. Create new one.</string>           
     <string name="saved_toast">Saved</string>
