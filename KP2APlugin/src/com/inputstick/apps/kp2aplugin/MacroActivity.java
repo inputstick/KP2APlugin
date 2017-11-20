@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -191,28 +192,31 @@ public class MacroActivity extends Activity {
 		button = (Button)findViewById(R.id.buttonAddCustom);		
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
+				final Context ctx = MacroActivity.this;
+				AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
 				alert.setTitle(R.string.custom_key_title);		
 				
-				final LinearLayout lin= new LinearLayout(MacroActivity.this);
+				final LinearLayout lin= new LinearLayout(ctx);
 				lin.setOrientation(LinearLayout.VERTICAL);
 				
-				final TextView tvInfo = new TextView(MacroActivity.this);				
+				final TextView tvInfo = new TextView(ctx);				
 				tvInfo.setText(R.string.custom_key_message);
+				final TextView tvLayoutInfo = new TextView(ctx);				
+				tvLayoutInfo.setText(R.string.custom_key_layout_message);
 				
-				final Spinner spinner = new Spinner(MacroActivity.this);				
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(MacroActivity.this, android.R.layout.simple_spinner_item, MacroHelper.getKeyList());
+				final Spinner spinner = new Spinner(ctx);				
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_spinner_item, MacroHelper.getKeyList());
 				spinner.setAdapter(adapter);
 				
-				final CheckBox cbCtrlLeft = new CheckBox(MacroActivity.this);
+				final CheckBox cbCtrlLeft = new CheckBox(ctx);
 				cbCtrlLeft.setText("Ctrl");
-				final CheckBox cbShiftLeft = new CheckBox(MacroActivity.this);
+				final CheckBox cbShiftLeft = new CheckBox(ctx);
 				cbShiftLeft.setText("Shift");
-				final CheckBox cbAltLeft = new CheckBox(MacroActivity.this);
+				final CheckBox cbAltLeft = new CheckBox(ctx);
 				cbAltLeft.setText("Alt");
-				final CheckBox cbGuiLeft = new CheckBox(MacroActivity.this);
+				final CheckBox cbGuiLeft = new CheckBox(ctx);
 				cbGuiLeft.setText("GUI (Win key)");
-				final CheckBox cbAltRight = new CheckBox(MacroActivity.this);
+				final CheckBox cbAltRight = new CheckBox(ctx);
 				cbAltRight.setText("AltGr (right)");
 				
 				lin.addView(tvInfo);
@@ -222,6 +226,7 @@ public class MacroActivity extends Activity {
 				lin.addView(cbAltLeft);	
 				lin.addView(cbGuiLeft);	
 				lin.addView(cbAltRight);	
+				lin.addView(tvLayoutInfo);
 				alert.setView(lin);
 				
 				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -239,7 +244,7 @@ public class MacroActivity extends Activity {
 						if (cbCtrlLeft.isChecked()) add("Ctrl");
 						if (cbShiftLeft.isChecked()) add("Shift");
 						if (cbAltLeft.isChecked()) add("Alt");
-						if (cbGuiLeft.isChecked()) add("Gui");
+						if (cbGuiLeft.isChecked()) add("GUI");
 						if (cbAltRight.isChecked()) add("AltGr");	
 						add((String)spinner.getSelectedItem());
 						addAction(MacroHelper.MACRO_ACTION_KEY, param);
