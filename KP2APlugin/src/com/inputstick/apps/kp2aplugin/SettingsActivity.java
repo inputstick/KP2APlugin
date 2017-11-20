@@ -7,6 +7,7 @@ import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -25,10 +26,15 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inputstick.api.Util;
+import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
 
 
@@ -52,6 +58,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private CheckBoxPreference prefLaunchAuthenticator;
 	private CheckBoxPreference prefLaunchCustomApp;
 	private Preference prefCustomAppPackage;
+	
+	private Preference prefQuickShortcut1;
+	private Preference prefQuickShortcut2;
+	private Preference prefQuickShortcut3;
 	
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
@@ -152,6 +162,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		setListSummary(Const.PREF_AUTO_CONNECT);    
 		setListSummary(Const.PREF_MAX_IDLE_PERIOD);
 		
+		setListSummary(Const.PREF_ENABLED_QUICK_SHORTCUTS);
         		
 		pref = findPreference(Const.PREF_ENABLE_PLUGIN_PREF);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -266,6 +277,46 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		});
 		setCustomAppPackageSummary();		
 		
+		//quick shortcuts
+		prefQuickShortcut1 = findPreference(Const.PREF_QUICK_SHORTCUT_1);
+		prefQuickShortcut1.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				editShortcut(1, PreferencesHelper.getQuickShortcut(prefs, 1));
+				return true;
+			}
+		});
+		
+		prefQuickShortcut2 = findPreference(Const.PREF_QUICK_SHORTCUT_2);
+		prefQuickShortcut2.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				editShortcut(2, PreferencesHelper.getQuickShortcut(prefs, 2));
+				return true;
+			}
+		});
+		
+		prefQuickShortcut3 = findPreference(Const.PREF_QUICK_SHORTCUT_3);
+		prefQuickShortcut3.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				editShortcut(3, PreferencesHelper.getQuickShortcut(prefs, 3));
+				return true;
+			}
+		});		
+				
+		manageQuickShortcuts(null);
+		
+		pref = findPreference(Const.PREF_ENABLED_QUICK_SHORTCUTS);
+		pref.setOnPreferenceClickListener(reloadInfoListener);
+		pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				manageQuickShortcuts((String)newValue);
+        		return true;
+			}
+        });
+		
 		
 		//UI:
 		findPreference(Const.PREF_DISPLAY_IS_TEXT).setOnPreferenceClickListener(reloadInfoListener);
@@ -349,6 +400,44 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			prefCustomAppPackage.setSummary(getNameForPackage(appPackage));
 		}
 	}
+	
+	private void manageQuickShortcuts(String value) {
+		int cnt = 0;
+		if (value == null) {
+			cnt = PreferencesHelper.getEnabledQuickShortcuts(prefs);
+		} else {
+			try {
+				cnt = Integer.parseInt(value);
+			} catch (Exception e) {				
+			}
+		}
+		String summary;
+		
+		if (cnt > 0) {
+			prefQuickShortcut1.setEnabled(true);
+			summary = PreferencesHelper.getQuickShortcut(prefs, 1);	
+			prefQuickShortcut1.setSummary(summary);
+		} else {
+			prefQuickShortcut1.setEnabled(false);
+			prefQuickShortcut1.setSummary(R.string.quickshortcut_disabled);
+		}
+		if (cnt > 1) {
+			prefQuickShortcut2.setEnabled(true);
+			summary = PreferencesHelper.getQuickShortcut(prefs, 2);
+			prefQuickShortcut2.setSummary(summary);
+		} else {
+			prefQuickShortcut2.setEnabled(false);
+			prefQuickShortcut2.setSummary(R.string.quickshortcut_disabled);
+		}		
+		if (cnt > 2) {
+			prefQuickShortcut3.setEnabled(true);
+			summary = PreferencesHelper.getQuickShortcut(prefs, 3);
+			prefQuickShortcut3.setSummary(summary);
+		} else {
+			prefQuickShortcut3.setEnabled(false);
+			prefQuickShortcut3.setSummary(R.string.quickshortcut_disabled);
+		}
+	}	
 	
 	
 	@Override
@@ -483,6 +572,100 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		alert.setNeutralButton(R.string.ok, null);	
 		alert.show();
 	}	
+	
+	
+	private void editShortcut(final int id, final String value) {
+		final Context ctx = SettingsActivity.this;
+		AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
+		switch (id) {
+			case 1:
+				alert.setTitle(R.string.quickshortcut_1);
+				break;
+			case 2:
+				alert.setTitle(R.string.quickshortcut_2);
+				break;
+			case 3:
+				alert.setTitle(R.string.quickshortcut_3);
+				break;
+		}
+		
+		final LinearLayout lin= new LinearLayout(ctx);
+		lin.setOrientation(LinearLayout.VERTICAL);
+		
+		final TextView tvInfo = new TextView(ctx);				
+		tvInfo.setText(R.string.custom_key_message);		
+		final TextView tvLayoutInfo = new TextView(ctx);				
+		tvLayoutInfo.setText(R.string.custom_key_layout_message);
+		
+		
+		final Spinner spinner = new Spinner(ctx);				
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_spinner_item, MacroHelper.getKeyList());
+		spinner.setAdapter(adapter);
+		
+		final CheckBox cbCtrlLeft = new CheckBox(ctx);
+		cbCtrlLeft.setText("Ctrl");
+		final CheckBox cbShiftLeft = new CheckBox(ctx);
+		cbShiftLeft.setText("Shift");
+		final CheckBox cbAltLeft = new CheckBox(ctx);
+		cbAltLeft.setText("Alt");
+		final CheckBox cbGuiLeft = new CheckBox(ctx);
+		cbGuiLeft.setText("GUI (Win key)");
+		final CheckBox cbAltRight = new CheckBox(ctx);
+		cbAltRight.setText("AltGr (right)");
+		
+		lin.addView(tvInfo);		
+		lin.addView(spinner);
+		lin.addView(cbCtrlLeft);
+		lin.addView(cbShiftLeft);	
+		lin.addView(cbAltLeft);	
+		lin.addView(cbGuiLeft);	
+		lin.addView(cbAltRight);
+		lin.addView(tvLayoutInfo);
+				
+		if (value != null) {
+			byte modifiers = MacroHelper.getModifiers(value);
+			byte key = MacroHelper.getKey(value);
+			cbCtrlLeft.setChecked((modifiers & HIDKeycodes.CTRL_LEFT) != 0);
+			cbShiftLeft.setChecked((modifiers & HIDKeycodes.SHIFT_LEFT) != 0);
+			cbAltLeft.setChecked((modifiers & HIDKeycodes.ALT_LEFT) != 0);
+			cbGuiLeft.setChecked((modifiers & HIDKeycodes.GUI_LEFT) != 0);
+			cbAltRight.setChecked((modifiers & HIDKeycodes.ALT_RIGHT) != 0);
+			int selectedPosition = MacroHelper.getIndexForKey(key);
+			if (selectedPosition >= 0) {
+				spinner.setSelection(selectedPosition);
+			} else {
+				spinner.setSelection(0);
+			}
+		}				
+		
+		alert.setView(lin);
+		
+		alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			private String param;
+			
+			private void add(String toAdd) {
+				if (param.length() > 0) {
+					param += "+";
+				}
+				param += toAdd;
+			}
+			
+			public void onClick(DialogInterface dialog, int whichButton) {
+				param = "";
+				if (cbCtrlLeft.isChecked()) add("Ctrl");
+				if (cbShiftLeft.isChecked()) add("Shift");
+				if (cbAltLeft.isChecked()) add("Alt");
+				if (cbGuiLeft.isChecked()) add("GUI");
+				if (cbAltRight.isChecked()) add("AltGr");	
+				add((String)spinner.getSelectedItem());				
+				//store value & update summary fields				
+				PreferencesHelper.setQuickShortcut(prefs, id, param);
+				manageQuickShortcuts(null);
+			}
+		});
+		alert.setNegativeButton(R.string.cancel, null);
+		alert.show();		
+	}
 	
 	
 	

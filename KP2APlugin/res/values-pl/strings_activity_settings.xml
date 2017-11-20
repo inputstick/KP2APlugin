@@ -138,13 +138,15 @@
     
     
     
+    
+    
+    
     <string name="tip_title">Porada:</string>
     <string name="tip_empty">Błąd: pusta wiadomość</string>
 	<string name="tip_typing_speed">Upewnij się, że wybrana opcja działa poprawnie! W niektórych sytuacjach (BIOS) test może nie być wpisywany poprawnie.</string>
 	
 	<string name="text_notification_info">Powiadomienie wskazuje, że KP2A InputStick plugin działa w tle. Możesz wyłączyć wyświetlanie powiadomienia w ustawieniach. Plugin zostanie zatrzymany automatycznie gdy baza danych KP2A zostanie zablokowana lub zamknięta. Jeżeli nie działa to poprawnie, upewnij się, że plugin ma wymagane uprawnienia KP2A: kliknij Ustaw jako plugin -> Akceptuj</string>
-		    
-    
+		        
 	
 	<string name="connection_auto_connect_title">Autom.-połącz</string>
 	<string-array name="connection_auto_connect_names">
@@ -171,9 +173,31 @@
 	
 	
 	
+
+	
+	
+	
+	
+	
+    <string name="quick_shortcuts_settings_title">Szybkie skróty (menu wpisu)</string>
+    <string name="enabled_quick_shortcuts_title">Włącz Szybkie skróty</string>
+    <string name="quickshortcut_1">Szybki skrót 1</string>
+    <string name="quickshortcut_2">Szybki skrót 2</string>
+    <string name="quickshortcut_3">Szybki skrót 3</string>
+    <string name="quickshortcut_disabled">Wyłączone</string>    
+    
+	<string-array name="enabled_quick_shortcuts_names">
+        <item>Wyłączone</item>
+        <item>Szybki skrót 1</item>
+		<item>Szybki skrót 1, Szybki skrót 2</item>
+		<item>Szybki skrót 1, Szybki skrót 2, Szybki skrót 3</item>
+    </string-array>	
+
+
 	
 	
 	
 	
 
+    
 </resources>

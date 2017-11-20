@@ -1,6 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public abstract class PreferencesHelper {
 	
@@ -213,6 +214,45 @@ public abstract class PreferencesHelper {
 		return prefs.getBoolean(Const.PREF_CLIPBOARD_CHECK_LENGTH, Const.PREF_CLIPBOARD_CHECK_LENGTH_VALUE);
 	}
 	
+	
+	//quick shortcuts
+	public static int getEnabledQuickShortcuts(SharedPreferences prefs) {
+		String tmp = prefs.getString(Const.PREF_ENABLED_QUICK_SHORTCUTS, Const.PREF_ENABLED_QUICK_SHORTCUTS_VALUE);
+		try {
+			return Integer.parseInt(tmp);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	public static String getQuickShortcut(SharedPreferences prefs, int id) {
+		switch (id) {
+			case 1:
+				return prefs.getString(Const.PREF_QUICK_SHORTCUT_1, Const.PREF_QUICK_SHORTCUT_VALUE);
+			case 2:
+				return prefs.getString(Const.PREF_QUICK_SHORTCUT_2, Const.PREF_QUICK_SHORTCUT_VALUE);
+			case 3:
+				return prefs.getString(Const.PREF_QUICK_SHORTCUT_3, Const.PREF_QUICK_SHORTCUT_VALUE);
+			default:
+				return "";
+		}		
+	}
+	
+	public static void setQuickShortcut(SharedPreferences prefs, int id, String value) {
+		Editor editor = prefs.edit();
+		switch (id) {
+			case 1:
+				editor.putString(Const.PREF_QUICK_SHORTCUT_1, value);		
+				break;
+			case 2:
+				editor.putString(Const.PREF_QUICK_SHORTCUT_2, value);
+				break;
+			case 3:
+				editor.putString(Const.PREF_QUICK_SHORTCUT_3, value);
+				break;
+		}	
+		editor.apply();		
+	}
 	
 	//setup
 	

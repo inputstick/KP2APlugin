@@ -176,6 +176,28 @@
 		<item>300000</item>
 		<item>600000</item>		        
         <item>0</item>
-    </string-array>			            
+    </string-array>			 
+    
+    
+    <string name="quick_shortcuts_settings_title">Quick Shortcuts (entry menu)</string>
+    <string name="enabled_quick_shortcuts_title">Enabled Quick Shortcuts</string>
+    <string name="quickshortcut_1">Quick Shortcut 1</string>
+    <string name="quickshortcut_2">Quick Shortcut 2</string>
+    <string name="quickshortcut_3">Quick Shortcut 3</string>
+    <string name="quickshortcut_disabled">Disabled</string>    
+    
+	<string-array name="enabled_quick_shortcuts_names">
+        <item>Disabled</item>
+        <item>Quick Shortcut 1</item>
+		<item>Quick Shortcut 1, Quick Shortcut 2</item>
+		<item>Quick Shortcut 1, Quick Shortcut 2, Quick Shortcut 3</item>
+    </string-array>	
+    <string-array name="enabled_quick_shortcuts_values">
+        <item>0</item>
+        <item>1</item>
+		<item>2</item>
+		<item>3</item>
+    </string-array>	    
+    
     
 </resources>

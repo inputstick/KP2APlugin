@@ -120,7 +120,11 @@ public class Const {
 	public static final String ACTION_CLIPBOARD = "com.inputstick.apps.kp2aplugin.clipboard";	
 	public static final String ACTION_MACRO_RUN = "com.inputstick.apps.kp2aplugin.macro_run";
 	public static final String ACTION_TEMPLATE_RUN = "com.inputstick.apps.kp2aplugin.template_run";
-	public static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";	
+	public static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";
+	
+	public static final String ACTION_QUICK_SHORTCUT_1 = "com.inputstick.apps.kp2aplugin.quick_shortcut_1";
+	public static final String ACTION_QUICK_SHORTCUT_2 = "com.inputstick.apps.kp2aplugin.quick_shortcut_2";
+	public static final String ACTION_QUICK_SHORTCUT_3 = "com.inputstick.apps.kp2aplugin.quick_shortcut_3";
 	
 	public static final String ACTION_FIELD_TYPE_PRIMARY = "com.inputstick.apps.kp2aplugin.type";	
 	public static final String ACTION_FIELD_TYPE_ENTER_PRIMARY = "com.inputstick.apps.kp2aplugin.type_enter";
@@ -213,5 +217,13 @@ public class Const {
 	
 	public static final String PREF_DO_NOT_REQUEST_DB_SCOPE = "db_scope_disabled";
 	public static final boolean PREF_DO_NOT_REQUEST_DB_VALUE = false;		
+	
+	public static final String PREF_ENABLED_QUICK_SHORTCUTS = "enabled_quick_shortcuts";
+	public static final String PREF_ENABLED_QUICK_SHORTCUTS_VALUE = "0";
+	
+	public static final String PREF_QUICK_SHORTCUT_1 = "quick_shortcut_1";
+	public static final String PREF_QUICK_SHORTCUT_2 = "quick_shortcut_2";
+	public static final String PREF_QUICK_SHORTCUT_3 = "quick_shortcut_3";
+	public static final String PREF_QUICK_SHORTCUT_VALUE = "none";
 	
 }

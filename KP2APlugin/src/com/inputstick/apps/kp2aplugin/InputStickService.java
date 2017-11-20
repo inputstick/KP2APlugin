@@ -204,7 +204,20 @@ public class InputStickService extends Service implements InputStickStateListene
 			ActionHelper.startSelectTemplateActivityAction(this, entryData, params, false);
 		} else if (Const.ACTION_TEMPLATE_MANAGE.equals(uiAction)) {
 			ActionHelper.startSelectTemplateActivityAction(this, entryData, params, true);
+		} else if (Const.ACTION_QUICK_SHORTCUT_1.equals(uiAction)) {
+			executeQuickAction(1, params);			
+		} else if (Const.ACTION_QUICK_SHORTCUT_2.equals(uiAction)) {
+			executeQuickAction(2, params);
+		} else if (Const.ACTION_QUICK_SHORTCUT_3.equals(uiAction)) {
+			executeQuickAction(3, params);
 		}
+	}
+	
+	private void executeQuickAction(int id, TypingParams params) {
+		String param = PreferencesHelper.getQuickShortcut(prefs, id);
+		byte modifiers = MacroHelper.getModifiers(param);
+		byte key = MacroHelper.getKey(param);
+		queueKey(modifiers, key, params, false);
 	}
 
 	private void typeUserNameAndPasswordFields(EntryData entryData, TypingParams params, boolean addEnter) {

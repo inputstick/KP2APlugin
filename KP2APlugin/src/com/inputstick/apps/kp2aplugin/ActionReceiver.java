@@ -1,9 +1,5 @@
 package com.inputstick.apps.kp2aplugin;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import keepass2android.pluginsdk.KeepassDefs;
 import keepass2android.pluginsdk.PluginAccessException;
 import keepass2android.pluginsdk.Strings;
@@ -138,7 +134,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			} 
 			if (PreferencesHelper.isClipboardActionEnabled(tmp)) {
 				addEntryAction(oe, getTextForClipboardAction(ctx, prefs), Const.ACTION_CLIPBOARD, Const.LAYOUT_PRIMARY, token);		
-			}				
+			}			
 			
 			//entry items, secondary layout 
 			if (isSecondaryLayoutEnabled) {
@@ -162,6 +158,21 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 					addEntryAction(oe, getTextForClipboardAction(ctx, prefs), Const.ACTION_CLIPBOARD, Const.LAYOUT_SECONDARY, token);	
 				}			
 			}
+			
+			//quick shortcuts; layout independent			
+			int cnt = PreferencesHelper.getEnabledQuickShortcuts(prefs);
+			if (cnt > 0) {
+				tmp = PreferencesHelper.getQuickShortcut(prefs, 1);
+				addEntryAction(oe, tmp, Const.ACTION_QUICK_SHORTCUT_1, Const.LAYOUT_NONE, token);
+			}
+			if (cnt > 1) {
+				tmp = PreferencesHelper.getQuickShortcut(prefs, 2);
+				addEntryAction(oe, tmp, Const.ACTION_QUICK_SHORTCUT_2, Const.LAYOUT_NONE, token);
+			}
+			if (cnt > 2) {
+				tmp = PreferencesHelper.getQuickShortcut(prefs, 3);
+				addEntryAction(oe, tmp, Const.ACTION_QUICK_SHORTCUT_3, Const.LAYOUT_NONE, token); 
+			}						
 		} catch (PluginAccessException e) {
 			e.printStackTrace();
 		}				
