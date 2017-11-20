@@ -243,6 +243,15 @@ public class MacroHelper {
 		return 0;
 	}
 	
+	public static int getIndexForKey(byte key) {		
+		for (int i = 0; i < keyLUT.length; i++) {			
+			if (keyLUT[i].keyCode == key) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 
 	public static String loadMacro(SharedPreferences prefs, String entryId) {
 		return prefs.getString(Const.MACRO_PREF_PREFIX + entryId, null);
