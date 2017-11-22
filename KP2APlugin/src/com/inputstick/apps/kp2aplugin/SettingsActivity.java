@@ -171,16 +171,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				enableAsPlugin();
 				return true;
 			}
-		});
-		
-		pref = (Preference) findPreference(Const.PREF_SHOW_CHANGELOG_PREFERENCE_KEY);
-		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {				
-				new ChangeLog(SettingsActivity.this).getFullLogDialog().show();
-				return true;
-			}
-		});
+		});		
 		
 		pref = (Preference)findPreference(Const.PREF_SHOW_HELP_WEBPAGE_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
