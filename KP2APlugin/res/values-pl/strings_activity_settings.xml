@@ -200,4 +200,10 @@
 	
 
     
+    <string name="section_typing_info">Upewnij się, że wybrany jest taki sam układ klawiatury z jakiego korzysta PC. Zmniejsz prędkość wpisywania gdy PC nie jest w stanie przetworzyć szybko wpisywanego tekstu.</string>
+    <string name="section_quick_shortcuts_info">Szybkie skróty to kombinacje klawiszy które mogą zostać szybko wybrane z menu wpisu</string>
+    <string name="section_ui_settings_info">Wybierz jakie akcje będą wyświetlane w menu wpisu i pola.</string>
+    <string name="section_clipboard_info">Użyj pisania ze schowka w celu wpisania tekstu z innych aplikacji (wygenerowane OTP, kody SMS, itp.).</string>	
+	
+	
 </resources>
