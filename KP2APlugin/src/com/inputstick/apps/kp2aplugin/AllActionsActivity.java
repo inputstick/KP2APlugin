@@ -1,6 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,12 +17,47 @@ import android.widget.Toast;
 
 public class AllActionsActivity extends Activity {
 	
+	public enum ActionId {
+		OPEN_SETTINGS,
+		CONNECT,
+		DISCONNECT,
+		MAC_SETUP, 
+		TYPE_TAB,
+		TYPE_ENTER,
+		MACRO_ADD_EDIT,
+		TEMPLATE_MANAGE,
+
+		QUICK_SHORTCUT_1,
+		QUICK_SHORTCUT_2,
+		QUICK_SHORTCUT_3,
+
+		USER_TAB_PASS_PRIMARY,
+		USER_TAB_PASS_ENTER_PRIMARY,
+		MASKED_PASS_PRIMARY,
+		MACRO_RUN_PRIMARY,
+		TEMPLATE_RUN_PRIMARY,
+		CLIPBOARD_PRIMARY,
+		
+		USER_TAB_PASS_SECONDARY,
+		USER_TAB_PASS_ENTER_SECONDARY,
+		MASKED_PASS_SECONDARY,
+		MACRO_RUN_SECONDARY,
+		TEMPLATE_RUN_SECONDARY,
+		CLIPBOARD_SECONDARY
+	}	
+	
+	
 	private long lastActionTime;
 	private long maxTime;
 
 	private boolean isSecondaryLayoutEnabled;
 	private String primaryLayoutCode;
 	private String secondaryLayoutCode;
+	
+	private ArrayList<String> list;
+	private ArrayAdapter<String> listAdapter;
+	private List<ActionId> actionsLUT;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,32 +76,44 @@ public class AllActionsActivity extends Activity {
 		lastActionTime = System.currentTimeMillis();
 
 		ListView listViewActions = (ListView) findViewById(R.id.listViewActions);
-		ArrayList<String> list = new ArrayList<String>();
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
+		list = new ArrayList<String>();
+		listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
+		actionsLUT = new ArrayList<ActionId>();
 		
-		listAdapter.add(getActionString(R.string.action_open_settings, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_connect, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_disconnect, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_open_mac_setup, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_type_tab, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_type_enter, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_macro_add_edit, Const.LAYOUT_NONE));
-		listAdapter.add(getActionString(R.string.action_template_manage, Const.LAYOUT_NONE));
+		addAction(getActionString(R.string.action_open_settings, Const.LAYOUT_NONE), ActionId.OPEN_SETTINGS);
+		addAction(getActionString(R.string.action_connect, Const.LAYOUT_NONE), ActionId.CONNECT);
+		addAction(getActionString(R.string.action_disconnect, Const.LAYOUT_NONE), ActionId.DISCONNECT);
+		addAction(getActionString(R.string.action_open_mac_setup, Const.LAYOUT_NONE), ActionId.MAC_SETUP);
+		addAction(getActionString(R.string.action_type_tab, Const.LAYOUT_NONE), ActionId.TYPE_TAB);
+		addAction(getActionString(R.string.action_type_enter, Const.LAYOUT_NONE), ActionId.TYPE_ENTER);
+		addAction(getActionString(R.string.action_macro_add_edit, Const.LAYOUT_NONE), ActionId.MACRO_ADD_EDIT);
+		addAction(getActionString(R.string.action_template_manage, Const.LAYOUT_NONE), ActionId.TEMPLATE_MANAGE);
 		
-		listAdapter.add(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_PRIMARY));
-		listAdapter.add(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_PRIMARY));
-		listAdapter.add(getActionString(R.string.action_masked_password, Const.LAYOUT_PRIMARY));
-		listAdapter.add(getActionString(R.string.action_macro_run, Const.LAYOUT_PRIMARY));
-		listAdapter.add(getActionString(R.string.action_template_run, Const.LAYOUT_PRIMARY));
-		listAdapter.add(getActionString(R.string.action_clipboard, Const.LAYOUT_PRIMARY));
+		int cnt = PreferencesHelper.getEnabledQuickShortcuts(prefs);
+		if (cnt > 0) {
+			addAction(PreferencesHelper.getQuickShortcut(prefs, 1), ActionId.QUICK_SHORTCUT_1);
+		}
+		if (cnt > 1) {
+			addAction(PreferencesHelper.getQuickShortcut(prefs, 2), ActionId.QUICK_SHORTCUT_2);
+		}
+		if (cnt > 2) {
+			addAction(PreferencesHelper.getQuickShortcut(prefs, 3), ActionId.QUICK_SHORTCUT_3);			
+		}	
+		
+		addAction(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_PRIMARY), ActionId.USER_TAB_PASS_PRIMARY);
+		addAction(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_PRIMARY), ActionId.USER_TAB_PASS_ENTER_PRIMARY);
+		addAction(getActionString(R.string.action_masked_password, Const.LAYOUT_PRIMARY), ActionId.MASKED_PASS_PRIMARY);
+		addAction(getActionString(R.string.action_macro_run, Const.LAYOUT_PRIMARY), ActionId.MACRO_RUN_PRIMARY);
+		addAction(getActionString(R.string.action_template_run, Const.LAYOUT_PRIMARY), ActionId.TEMPLATE_RUN_PRIMARY);
+		addAction(getActionString(R.string.action_clipboard, Const.LAYOUT_PRIMARY), ActionId.CLIPBOARD_PRIMARY);
 		
 		if (isSecondaryLayoutEnabled) {
-			listAdapter.add(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_SECONDARY));
-			listAdapter.add(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_SECONDARY));
-			listAdapter.add(getActionString(R.string.action_masked_password, Const.LAYOUT_SECONDARY));
-			listAdapter.add(getActionString(R.string.action_macro_run, Const.LAYOUT_SECONDARY));
-			listAdapter.add(getActionString(R.string.action_template_run, Const.LAYOUT_SECONDARY));
-			listAdapter.add(getActionString(R.string.action_clipboard, Const.LAYOUT_SECONDARY));
+			addAction(getActionString(R.string.action_type_user_tab_pass, Const.LAYOUT_SECONDARY), ActionId.USER_TAB_PASS_SECONDARY);
+			addAction(getActionString(R.string.action_type_user_tab_pass_enter, Const.LAYOUT_SECONDARY), ActionId.USER_TAB_PASS_ENTER_SECONDARY);
+			addAction(getActionString(R.string.action_masked_password, Const.LAYOUT_SECONDARY), ActionId.MASKED_PASS_SECONDARY);
+			addAction(getActionString(R.string.action_macro_run, Const.LAYOUT_SECONDARY), ActionId.MACRO_RUN_SECONDARY);
+			addAction(getActionString(R.string.action_template_run, Const.LAYOUT_SECONDARY), ActionId.TEMPLATE_RUN_SECONDARY);
+			addAction(getActionString(R.string.action_clipboard, Const.LAYOUT_SECONDARY), ActionId.CLIPBOARD_SECONDARY);
 		}
 		
 		listViewActions.setAdapter(listAdapter);
@@ -83,81 +131,98 @@ public class AllActionsActivity extends Activity {
 					Intent serviceIntent = new Intent(AllActionsActivity.this, InputStickService.class);
 					serviceIntent.setAction(Const.SERVICE_ENTRY_ACTION); 
 					
-					switch (pos) {
+					ActionId actionId = actionsLUT.get(pos);
+					
+					
+					
+					switch (actionId) {
 						//general:
-						case 0:
+						case OPEN_SETTINGS:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SETTINGS);
 							break;
-						case 1:
+						case CONNECT:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CONNECT);
 							break;
-						case 2:
+						case DISCONNECT:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_DISCONNECT);   
 							break;						
-						case 3:
+						case MAC_SETUP:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MAC_SETUP);
 							break;		
-						case 4:
+						case TYPE_TAB:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TAB);   
 							finish = false;
 							break;		
-						case 5:							
+						case TYPE_ENTER:							
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_ENTER);
 							finish = false;
 							break;
-						case 6:
+						case MACRO_ADD_EDIT:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_ADDEDIT);  
 							break;
-						case 7:
+						case TEMPLATE_MANAGE:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_MANAGE);
 							break;							
+						//quick shortcuts
+						case QUICK_SHORTCUT_1:
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_1);
+							finish = false;
+							break;
+						case QUICK_SHORTCUT_2:
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_2);
+							finish = false;
+							break;
+						case QUICK_SHORTCUT_3:
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_3);
+							finish = false;
+							break;							
 						//entry, primary layout
-						case 8:
+						case USER_TAB_PASS_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;				
-						case 9:
+						case USER_TAB_PASS_ENTER_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;	
-						case 10:
+						case MASKED_PASS_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
 							break;		
-						case 11:
+						case MACRO_RUN_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
 							break;	
-						case 12:
+						case TEMPLATE_RUN_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);	
 							break;															
-						case 13:
+						case CLIPBOARD_PRIMARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
 							break;
-						//entry, secondary layout
-						case 14:
+						//entry, secondary layout							
+						case USER_TAB_PASS_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;				
-						case 15:
+						case USER_TAB_PASS_ENTER_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;	
-						case 16:
+						case MASKED_PASS_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;		
-						case 17:
+						case MACRO_RUN_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;
-						case 18:
+						case TEMPLATE_RUN_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;								
-						case 19:
+						case CLIPBOARD_SECONDARY:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
 							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 							break;			
@@ -176,6 +241,12 @@ public class AllActionsActivity extends Activity {
 				}
 			}			
 		});
+	}
+	
+	private void addAction(String label, ActionId actionId) {
+		listAdapter.add(label);
+		actionsLUT.add(actionId);
+		
 	}
 	
 	private String getActionString(int resId, int actionLayoutType) {
