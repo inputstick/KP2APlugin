@@ -9,6 +9,7 @@ public class Const {
 	
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;
 	public static final int CLIPBOARD_SERVICE_NOTIFICATION_ID = 2;
+	public static final int UPDATE_NOTIFICATION_ID = 3;
 	
 	public static final String PACKAGE_PLUGIN_OLD = "keepass2android.plugin.inputstick";
 	public static final String PACKAGE_KP2A = "keepass2android.keepass2android";
