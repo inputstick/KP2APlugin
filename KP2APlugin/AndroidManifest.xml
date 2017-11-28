@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inputstick.apps.kp2aplugin"
-    android:versionCode="13"
-    android:versionName="1.12" >
+    android:versionCode="14"
+    android:versionName="1.13" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -36,6 +36,13 @@
                 <action android:name="keepass2android.ACTION_ENTRY_ACTION_SELECTED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".UpdateReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>        
 
         <service
             android:name=".InputStickService"
