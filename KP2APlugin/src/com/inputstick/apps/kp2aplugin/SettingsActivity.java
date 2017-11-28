@@ -652,6 +652,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				//store value & update summary fields				
 				PreferencesHelper.setQuickShortcut(prefs, id, param);
 				manageQuickShortcuts(null);
+				//entry must be reloaded to show new value
+				displayReloadInfo = true;
 			}
 		});
 		alert.setNegativeButton(R.string.cancel, null);
