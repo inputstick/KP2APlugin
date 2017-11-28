@@ -19,6 +19,19 @@
     </style>
   </head>
   <body>
+  
+   % Bug fix 
+<b>If the plugin no longer works try following fix:</b> Configure as plugin → Deny → Configure as plugin → Accept
+  _ <a href="http://blog.inputstick.com/2017/11/if-your-kp2a-plugin-no-longer-works-fix.html">(More details)</a>    
+  
+$ 1.13
+  % Version 1.13  
+  	_ <a href="http://blog.inputstick.com/2017/11/kp2a-plugin-v113.html">(More info)</a>  
+  	* added masked password option for field actions (password field only, enable in Settings)
+  	* added Close button for masked password screen
+  	* it is now possible to add keyboard shortcuts to entry menu
+  	* added missing key (empty key, numlock section keys) definitions (macros/templates)
+  	* moved ChangeLog to About app section
 $ 1.12
   % Version 1.12
   	_ <a href="http://blog.inputstick.com/2017/10/kp2a-plugin-v112.html">(More info)</a>
