@@ -21,8 +21,9 @@
     <string name="save_message">Czy chcesz zapisać zmiany?</string>
     <string name="delete_title">Usunąć?</string>
     <string name="delete_message">Czy chcesz usunąc makro?</string>
-    <string name="custom_key_title">Dowolny klawisz</string>
-    <string name="custom_key_message">Wybierz kombinację klawiszy:</string>
+    <string name="custom_key_title">Skrót klawiaturowy</string>
+    <string name="custom_key_message">Klawisz:</string>
+    <string name="custom_key_layout_message">Ważne! Etykiety klawiszy odnoszą się do układu klawiatury US i nie wpływa na nie aktualnie wybrany układ klawiatury!</string>
     <string name="illegal_character_toast">Nie można użyć znaku: %</string>
     <string name="no_macro_create_new">Brak przypisanego makra. Utwórz nowe.</string>        
     <string name="saved_toast">Zapisano</string>
