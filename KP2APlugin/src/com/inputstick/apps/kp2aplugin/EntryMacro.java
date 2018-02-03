@@ -48,7 +48,7 @@ public class EntryMacro {
 							ite = new ItemToExecute(actionParam, params);
 						}
 						if (tmp.startsWith(MacroHelper.MACRO_ACTION_DELAY)) {
-							if ( !runInBackground) {
+							if (runInBackground) {
 								ite = new ItemToExecute(MacroHelper.getDelay(actionParam));
 							}
 						}
