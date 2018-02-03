@@ -89,6 +89,8 @@ public class Const {
 	public static final String ITEM_MACRO = "macro";
 	public static final String ITEM_RUN_TEMPLATE = "run_template";
 	public static final String ITEM_TEMPLATE_MANAGE = "manage_template";
+	public static final String ITEM_REMOTE = "remote";
+	
 	
 	
 	//entry
@@ -116,6 +118,8 @@ public class Const {
 	public static final String ACTION_MAC_SETUP = "com.inputstick.apps.kp2aplugin.mac_setup";
 	public static final String ACTION_TAB = "com.inputstick.apps.kp2aplugin.tab";
 	public static final String ACTION_ENTER = "com.inputstick.apps.kp2aplugin.enter";
+	public static final String ACTION_REMOTE = "com.inputstick.apps.kp2aplugin.remote";
+	
 	
 	public static final String ACTION_MACRO_ADDEDIT = "com.inputstick.apps.kp2aplugin.macro_addedit";	
 	public static final String ACTION_CLIPBOARD = "com.inputstick.apps.kp2aplugin.clipboard";	
@@ -170,7 +174,7 @@ public class Const {
 	public static final boolean PREF_DISPLAY_IS_TEXT_VALUE = true;
 	
 	public static final String PREF_ITEMS_GENERAL = "items_general";
-	public static final String PREF_ITEMS_GENERAL_VALUE = "settings|osx|tab_enter|macro";		
+	public static final String PREF_ITEMS_GENERAL_VALUE = "settings|osx|tab_enter|macro|remote";		
 
 	public static final String PREF_ITEMS_ENTRY_PRIMARY = "items_entry_primary";
 	public static final String PREF_ITEMS_ENTRY_PRIMARY_VALUE = "username_and_password|username_password_enter|masked_password|macro|run_template|clipboard";
@@ -215,6 +219,8 @@ public class Const {
 	public static final String PREF_SHOW_ABOUT_KEY = "show_about_key";
 	public static final String PREF_SHOW_HELP_WEBPAGE_KEY = "show_help_webpage_key";
 	public static final String PREF_SHOW_CHANGELOG_PREFERENCE_KEY = "show_changelog_preference_key";
+	public static final String PREF_RUN_REMOTE = "run_remote_key";
+	
 	
 	public static final String PREF_DO_NOT_REQUEST_DB_SCOPE = "db_scope_disabled";
 	public static final boolean PREF_DO_NOT_REQUEST_DB_VALUE = false;		
@@ -226,5 +232,18 @@ public class Const {
 	public static final String PREF_QUICK_SHORTCUT_2 = "quick_shortcut_2";
 	public static final String PREF_QUICK_SHORTCUT_3 = "quick_shortcut_3";
 	public static final String PREF_QUICK_SHORTCUT_VALUE = "none";
+	
+	
+	public static final String PREF_REMOTE_MOUSE_MODE = "remote_mouse_mode";
+	public static final String PREF_REMOTE_MOUSE_MODE_VALUE = "mouse";
+	
+	public static final String PREF_REMOTE_MOUSE_SENSITIVITY = "remote_mouse_mode";
+	public static final String PREF_REMOTE_MOUSE_SENSITIVITY_VALUE = "50";
+	
+	public static final String PREF_REMOTE_SCROLL_SENSITIVITY = "remote_mouse_mode";
+	public static final String PREF_REMOTE_SCROLL_SENSITIVITY_VALUE = "50";
+	
+	public static final String PREF_REMOTE_USE_PRIMARY_LAYOUT = "remote_use_primary_layout";
+	public static final boolean PREF_REMOTE_USE_PRIMARY_LAYOUT_VALUE = true;
 	
 }

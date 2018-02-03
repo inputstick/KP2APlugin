@@ -93,11 +93,22 @@ public abstract class PreferencesHelper {
 		return prefs.getBoolean(Const.PREF_DISPLAY_IS_TEXT, Const.PREF_DISPLAY_IS_TEXT_VALUE);
 	}
 	
+	public static void addDisplayMenuItem(SharedPreferences prefs, String key, String defValue, String item) {		
+		String tmp = prefs.getString(key, defValue);
+		if ( !tmp.contains(item)) {
+			if (tmp.length() > 1) {
+				tmp += "|";
+			}
+			tmp += item;
+			prefs.edit().putString(key, tmp).apply();
+		}
+	}
+	
 	//enabled actions
 	
 	public static String getGeneralItems(SharedPreferences prefs) {
 		return prefs.getString(Const.PREF_ITEMS_GENERAL, Const.PREF_ITEMS_GENERAL_VALUE);
-	}
+	}		
 	
 	public static String getEntryItemsForPrimaryLayout(SharedPreferences prefs) {
 		return prefs.getString(Const.PREF_ITEMS_ENTRY_PRIMARY, Const.PREF_ITEMS_ENTRY_PRIMARY_VALUE);
@@ -119,6 +130,10 @@ public abstract class PreferencesHelper {
 	
 	public static boolean isSettingsActionEnabled(String enabledActions) {
 		return enabledActions.contains(Const.ITEM_SETTINGS);
+	}
+	
+	public static boolean isRemoteActionEnabled(String enabledActions) {
+		return enabledActions.contains(Const.ITEM_REMOTE);
 	}
 
 	public static boolean isConnectionOptionsActionEnabled(String enabledActions) {
@@ -257,5 +272,43 @@ public abstract class PreferencesHelper {
 	//setup
 	
 	
-
+	//remote
+	
+	public static String getRemoteLayoutCode(SharedPreferences prefs) {
+		if (isSecondaryLayoutEnabled(prefs)) {
+			if (isRemoteUsingPrimaryLayout(prefs)) {
+				return getPrimaryLayoutCode(prefs);
+			} else {
+				return getSecondaryLayoutCode(prefs);
+			}
+		} else {
+			return getPrimaryLayoutCode(prefs);
+		}
+	}
+	
+	public static boolean isRemoteUsingPrimaryLayout(SharedPreferences prefs) {
+		return prefs.getBoolean(Const.PREF_REMOTE_USE_PRIMARY_LAYOUT, Const.PREF_REMOTE_USE_PRIMARY_LAYOUT_VALUE);	
+	}
+	
+	public static boolean isRemoteInMouseMode(SharedPreferences prefs) {
+		return prefs.getString(Const.PREF_REMOTE_MOUSE_MODE, Const.PREF_REMOTE_MOUSE_MODE_VALUE).equals(Const.PREF_REMOTE_MOUSE_MODE_VALUE);
+	}
+	
+	public static int getRemoteMouseSensitivity(SharedPreferences prefs) {
+		String tmp = prefs.getString(Const.PREF_REMOTE_MOUSE_SENSITIVITY, Const.PREF_REMOTE_MOUSE_SENSITIVITY_VALUE);
+		try {
+			return Integer.parseInt(tmp);
+		} catch (Exception e) {
+			return 50;
+		}
+	}
+	
+	public static int getRemoteScrollSensitivity(SharedPreferences prefs) {
+		String tmp = prefs.getString(Const.PREF_REMOTE_SCROLL_SENSITIVITY, Const.PREF_REMOTE_SCROLL_SENSITIVITY_VALUE);
+		try {
+			return Integer.parseInt(tmp);
+		} catch (Exception e) {
+			return 50;
+		}
+	}
 }

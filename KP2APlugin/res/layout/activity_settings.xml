@@ -1,4 +1,6 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android"   
+    xmlns:tools="http://schemas.android.com/tools"
     android:key="general_pref" >
     
 	<PreferenceCategory android:title="@string/help_and_info_settings_title" >
@@ -10,7 +12,13 @@
 	    <Preference
 	        android:key="show_help_webpage_key"
 	        android:title="@string/show_help_webpage_title" >
-	    </Preference>    
+	    </Preference>   
+	    
+		<Preference
+	        android:key="run_remote_key"
+	        android:title="@string/action_remote" >
+	    </Preference>   
+	    
     
     </PreferenceCategory>   
     
@@ -236,7 +244,28 @@
             android:key="items_field_secondary"
             android:summary=""
             android:title="@string/items_field_secondary_title" />        
-    </PreferenceCategory>   
-       
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/remote_settings_title" >
+        
+        <ListPreference
+            android:defaultValue="mouse"
+            android:entries="@array/mouseModeDisplayList"
+            android:entryValues="@array/mouseModeReturnList"
+            android:key="remote_mouse_mode"
+            android:title="@string/remote_mouse_mode_title" />
 
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="remote_mouse_sensitivity"
+            android:max="100"
+            android:title="@string/remote_mouse_sensitivity_title" />
+
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="remote_scroll_sensitivity"
+            android:max="100"
+            android:title="@string/remote_scroll_sensitivity_title" />
+</PreferenceCategory>
+    
 </PreferenceScreen>

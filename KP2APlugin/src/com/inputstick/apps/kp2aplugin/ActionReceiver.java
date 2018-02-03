@@ -99,7 +99,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			if (PreferencesHelper.isConnectionOptionsActionEnabled(tmp)) {
 				addEntryAction(oe, R.string.action_connect, Const.ACTION_CONNECT, Const.LAYOUT_NONE, token);		
 				addEntryAction(oe, R.string.action_disconnect, Const.ACTION_DISCONNECT, Const.LAYOUT_NONE, token);		
-			}					
+			}			
+			if (PreferencesHelper.isRemoteActionEnabled(tmp)) {
+				addEntryAction(oe, R.string.action_remote, Const.ACTION_REMOTE, Const.LAYOUT_NONE, token);		
+			}
 			if (PreferencesHelper.isMacSetupActionEnabled(tmp)) {
 				addEntryAction(oe, R.string.action_open_mac_setup, Const.ACTION_MAC_SETUP, Const.LAYOUT_NONE, token);		
 			}			

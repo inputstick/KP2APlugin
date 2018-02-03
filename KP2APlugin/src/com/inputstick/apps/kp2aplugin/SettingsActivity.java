@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.inputstick.api.Util;
 import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
+import com.inputstick.apps.kp2aplugin.remote.RemoteActivity;
 
 
 @SuppressWarnings("deprecation")
@@ -169,6 +170,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				enableAsPlugin();
+				return true;
+			}
+		});		
+		
+		pref = (Preference)findPreference(Const.PREF_RUN_REMOTE);
+		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				startActivity(new Intent(SettingsActivity.this, RemoteActivity.class));	
 				return true;
 			}
 		});		
@@ -317,7 +327,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefUiEntrySecondary = findPreference(Const.PREF_ITEMS_ENTRY_SECONDARY);
 		prefUiEntrySecondary.setOnPreferenceClickListener(reloadInfoListener);
 		prefUiFieldSecondary = findPreference(Const.PREF_ITEMS_FIELD_SECONDARY);
-		prefUiFieldSecondary.setOnPreferenceClickListener(reloadInfoListener);						
+		prefUiFieldSecondary.setOnPreferenceClickListener(reloadInfoListener);					
+		
+		//remote:
+		setListSummary(Const.PREF_REMOTE_MOUSE_MODE);
 		
 		//enable/disable preferences
 		setSecondaryLayoutEnabled(PreferencesHelper.isSecondaryLayoutEnabled(prefs));			

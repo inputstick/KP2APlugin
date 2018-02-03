@@ -21,6 +21,7 @@ public class AllActionsActivity extends Activity {
 		OPEN_SETTINGS,
 		CONNECT,
 		DISCONNECT,
+		REMOTE,
 		MAC_SETUP, 
 		TYPE_TAB,
 		TYPE_ENTER,
@@ -83,6 +84,7 @@ public class AllActionsActivity extends Activity {
 		addAction(getActionString(R.string.action_open_settings, Const.LAYOUT_NONE), ActionId.OPEN_SETTINGS);
 		addAction(getActionString(R.string.action_connect, Const.LAYOUT_NONE), ActionId.CONNECT);
 		addAction(getActionString(R.string.action_disconnect, Const.LAYOUT_NONE), ActionId.DISCONNECT);
+		addAction(getActionString(R.string.action_remote, Const.LAYOUT_NONE), ActionId.REMOTE);
 		addAction(getActionString(R.string.action_open_mac_setup, Const.LAYOUT_NONE), ActionId.MAC_SETUP);
 		addAction(getActionString(R.string.action_type_tab, Const.LAYOUT_NONE), ActionId.TYPE_TAB);
 		addAction(getActionString(R.string.action_type_enter, Const.LAYOUT_NONE), ActionId.TYPE_ENTER);
@@ -145,7 +147,10 @@ public class AllActionsActivity extends Activity {
 							break;
 						case DISCONNECT:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_DISCONNECT);   
-							break;						
+							break;		
+						case REMOTE:
+							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_REMOTE);   
+							break;								
 						case MAC_SETUP:
 							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MAC_SETUP);
 							break;		

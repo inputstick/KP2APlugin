@@ -95,6 +95,7 @@
     <string-array name="generalItemsDisplayList">
         <item>Settings shortcut</item>
         <item>Connect/Disconnect</item>
+        <item>Remote controller</item>
         <item>OSX Setup shortcut</item>
         <item>Add/Edit macro</item>        
         <item>Manage templates</item>        
@@ -102,7 +103,8 @@
     </string-array>
     <string-array name="generalItemsReturnList">
         <item>settings</item>
-		<item>con_disc</item>     
+		<item>con_disc</item>
+		<item>remote</item>          
         <item>osx</item>
         <item>macro</item>        
         <item>manage_template</item>                
@@ -204,5 +206,21 @@
     <string name="section_quick_shortcuts_info">Quick Shortcuts are keyboard shortcuts that can be easily accessed from Entry menu.</string>
     <string name="section_ui_settings_info">Adjust what actions will be displayed in Entry and Field menus.</string>
     <string name="section_clipboard_info">Use clipboard typing to type text from other apps (generated OTPs, SMS codes, etc.).</string>
+    
+    
+    
+	<string name="remote_settings_title">Remote:</string>
+	<string name="remote_mouse_mode_title">Mousepad mode</string>
+    <string name="remote_mouse_sensitivity_title">Mouse sensitivity</string>
+    <string name="remote_scroll_sensitivity_title">Scroll wheel sensitivity</string>
+		<string-array name="mouseModeDisplayList">
+        <item>Mouse</item>
+        <item>Touch-screen</item>
+    </string-array>	
+    <string-array name="mouseModeReturnList">
+        <item>mouse</item>
+        <item>touchscreen</item>
+    </string-array>	   
+    
             
 </resources>

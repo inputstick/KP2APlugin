@@ -1,5 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
+import com.inputstick.apps.kp2aplugin.remote.RemoteActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +36,13 @@ public abstract class ActionHelper {
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);				
 	}
+	
+	public static void startRemoteActivityAction(Context ctx) {		
+		Intent i = new Intent(ctx, RemoteActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		ctx.startActivity(i);				
+	}	
+	
 	
 	public static void startSelectTemplateActivityAction(Context ctx, EntryData entryData, TypingParams params, boolean manage) {
 		Intent i = new Intent(ctx, SelectTemplateActivity.class);	

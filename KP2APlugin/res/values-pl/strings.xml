@@ -12,7 +12,7 @@
          
     <string name="title_activity_init">Plugin Init</string>
 	<string name="title_activity_all_actions">Wybierz akcję:</string>
-	<string name="title_activity_select_app">Wybierz aplikację:</string>
+	<string name="title_activity_select_app">Wybierz aplikację:</string>	
     <string name="text_please_wait">Proszę czekać</string>
 	<string name="text_locked">Zablokowano po 3 minutach bezczynności. Otwórz ponownie z aplikacji Keepass2Android.</string>  
 	<string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator NIE jest zainstalowany!</string>
@@ -31,9 +31,9 @@
 	<string name="text_plugin_restarted">Restart pluginu, wybierz akcję ponownie</string>
 	<string name="text_stop_plugin">Zatrzymaj plugin</string>
     <string name="action_field_type">Wpisz</string>
-    <string name="action_field_enter">Wpisz+Enter</string>
-    <string name="action_field_tab">Wpisz+Tab</string>    
-    <string name="action_field_slow">Wpisz (powoli)</string>
+    <string name="action_field_type_enter">Wpisz+Enter</string>
+    <string name="action_field_type_tab">Wpisz+Tab</string>    
+    <string name="action_field_type_slow">Wpisz (powoli)</string>
     <string name="action_field_type_masked">Wpisz (maskowane)</string>    
     <string name="action_type_tab">Tab</string>
     <string name="action_type_enter">Enter</string>
@@ -50,6 +50,7 @@
 	<string name="action_macro_add_edit">Dodaj/Edytuj makro</string>
 	<string name="action_template_manage">Zarządzaj szablonami</string>  
 	<string name="action_clipboard">Schowek</string>  
+	<string name="action_remote">Kontroler (klaw/mysz)</string>
     
     <string name="ok">OK</string>
     <string name="yes">Tak</string>
@@ -68,13 +69,16 @@
 	<string name="configuration_title">Konfiguracja</string>  	
     <string name="later">Później</string>
     <string name="never">Nigdy</string>	
+	<string name="connect">Połącz</string>
+    <string name="disconnect">Rozłącz</string>    
     
     <string name="notification_state_ready">InputStick plugin: połączono (USB OK)</string>	    
 	<string name="notification_state_connected">InputStick plugin: połączono (oczekuje na USB)</string>
-	<string name="notification_state_connecting">InputStick plugin: łączenie...</string>
-	<string name="notification_state_not_connected">InputStick plugin: nie połączono</string>    
+	<string name="notification_state_connecting">InputStick plugin: łączenie&#8230;</string>
+	<string name="notification_state_not_connected">InputStick plugin: nie połączono</string>    	
 	
     <string name="title_activity_about">O aplikacji</string>
     <string name="about_text">Autorzy:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nKod źródłowy:\nhttps://github.com/inputstick\n\nAplikacja korzysta z:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
     	    
+    
 </resources>

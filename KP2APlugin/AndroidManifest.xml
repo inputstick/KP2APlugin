@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="22" />    
+        android:targetSdkVersion="22" />
 
     <application
         android:allowBackup="true"
@@ -42,17 +42,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
-        </receiver>        
+        </receiver>
 
         <service
             android:name=".InputStickService"
-            android:exported="false"
-            android:enabled="true" >
+            android:enabled="true"
+            android:exported="false" >
         </service>
         <service
             android:name=".ClipboardService"
-            android:exported="false"
-            android:enabled="true" >
+            android:enabled="true"
+            android:exported="false" >
         </service>
 
         <activity
@@ -112,6 +112,10 @@
             android:excludeFromRecents="true"
             android:label="@string/title_activity_select_app"
             android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="com.inputstick.apps.kp2aplugin.remote.RemoteActivity"
+            android:imeOptions="flagNoExtractUi" >
         </activity>
     </application>
 

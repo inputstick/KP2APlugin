@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 public class UpdateReceiver extends BroadcastReceiver {
@@ -28,6 +30,10 @@ public class UpdateReceiver extends BroadcastReceiver {
         		mBuilder.setContentIntent(pending);
 
         		mNotificationManager.notify(Const.UPDATE_NOTIFICATION_ID, mBuilder.build());
+            }
+            if ("1.20".equals(versionName)) {
+            	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            	PreferencesHelper.addDisplayMenuItem(prefs, Const.PREF_ITEMS_GENERAL, Const.PREF_ITEMS_GENERAL_VALUE, Const.ITEM_REMOTE);            	
             }
         } catch (NameNotFoundException e) {
         }
