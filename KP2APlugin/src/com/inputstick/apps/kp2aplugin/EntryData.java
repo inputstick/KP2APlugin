@@ -33,7 +33,7 @@ public class EntryData {
 				password = intent.getStringExtra(KEY_PASSWORD);
 				userName = intent.getStringExtra(KEY_USERNAME);
 				url = intent.getStringExtra(KEY_URL);
-			} else {
+			} else if (intent.hasExtra(Strings.EXTRA_ENTRY_ID)) {
 				//from broadcast receiver
 				entryId = intent.getStringExtra(Strings.EXTRA_ENTRY_ID);
 				HashMap<String, String> res = new HashMap<String, String>();
@@ -52,6 +52,11 @@ public class EntryData {
 				password = res.get(KeepassDefs.PasswordField);
 				userName = res.get(KeepassDefs.UserNameField);
 				url = res.get(KeepassDefs.UrlField);				
+			} else {
+				entryId = "";
+				password = "";
+				userName = "";
+				url = "";
 			}
 		} 			
 	}
@@ -71,6 +76,15 @@ public class EntryData {
 		b.putString(KEY_PASSWORD, entryFields.get(KeepassDefs.PasswordField));
 		b.putString(KEY_USERNAME, entryFields.get(KeepassDefs.UserNameField));
 		b.putString(KEY_URL, entryFields.get(KeepassDefs.UrlField));		
+		return b;		
+	}
+	
+	public static Bundle getDummyBundle() {
+		Bundle b = new Bundle();		
+		b.putString(KEY_ID, "");
+		b.putString(KEY_PASSWORD, "");
+		b.putString(KEY_USERNAME, "");
+		b.putString(KEY_URL, "");		
 		return b;		
 	}
 	

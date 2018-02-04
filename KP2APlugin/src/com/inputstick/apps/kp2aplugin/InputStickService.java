@@ -33,7 +33,6 @@ import com.inputstick.api.InputStickStateListener;
 import com.inputstick.api.basic.InputStickHID;
 import com.inputstick.api.basic.InputStickKeyboard;
 import com.inputstick.api.hid.HIDKeycodes;
-import com.inputstick.apps.kp2aplugin.remote.RemoteActivity;
 
 public class InputStickService extends Service implements InputStickStateListener {
 
@@ -65,10 +64,8 @@ public class InputStickService extends Service implements InputStickStateListene
 			final long time = System.currentTimeMillis();
 			if (InputStickHID.isConnected()) {
 				if ((maxIdlePeriod > 0) && (lastActionTime > 0) && (time > lastActionTime + maxIdlePeriod)) {
-					if ( !RemoteActivity.isRunning()) { 
-						Log.d(_TAG, "disconnect (inactivity)");
-						InputStickHID.disconnect();
-					}
+					Log.d(_TAG, "disconnect (inactivity)");
+					InputStickHID.disconnect();
 				}
 				delayHandler.postDelayed(mUpdateTimeTask, 1000);
 			}
@@ -215,6 +212,10 @@ public class InputStickService extends Service implements InputStickStateListene
 			executeQuickAction(3, params);
 		} else if (Const.ACTION_REMOTE.equals(uiAction)) {
 			ActionHelper.startRemoteActivityAction(this);
+		} else if (Const.ACTION_DUMMY.equals(uiAction)) {
+			if (InputStickHID.isReady()) {
+				lastActionTime = System.currentTimeMillis();
+			}
 		}
 	}
 	

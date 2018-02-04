@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,14 +35,13 @@ import com.inputstick.api.utils.remote.MousePadView;
 import com.inputstick.api.utils.remote.MouseScrollView;
 import com.inputstick.api.utils.remote.RemoteSupport;
 import com.inputstick.apps.kp2aplugin.Const;
+import com.inputstick.apps.kp2aplugin.EntryData;
+import com.inputstick.apps.kp2aplugin.InputStickService;
 import com.inputstick.apps.kp2aplugin.MacroHelper;
 import com.inputstick.apps.kp2aplugin.PreferencesHelper;
 import com.inputstick.apps.kp2aplugin.R;
-import com.inputstick.apps.kp2aplugin.SettingsActivity;
 
-public class RemoteActivity extends Activity implements InputStickStateListener {
-	
-	private static boolean isRunning;
+public class RemoteActivity extends Activity implements InputStickStateListener {	
 
 	private RelativeLayout relativeLayoutMouse;
 	private MousePadView viewMousePad;
@@ -71,6 +71,28 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	private KP2ARemotePreferences mRemotePreferences;
 	private MousePadSupport mMouse;
 	private ModifiersSupport mModifiers;
+	
+	private final Handler mHandler = new Handler();
+	private final Runnable tick = new Runnable(){
+	    public void run() {
+	    	if (InputStickHID.isReady() && mRemote != null) {
+	    		long lastActionTime = mRemote.getLastActionTime();
+	    		long time = System.currentTimeMillis();
+	    		if (time - lastActionTime < 2000) {
+	    			sendToService(Const.ACTION_DUMMY);
+	    		}
+	    	}
+	    	mHandler.postDelayed(this, 1000); 
+	    }
+	};
+	
+	private void sendToService(String action) {
+		Intent serviceIntent = new Intent(RemoteActivity.this, InputStickService.class);
+		serviceIntent.setAction(Const.SERVICE_ENTRY_ACTION); 
+		serviceIntent.putExtra(Const.EXTRA_ACTION, action);
+		serviceIntent.putExtras(EntryData.getDummyBundle());
+		startService(serviceIntent);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +103,6 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		setContentView(R.layout.activity_remote);
-		
 		
 		relativeLayoutMouse = (RelativeLayout)findViewById(R.id.relativeLayoutMouse);
 		
@@ -94,16 +115,16 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 		
 		buttonConnection = (Button)findViewById(R.id.buttonConnection);
 		buttonConnection.setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {				
+			public void onClick(View arg0) {		
 				switch (InputStickHID.getState()) {
 					case ConnectionManager.STATE_DISCONNECTED:
 					case ConnectionManager.STATE_FAILURE:
-						InputStickHID.connect(getApplication());
+						sendToService(Const.ACTION_CONNECT);
 						break;
 					case ConnectionManager.STATE_READY:
 					case ConnectionManager.STATE_CONNECTED:
 					case ConnectionManager.STATE_CONNECTING:
-						InputStickHID.disconnect();
+						sendToService(Const.ACTION_DISCONNECT);
 						break;												
 				}
 			}        	
@@ -191,7 +212,13 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 						params.height = r.bottom - loc[1] - 10;
 						relativeLayoutMouse.setLayoutParams(params);
 					}
-				});					
+				});						
+	}
+	
+	@Override
+	protected void onDestroy() {
+	      super.onDestroy();
+	      mHandler.removeCallbacks(tick);
 	}
 	
 	private void manageUI(int state) {
@@ -227,7 +254,6 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		isRunning = true;
 		InputStickHID.addStateListener(this);
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -236,21 +262,18 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 		
 		manageUI(InputStickHID.getState()); 			
 		//((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);				
+		mHandler.post(tick);
 	}
 	
 	@Override
-	protected void onPause() {		
-		isRunning = false;
+	protected void onPause() {	
 		mModifiers.resetModifiers();
 		mRemote.resetHIDInterfaces();		
-		((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); 
+		//((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+		mHandler.removeCallbacks(tick);
 	    InputStickHID.removeStateListener(this);	    
 	    super.onPause();		
-	}		
-	
-	public static boolean isRunning() {
-		return isRunning;
-	}
+	}	
 	
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {    	
