@@ -72,6 +72,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	private MousePadSupport mMouse;
 	private ModifiersSupport mModifiers;
 	
+	//notify service than an action was performed to avoid disconnecting (reaching max idle time)
 	private final Handler mHandler = new Handler();
 	private final Runnable tick = new Runnable(){
 	    public void run() {
@@ -99,8 +100,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		setContentView(R.layout.activity_remote);
 		
@@ -166,6 +166,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 		mMouse = new MousePadSupport(mRemote, relativeLayoutMouse, viewMousePad, buttonMouseL, buttonMouseM, buttonMouseR, viewMouseScroll);
 		mModifiers = new ModifiersSupport(mRemote, linearLayoutModifiers, toggleButtonCtrl, toggleButtonShift, toggleButtonAlt, toggleButtonGui, toggleButtonAltGr, buttonContext); 
 
+		//used to switch between mouse and touch-screen modes for mousepad area
 		imageViewMouseConfigure.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -182,35 +183,37 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 					Toast.makeText(ctx, R.string.remote_touchscreen_mode, Toast.LENGTH_SHORT).show();	
 				}
 				editor.apply();	
-				mRemotePreferences.reload(sharedPref);								
-				manageUI(InputStickHID.getState());
+				mRemotePreferences.reload(sharedPref); //will put mousepad into selected mode								
+				manageUI(InputStickHID.getState()); //reload UI to display correct icon
 			}
 		});
 		
 		
+		//manage height of mousepad, depending on whether soft-keyboard is visible or hidden
 		final Window mRootWindow = getWindow();
 		final View mRootView = mRootWindow.getDecorView().findViewById(android.R.id.content);
 		mRootView.getViewTreeObserver().addOnGlobalLayoutListener(
 				new ViewTreeObserver.OnGlobalLayoutListener() {
-					boolean skipNext;
+					boolean skipNext; 
 
-					public void onGlobalLayout() {
+					public void onGlobalLayout() {						
 						if (skipNext) {
-							skipNext = false;
-							return;
+							skipNext = false;							
+						} else {						
+							//skip next callback that will be performed due to modifications performed later on in this method
+							skipNext = true;
+							
+							Rect r = new Rect();
+							View view = mRootWindow.getDecorView();
+							view.getWindowVisibleDisplayFrame(r);
+							
+							int[] loc = new int[2];
+							relativeLayoutMouse.getLocationOnScreen(loc);
+	
+							RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)relativeLayoutMouse.getLayoutParams();
+							params.height = r.bottom - loc[1] - 10;
+							relativeLayoutMouse.setLayoutParams(params);
 						}
-						skipNext = true;
-						
-						Rect r = new Rect();
-						View view = mRootWindow.getDecorView();
-						view.getWindowVisibleDisplayFrame(r);
-						
-						int[] loc = new int[2];
-						relativeLayoutMouse.getLocationOnScreen(loc);
-
-						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)relativeLayoutMouse.getLayoutParams();
-						params.height = r.bottom - loc[1] - 10;
-						relativeLayoutMouse.setLayoutParams(params);
 					}
 				});						
 	}
