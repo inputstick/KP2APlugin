@@ -201,7 +201,7 @@
             android:title="@string/display_inputstick_text_title" />                   
 
         <com.inputstick.apps.kp2aplugin.MultiSelectListPreference
-            android:defaultValue="settings|osx|tab_enter|macro"
+            android:defaultValue="settings|osx|tab_enter|macro|remote"
             android:dialogTitle="@string/items_general_title"
             android:entries="@array/generalItemsDisplayList"
             android:entryValues="@array/generalItemsReturnList"
@@ -219,7 +219,7 @@
             android:title="@string/items_entry_primary_title" />        
         
         <com.inputstick.apps.kp2aplugin.MultiSelectListPreference
-            android:defaultValue="type_normal|type_slow"
+            android:defaultValue="type_normal|type_enter|type_slow|type_masked"
             android:dialogTitle="@string/items_field_primary_title"
             android:entries="@array/fieldItemsDisplayList"
             android:entryValues="@array/fieldItemsReturnList"
