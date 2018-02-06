@@ -23,7 +23,7 @@
 $ 1.20
   % Version 1.20                 
   	_ <a href="http://blog.inputstick.com/2018/01/kp2a-plugin-v120.html">(More info)</a>  
-  	* added remote controller screen
+  	* added remote controller screen (access from Entry menu or plugin Settings)
   	* fixed macro delay bug
 $ 1.13
   % Version 1.13  
