@@ -10,6 +10,7 @@ public class Const {
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;
 	public static final int CLIPBOARD_SERVICE_NOTIFICATION_ID = 2;
 	public static final int UPDATE_NOTIFICATION_ID = 3;
+	public static final int SMS_NOTIFICATION_ID = 4;
 	
 	public static final String PACKAGE_PLUGIN_OLD = "keepass2android.plugin.inputstick";
 	public static final String PACKAGE_KP2A = "keepass2android.keepass2android";
@@ -32,6 +33,7 @@ public class Const {
 	public static final int MASKED_PASSWORD_TIMEOUT_MS = 120000;  //2min 
 	public static final int CLIPBOARD_TIMEOUT_MS = 30000; //30s
 	public static final int ACTIVITY_LOCK_TIMEOUT_MS = 180000; //3min, 
+	public static final int SMS_TIMEOUT_MS = 120000;  //2min 
 	
 	
 	//service
@@ -41,12 +43,16 @@ public class Const {
 	
 	public static final String SERVICE_QUEUE_ITEM = "queue_item"; 
 	public static final String SERVICE_ENTRY_ACTION = "entry_action";	
+	public static final String SERVICE_DISMISS_SMS = "dismiss_sms";	
 	
 	//AllActions 
 	public static final String EXTRA_ACTION = "selected_action";	
 	public static final String EXTRA_LAYOUT = "layout";
-	//MaskedPassword
+	//MaskedPassword & SMS
 	public static final String EXTRA_TEXT = "text";
+	//SMS
+	public static final String EXTRA_SMS_SENDER = "sms_sender";
+	
 	//Macro/Template
 	public static final String EXTRA_MACRO_DATA = "macro_data";	
 	public static final String EXTRA_ENTRY_ID = "entry_id";	
@@ -59,6 +65,7 @@ public class Const {
 	public static final String EXTRA_LAUNCHED_FROM_KP2A = "kp2a_launch";
 	//Clipboard 
 	public static final String EXTRA_NOTIFICATION_ACTION = "notification_action";  //clipboardservice
+	
 		
 	public static final String EXTRA_TYPE_SLOW = "type_slow";
 	public static final String EXTRA_TYPE_MASKED = "type_masked";
@@ -126,7 +133,7 @@ public class Const {
 	public static final String ACTION_CLIPBOARD = "com.inputstick.apps.kp2aplugin.clipboard";	
 	public static final String ACTION_MACRO_RUN = "com.inputstick.apps.kp2aplugin.macro_run";
 	public static final String ACTION_TEMPLATE_RUN = "com.inputstick.apps.kp2aplugin.template_run";
-	public static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";
+	public static final String ACTION_TEMPLATE_MANAGE = "com.inputstick.apps.kp2aplugin.template_manage";	
 	
 	public static final String ACTION_QUICK_SHORTCUT_1 = "com.inputstick.apps.kp2aplugin.quick_shortcut_1";
 	public static final String ACTION_QUICK_SHORTCUT_2 = "com.inputstick.apps.kp2aplugin.quick_shortcut_2";
@@ -142,7 +149,9 @@ public class Const {
 	public static final String ACTION_FIELD_TYPE_ENTER_SECONDARY = "com.inputstick.apps.kp2aplugin.type_enter_secondary";
 	public static final String ACTION_FIELD_TYPE_TAB_SECONDARY = "com.inputstick.apps.kp2aplugin.type_tab_secondary";
 	public static final String ACTION_FIELD_TYPE_SLOW_SECONDARY = "com.inputstick.apps.kp2aplugin.type_slow_secondary";
-	public static final String ACTION_FIELD_TYPE_MASKED_SECONDARY = "com.inputstick.apps.kp2aplugin.type_masked_secondary";	
+	public static final String ACTION_FIELD_TYPE_MASKED_SECONDARY = "com.inputstick.apps.kp2aplugin.type_masked_secondary";
+	
+	public static final String ACTION_SMS = "com.inputstick.apps.kp2aplugin.sms";	//from notification only
 	
 	//PREFERENCES:	
 	
@@ -246,5 +255,8 @@ public class Const {
 	
 	public static final String PREF_REMOTE_USE_PRIMARY_LAYOUT = "remote_use_primary_layout";
 	public static final boolean PREF_REMOTE_USE_PRIMARY_LAYOUT_VALUE = true;
+	
+	public static final String PREF_SMS = "sms";
+	public static final boolean PREF_SMS_VALUE = false;
 	
 }

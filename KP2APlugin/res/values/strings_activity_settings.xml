@@ -80,7 +80,12 @@
 	<string name="clipboard_check_length_title">Check length</string>
 	<string name="clipboard_check_length_summary_on">Do not type if text in clipboard is longer than 64 characters</string>
 	<string name="clipboard_check_length_summary_off">Always type, even long text</string>	
-	
+		
+	<string name="sms_settings_title">SMS</string>	
+	<string name="sms_title">Listen for incoming SMS</string>	
+	<string name="sms_summary_on">Enabled</string>	
+	<string name="sms_summary_off">Disabled</string>
+
 	<string name="display_inputstick_text_title">Display \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>           
     <string name="display_inputstick_text_summary_off">Display only action name, example: Type</string>         
@@ -149,6 +154,10 @@
 	
 	<string name="text_notification_info">Notification indicates that KP2A InputStick plugin is running in the background. You can disable this notification in settings. Plugin will stop automatically when KP2A database is locked or closed. If this does not work make sure plugin has necessary KP2A permissions: Configure as plugin -> Accept</string>
 		
+	<string name="sms_dialog_title">SMS permission</string>
+	<string name="sms_dialog_message">Application needs permission to be able to read incomins SMS messages. This feature will work only when the plugin is active (when you are using Keepass2Android). The plugin does not store any received SMS. Click OK to continue.</string>		
+	<string name="sms_missing_permission">Listening for incoming SMS disabled (due to missing permission)</string>
+	
 	
 	<string name="connection_auto_connect_title">Auto-connect</string>
 	<string-array name="connection_auto_connect_names">
@@ -205,9 +214,9 @@
     <string name="section_typing_info">Always make sure that selected keyboard layout is the same as used by your PC. Use lower typing speed if USB host can\'t accept fast keyboard input.</string>
     <string name="section_quick_shortcuts_info">Quick Shortcuts are keyboard shortcuts that can be easily accessed from Entry menu.</string>
     <string name="section_ui_settings_info">Adjust what actions will be displayed in Entry and Field menus.</string>
-    <string name="section_clipboard_info">Use clipboard typing to type text from other apps (generated OTPs, SMS codes, etc.).</string>
-    
-    
+    <string name="section_clipboard_info">Use clipboard typing to type text from other apps (generated OTPs, etc.).</string>
+    <string name="section_sms_info">Allow to type text (authentication codes etc.) from received SMS (only when the plugin is active)</string>
+        
     
 	<string name="remote_settings_title">Remote:</string>
 	<string name="remote_mouse_mode_title">Mousepad mode</string>

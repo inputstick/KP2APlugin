@@ -10,6 +10,7 @@ import keepass2android.pluginsdk.Strings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -19,11 +20,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -44,6 +48,10 @@ public class InputStickService extends Service implements InputStickStateListene
 	private int defaultTypingSpeed;
 	private int autoConnect;
 	private int maxIdlePeriod;
+	
+	private boolean smsEnabled;
+	private String smsText;
+	private String smsSender;
 
 	private long lastActionTime;
 
@@ -80,7 +88,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			Log.d(_TAG, "received action " + action);
 			if (action != null) {
 				if (action.equals(Strings.ACTION_OPEN_ENTRY)) {
-					openEntryAction();
+					onEntryOpened();
 				} else if (action.equals(Strings.ACTION_CLOSE_ENTRY_VIEW)) {
 					//
 				} else if (action.equals(Strings.ACTION_ENTRY_ACTION_SELECTED)) {
@@ -91,14 +99,31 @@ public class InputStickService extends Service implements InputStickStateListene
 			}
 		}
 	};
+	
+	
+	private final BroadcastReceiver smsReceiver = new BroadcastReceiver() {
 
-	private final OnSharedPreferenceChangeListener msharedPrefsListener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle bundle = intent.getExtras();
+	        Object[] pdus = (Object[]) bundle.get("pdus");
+	        for(int i=0; i<pdus.length; i++){
+	            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
+	            smsText = smsMessage.getMessageBody();
+	            smsSender = smsMessage.getDisplayOriginatingAddress();
+	            showSMSNotification(true);
+	        }
+		}
+	};
+	
+
+	private final OnSharedPreferenceChangeListener mSharedPrefsListener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			loadPreference(key);
 		}
 	};
 
-	private void openEntryAction() {
+	private void onEntryOpened() {
 		if (autoConnect == Const.AUTO_CONNECT_ALWAYS) {
 			connectAction();
 		} else if (autoConnect == Const.AUTO_CONNECT_SMART) {
@@ -211,7 +236,9 @@ public class InputStickService extends Service implements InputStickStateListene
 		} else if (Const.ACTION_QUICK_SHORTCUT_3.equals(uiAction)) {
 			executeQuickAction(3, params);
 		} else if (Const.ACTION_REMOTE.equals(uiAction)) {
-			ActionHelper.startRemoteActivityAction(this);
+			ActionHelper.startRemoteActivityAction(this); 
+		} else if (Const.ACTION_SMS.equals(uiAction)) {
+			ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
 		} else if (Const.ACTION_DUMMY.equals(uiAction)) {
 			if (InputStickHID.isReady()) {
 				lastActionTime = System.currentTimeMillis();
@@ -264,28 +291,40 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		InputStickHID.addStateListener(this);
 
-		IntentFilter filter = new IntentFilter();
+		IntentFilter filter;
+		filter = new IntentFilter();
 		filter.addAction(Strings.ACTION_ENTRY_ACTION_SELECTED);
 		filter.addAction(Strings.ACTION_OPEN_ENTRY);
 		filter.addAction(Strings.ACTION_CLOSE_ENTRY_VIEW);
 		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
 		filter.addAction(Strings.ACTION_LOCK_DATABASE);
-		registerReceiver(receiver, filter);
+		registerReceiver(receiver, filter);		
 
 		delayHandler.removeCallbacksAndMessages(null);
 		delayHandler.postDelayed(mUpdateTimeTask, 30000);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		prefs.registerOnSharedPreferenceChangeListener(msharedPrefsListener);
+		prefs.registerOnSharedPreferenceChangeListener(mSharedPrefsListener);
 
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		loadPreference(null);
-		showNotification(canShowNotification);
+		showNotification(canShowNotification);		
+		if (smsEnabled) {
+			setupSMS();
+		}
+	}
+	
+	private void setupSMS() {
+		if (ContextCompat.checkSelfPermission(InputStickService.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+			intentFilter.setPriority(100);
+			registerReceiver(smsReceiver, intentFilter);
+		}
 	}
 
-	private void showNotification(boolean enabled) {
-		if (enabled) {
+	private void showNotification(boolean show) {
+		if (show) {
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 			mBuilder.setContentTitle(getString(R.string.app_name));
 			int resId;
@@ -321,8 +360,34 @@ public class InputStickService extends Service implements InputStickStateListene
 			mNotificationManager.cancel(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID);
 		}
 	}
+	
+	private void showSMSNotification(boolean show) {
+		if (show) {
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+			mBuilder.setContentTitle(getString(R.string.app_name));
+			mBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")"); 
+			mBuilder.setSmallIcon(R.drawable.ic_sms);
+	
+			Intent smsIntent = new Intent(this, InputStickService.class);
+			smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
+			smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
+			smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
+			mBuilder.setContentIntent(PendingIntent.getService(this, 0, smsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+			
+		    Intent dismissIntent = new Intent(this, InputStickService.class);
+		    dismissIntent.setAction(Const.SERVICE_DISMISS_SMS); 
+		    mBuilder.setDeleteIntent(PendingIntent.getService(this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));					
+	
+			mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+			mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mBuilder.build());
+		} else {			
+			smsText = null;
+			smsSender = null;
+			mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
+		}
+	}
 
-	// if key == null load all
+	// if key == null load all preferences; if not, only single preference was changed
 	private void loadPreference(String key) {
 		if (key == null || Const.PREF_SHOW_NOTIFICATION.equals(key)) {
 			canShowNotification = PreferencesHelper.canShowNotification(prefs);
@@ -342,6 +407,19 @@ public class InputStickService extends Service implements InputStickStateListene
 		if (key == null || Const.PREF_MAX_IDLE_PERIOD.equals(key)) {
 			maxIdlePeriod = PreferencesHelper.getMaxIdlePeriod(prefs);
 		}
+		
+		if (key == null || Const.PREF_SMS.equals(key)) {
+			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);
+			if (key != null) {
+				if (smsEnabled) {
+					setupSMS();
+				} else {
+					unregisterReceiver(smsReceiver);
+					showSMSNotification(false);
+				}
+			}
+		}
+		
 	}
 
 	@Override
@@ -356,7 +434,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				queueItem(item);
 			} else if (Const.SERVICE_START.equals(action)) {
 				if (cnt == 0) {
-					openEntryAction(); // only if just created, otherwise it will be handled by already registered broadcast receiver
+					onEntryOpened(); // only if just created, otherwise it will be handled by already registered broadcast receiver
 				}
 			} else if (Const.SERVICE_ENTRY_ACTION.equals(action)) {
 				String uiAction = intent.getStringExtra(Const.EXTRA_ACTION);
@@ -364,14 +442,15 @@ public class InputStickService extends Service implements InputStickStateListene
 				TypingParams params = new TypingParams(layoutCode, defaultTypingSpeed);
 				EntryData entryData = new EntryData(intent);
 				entryAction(uiAction, entryData, params);
-				// Toast.makeText(this, R.string.text_plugin_restarted,
-				// Toast.LENGTH_LONG).show();
+				// Toast.makeText(this, R.string.text_plugin_restarted, Toast.LENGTH_LONG).show();
 			} else if (Const.SERVICE_RESTART.equals(action)) {
 				if (cnt == 0) {
 					Toast.makeText(this, R.string.text_plugin_restarted, Toast.LENGTH_LONG).show();
 				}
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
 				stopSelf(); // onDestroy() will disconnect if connecting/connected
+			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
+				showSMSNotification(false);				
 			}
 			cnt++;
 		}
@@ -389,7 +468,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		showNotification(false);
 		isRunning = false;
 		unregisterReceiver(receiver);
-		prefs.unregisterOnSharedPreferenceChangeListener(msharedPrefsListener);
+		if (smsEnabled) {
+			unregisterReceiver(smsReceiver);
+			showSMSNotification(false);
+		}
+		prefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefsListener);
 		delayHandler.removeCallbacksAndMessages(null);
 		items.clear();
 		InputStickHID.removeStateListener(this);

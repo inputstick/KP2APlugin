@@ -44,6 +44,18 @@ public abstract class ActionHelper {
 	}	
 	
 	
+	public static void startSMSActivityAction(Context ctx, String smsText, String smsSender, TypingParams params) {
+		Intent i = new Intent(ctx, SMSActivity.class);
+		i.putExtras(params.getBundle());
+		i.putExtra(Const.EXTRA_TEXT, smsText);
+		i.putExtra(Const.EXTRA_SMS_SENDER, smsSender);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		ctx.startActivity(i);				
+	}
+	
+	
+	
+	
 	public static void startSelectTemplateActivityAction(Context ctx, EntryData entryData, TypingParams params, boolean manage) {
 		Intent i = new Intent(ctx, SelectTemplateActivity.class);	
 		i.putExtras(params.getBundle());

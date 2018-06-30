@@ -79,7 +79,12 @@
 	<string name="clipboard_auto_disable_summary_off">Opcja zawsze aktywna przez 30 sekund od uruchomienia</string>
 	<string name="clipboard_check_length_title">Sprawdzaj długość</string>
 	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
-	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>		              
+	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>
+	
+	<string name="sms_settings_title">SMS</string>	
+	<string name="sms_title">Odczytuj SMSy</string>	
+	<string name="sms_summary_on">Włączone</string>	
+	<string name="sms_summary_off">Wyłączone</string>			              
 	
 	<string name="display_inputstick_text_title">Wyświetlaj \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Pokaż nazwę akcji + (IS), przykład: Wpisz (IS)</string>           
@@ -149,6 +154,10 @@
 	
 	<string name="text_notification_info">Powiadomienie wskazuje, że KP2A InputStick plugin działa w tle. Możesz wyłączyć wyświetlanie powiadomienia w ustawieniach. Plugin zostanie zatrzymany automatycznie gdy baza danych KP2A zostanie zablokowana lub zamknięta. Jeżeli nie działa to poprawnie, upewnij się, że plugin ma wymagane uprawnienia KP2A: kliknij Ustaw jako plugin -> Akceptuj</string>
 		        
+	<string name="sms_dialog_title">Uprawnienia SMS</string>
+	<string name="sms_dialog_message">Aplikacja potrzebuje uprawnień aby odczytywać wiadomości SMS. Ta funkcja działa tylko gdy plugin jest aktywny (gdy korzystasz z Keepass2Android). Plugin nie przechowuje odczytanych wiadomości. Kliknij OK aby kontunuować</string>		
+	<string name="sms_missing_permission">Odczytywanie SMS wyłączone (brak uprawnień)</string>
+			
 	
 	<string name="connection_auto_connect_title">Autom.-połącz</string>
 	<string-array name="connection_auto_connect_names">
@@ -205,8 +214,8 @@
     <string name="section_typing_info">Upewnij się, że wybrany jest taki sam układ klawiatury z jakiego korzysta PC. Zmniejsz prędkość wpisywania gdy PC nie jest w stanie przetworzyć szybko wpisywanego tekstu.</string>
     <string name="section_quick_shortcuts_info">Szybkie skróty to kombinacje klawiszy które mogą zostać szybko wybrane z menu wpisu</string>
     <string name="section_ui_settings_info">Wybierz jakie akcje będą wyświetlane w menu wpisu i pola.</string>
-    <string name="section_clipboard_info">Użyj pisania ze schowka w celu wpisania tekstu z innych aplikacji (wygenerowane OTP, kody SMS, itp.).</string>	
-	
+    <string name="section_clipboard_info">Użyj pisania ze schowka w celu wpisania tekstu z innych aplikacji (wygenerowane OTP itp.).</string>	
+	<string name="section_sms_info">Pozwalaj na pisanie tekstu (kody jednorazowe itp.) z odebranych SMSów (tylko gdy plugin jest aktywny)</string>
     
     
 	<string name="remote_settings_title">Kontroler:</string>

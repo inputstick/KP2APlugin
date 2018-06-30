@@ -5,6 +5,7 @@ import java.util.Arrays;
 import keepass2android.pluginsdk.AccessManager;
 import keepass2android.pluginsdk.Strings;
 import sheetrock.panda.changelog.ChangeLog;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,6 +27,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -63,6 +66,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private Preference prefQuickShortcut1;
 	private Preference prefQuickShortcut2;
 	private Preference prefQuickShortcut3;
+	
+	private CheckBoxPreference prefSMS;
 	
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
@@ -118,8 +123,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			
 			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, false)) && ( !dismissed)) {
 				showNotificationInfoDialog();
-			}	
-			
+			}				
 		}
 	}
 	
@@ -236,6 +240,23 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         });
 		prefSecondaryKbdLayout = findPreference(Const.PREF_SECONDARY_LAYOUT);
 		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);	
+		
+		//SMS
+		prefSMS = (CheckBoxPreference)findPreference(Const.PREF_SMS);	
+		//set value only if permission is granted
+		prefSMS.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean enabled = (Boolean)newValue;
+				if (enabled) {
+					if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+						showRequestPermissionsInfoAlertDialog();
+						return false;
+					}
+				}
+        		return true;
+			}
+        });
 		
 		//clipboard:
 		prefLaunchAuthenticator = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR);
@@ -360,6 +381,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		int selectedLayout = Arrays.asList(layoutValues).indexOf(layoutCode);
 		Preference pref  = findPreference(Const.PREF_PRIMARY_LAYOUT);
 		pref.setSummary(layoutNames[selectedLayout]);		
+		
+		//handle case when SMS permission gets revoked by used
+		if (PreferencesHelper.isSMSEnabled(prefs)) {
+			if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+				Toast.makeText(SettingsActivity.this, R.string.sms_missing_permission, Toast.LENGTH_LONG).show();
+				PreferencesHelper.setSMSEnabled(prefs, false);
+				prefSMS.setChecked(false);
+			}
+		}
 	}
 	
 	@Override
@@ -674,6 +704,40 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	}
 	
 	
+	
+	
+	
+	//SMS permission
+	
+	private static final int PERMISSION_REQUEST_SMS = 1112;
+	
+	public void showRequestPermissionsInfoAlertDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.sms_dialog_title); 
+		builder.setMessage(R.string.sms_dialog_message);
+		builder.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						ActivityCompat.requestPermissions(SettingsActivity.this,  new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SMS);						
+					}
+				});
+		builder.setCancelable(false);
+		builder.show();
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		if (requestCode == PERMISSION_REQUEST_SMS) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				PreferencesHelper.setSMSEnabled(prefs, true);
+				prefSMS.setChecked(true);
+			}
+		}
+	}
+	
+		
+	//selecting app for clipboard action:
 	
 	class LoadAppsTask extends AsyncTask<String, String, String> {
 

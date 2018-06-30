@@ -104,6 +104,22 @@
         
     </PreferenceCategory>
     
+    <PreferenceCategory android:title="@string/sms_settings_title" >
+        
+        <Preference 
+            android:summary="@string/section_sms_info"
+            android:selectable="false" >  
+        </Preference>     
+            
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sms"
+            android:summaryOn="@string/sms_summary_on"
+            android:summaryOff="@string/sms_summary_off"
+            android:title="@string/sms_title" />          
+        
+    </PreferenceCategory>          
+    
     <PreferenceCategory android:title="@string/clipboard_typing_settings_title" >
         
         <Preference 

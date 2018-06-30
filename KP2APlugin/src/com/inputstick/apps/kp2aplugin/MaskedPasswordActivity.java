@@ -135,6 +135,7 @@ public class MaskedPasswordActivity extends Activity {
 		buttonMaskedPassLeft = (Button)findViewById(R.id.buttonMaskedPassLeft);
 		buttonMaskedPassRight = (Button)findViewById(R.id.buttonMaskedPassRight);
 		buttonMaskedPassEnter = (Button)findViewById(R.id.buttonMaskedPassEnter);
+		buttonMaskedClose = (Button)findViewById(R.id.buttonMaskedClose);
 		
 		buttonMaskedPassEsc.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
@@ -161,8 +162,7 @@ public class MaskedPasswordActivity extends Activity {
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(MaskedPasswordActivity.this, true);			
 			}
 		});	
-		
-		buttonMaskedClose = (Button)findViewById(R.id.buttonMaskedClose);
+				
 		buttonMaskedClose.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				finish();		
@@ -172,15 +172,11 @@ public class MaskedPasswordActivity extends Activity {
 	
 		if (savedInstanceState == null) {			
 			remainingTime = Const.MASKED_PASSWORD_TIMEOUT_MS;
-			mHandler.post(tick);
 		} else {	
 			offset = savedInstanceState.getInt(OFFSET_KEY);	
-			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);
-			mHandler.post(tick);
+			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);			
 		}
-		
-		
-		
+		mHandler.post(tick);
 	}
 	
 	@Override

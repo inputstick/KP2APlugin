@@ -75,10 +75,10 @@
     <string name="notification_state_ready">InputStick plugin: połączono (USB OK)</string>	    
 	<string name="notification_state_connected">InputStick plugin: połączono (oczekuje na USB)</string>
 	<string name="notification_state_connecting">InputStick plugin: łączenie&#8230;</string>
-	<string name="notification_state_not_connected">InputStick plugin: nie połączono</string>    	
+	<string name="notification_state_not_connected">InputStick plugin: nie połączono</string>    		
+	<string name="notification_sms">Pisz z SMS</string>
 	
     <string name="title_activity_about">O aplikacji</string>
-    <string name="about_text">Autorzy:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nKod źródłowy:\nhttps://github.com/inputstick\n\nAplikacja korzysta z:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
-    	    
+    <string name="about_text">Autorzy:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nKod źródłowy:\nhttps://github.com/inputstick\n\nAplikacja korzysta z:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>    	    
     
 </resources>

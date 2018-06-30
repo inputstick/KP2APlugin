@@ -20,6 +20,10 @@
   </head>
   <body>
   
+$ 1.30
+  % Version 1.30                 
+  	_ <a href="http://blog.inputstick.com/2018/07/kp2a-plugin-v130.html">(More info)</a>  
+  	* added option to type text from SMS (must be received when plugin is active, enable in Settings)
 $ 1.20
   % Version 1.20                 
   	_ <a href="http://blog.inputstick.com/2018/01/kp2a-plugin-v120.html">(More info)</a>  

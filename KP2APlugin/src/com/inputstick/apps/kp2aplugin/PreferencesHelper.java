@@ -311,4 +311,17 @@ public abstract class PreferencesHelper {
 			return 50;
 		}
 	}
+	
+	
+	//SMS
+	
+	public static boolean isSMSEnabled(SharedPreferences prefs) {
+		return prefs.getBoolean(Const.PREF_SMS, Const.PREF_SMS_VALUE);
+	}
+	
+	public static void setSMSEnabled(SharedPreferences prefs, boolean value) {
+		Editor editor = prefs.edit();
+		editor.putBoolean(Const.PREF_SMS, value);		
+		editor.apply();		
+	}
 }

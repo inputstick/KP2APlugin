@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inputstick.apps.kp2aplugin"
-    android:versionCode="15"
-    android:versionName="1.20" >
+    android:versionCode="16"
+    android:versionName="1.30" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:allowBackup="true"
@@ -114,8 +117,14 @@
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name="com.inputstick.apps.kp2aplugin.remote.RemoteActivity"
+            android:name=".remote.RemoteActivity"
             android:imeOptions="flagNoExtractUi" >
+        </activity>
+        <activity
+            android:name=".SMSActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/title_activity_sms"
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
     </application>
 
