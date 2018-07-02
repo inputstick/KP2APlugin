@@ -2,10 +2,15 @@ package com.inputstick.apps.kp2aplugin;
 
 import java.util.ArrayList;
 
+import keepass2android.pluginsdk.Strings;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +25,14 @@ public class SelectTemplateActivity extends Activity {
 	
 	private long lastActionTime;
 	private long maxTime;
+	
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Toast.makeText(SelectTemplateActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+			finish();
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +87,20 @@ public class SelectTemplateActivity extends Activity {
 					}
 				}
 			}
-		});					
+		});		
+		
+		IntentFilter filter;
+		filter = new IntentFilter();
+		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
+		filter.addAction(Strings.ACTION_LOCK_DATABASE);
+		registerReceiver(receiver, filter);	
 	}
+	
+	@Override
+	protected void onDestroy() {		
+		unregisterReceiver(receiver);
+		super.onDestroy();
+	}	
 	
 	private boolean checkTime() {
 		long now = System.currentTimeMillis();

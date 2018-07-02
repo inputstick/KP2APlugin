@@ -1,7 +1,11 @@
 package com.inputstick.apps.kp2aplugin;
 
+import keepass2android.pluginsdk.Strings;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +27,14 @@ public class MacroExecuteActivity extends Activity {
 	private Button buttonActionPrev;
 	private Button buttonActionNext;
 	private TextView textViewActionPreview;
+	
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Toast.makeText(MacroExecuteActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+			finish();
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +96,19 @@ public class MacroExecuteActivity extends Activity {
 			index = savedInstanceState.getInt(INDEX_KEY);
 		}
 		manageUI();		
+		
+		IntentFilter filter;
+		filter = new IntentFilter();
+		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
+		filter.addAction(Strings.ACTION_LOCK_DATABASE);
+		registerReceiver(receiver, filter);	
 	}
 	
-	
+	@Override
+	protected void onDestroy() {		
+		unregisterReceiver(receiver);
+		super.onDestroy();
+	}	
 
 
 	@Override

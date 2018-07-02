@@ -1,9 +1,11 @@
 package com.inputstick.apps.kp2aplugin;
 
-import com.inputstick.api.hid.HIDKeycodes;
-
+import keepass2android.pluginsdk.Strings;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
+
+import com.inputstick.api.hid.HIDKeycodes;
 
 public class MaskedPasswordActivity extends Activity {
 	
@@ -76,6 +81,14 @@ public class MaskedPasswordActivity extends Activity {
 				mHandler.postDelayed(this, 1000);    
 			}
 	    }
+	};
+	
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Toast.makeText(MaskedPasswordActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+			finish();
+		}
 	};
 	
 
@@ -177,6 +190,12 @@ public class MaskedPasswordActivity extends Activity {
 			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);			
 		}
 		mHandler.post(tick);
+		
+		IntentFilter filter;
+		filter = new IntentFilter();
+		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
+		filter.addAction(Strings.ACTION_LOCK_DATABASE);
+		registerReceiver(receiver, filter);	
 	}
 	
 	@Override
@@ -193,9 +212,10 @@ public class MaskedPasswordActivity extends Activity {
 	}
 	
 	@Override
-	protected void onDestroy() {
-	      super.onDestroy();
-	      mHandler.removeCallbacks(tick);
+	protected void onDestroy() {		
+		unregisterReceiver(receiver);
+		mHandler.removeCallbacks(tick);
+		super.onDestroy();
 	}	
 	
 	private void drawButton(int i) {

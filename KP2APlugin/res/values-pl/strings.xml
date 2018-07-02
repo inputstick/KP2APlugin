@@ -30,6 +30,7 @@
 	<string name="text_missing_utility_app">Musisz pobrać aplikację InputStickUtility</string>
 	<string name="text_plugin_restarted">Restart pluginu, wybierz akcję ponownie</string>
 	<string name="text_stop_plugin">Zatrzymaj plugin</string>
+    <string name="text_activity_closed">KP2A db closed</string>	
     <string name="action_field_type">Wpisz</string>
     <string name="action_field_type_enter">Wpisz+Enter</string>
     <string name="action_field_type_tab">Wpisz+Tab</string>    
