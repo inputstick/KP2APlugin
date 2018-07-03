@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -66,23 +65,6 @@ public class MaskedPasswordActivity extends Activity {
 	
 	private Button buttonMaskedClose;
 	
-	private String timeLeftMessage;
-	private static int remainingTime;
-	
-	private final Handler mHandler = new Handler();
-	private final Runnable tick = new Runnable(){
-	    public void run(){
-			setTitle(timeLeftMessage + " " + (remainingTime/1000));
-			if (remainingTime <= 0) {
-				password = " ";
-				finish();
-			} else {
-				remainingTime -= 1000;
-				mHandler.postDelayed(this, 1000);    
-			}
-	    }
-	};
-	
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -107,8 +89,6 @@ public class MaskedPasswordActivity extends Activity {
 			password = "";
 		}
 		wasClicked = new boolean[password.length()];
-		
-		timeLeftMessage = getString(R.string.time_left);
 		
 		checkBoxShowPassword = (CheckBox)findViewById(R.id.checkBoxShowPassword);
 		buttonPrev = (Button)findViewById(R.id.buttonPrev);
@@ -183,13 +163,10 @@ public class MaskedPasswordActivity extends Activity {
 		});	
 		
 	
-		if (savedInstanceState == null) {			
-			remainingTime = Const.MASKED_PASSWORD_TIMEOUT_MS;
-		} else {	
+		if (savedInstanceState != null) {			
 			offset = savedInstanceState.getInt(OFFSET_KEY);	
-			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);			
+			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);		
 		}
-		mHandler.post(tick);
 		
 		IntentFilter filter;
 		filter = new IntentFilter();
@@ -214,7 +191,6 @@ public class MaskedPasswordActivity extends Activity {
 	@Override
 	protected void onDestroy() {		
 		unregisterReceiver(receiver);
-		mHandler.removeCallbacks(tick);
 		super.onDestroy();
 	}	
 	

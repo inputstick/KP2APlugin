@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -26,6 +25,7 @@ public class SMSActivity extends Activity {
 
 	private TextView textViewSMSContent;
 	private TextView textViewSMSSender;
+	
 	private Button buttonSMSEsc;
 	private Button buttonSMSTab;
 	private Button buttonSMSLeft;
@@ -33,23 +33,8 @@ public class SMSActivity extends Activity {
 	private Button buttonSMSEnter;	
 	
 	private Button buttonSMSDone;
-	private Button buttonSMSTypeAll;
+	private Button buttonSMSTypeAll;	
 	
-	private String timeLeftMessage;
-	private static int remainingTime;
-	
-	private final Handler mHandler = new Handler();
-	private final Runnable tick = new Runnable(){
-	    public void run(){
-			setTitle(timeLeftMessage + " " + (remainingTime/1000));
-			if (remainingTime <= 0) {
-				finish();
-			} else {
-				remainingTime -= 1000;
-				mHandler.postDelayed(this, 1000);    
-			}
-	    }
-	};
 	
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
@@ -71,9 +56,7 @@ public class SMSActivity extends Activity {
 		Intent intent = getIntent();
 		final TypingParams params = new TypingParams(intent);	
 		final String message = intent.getStringExtra(Const.EXTRA_TEXT);
-		final String sender = intent.getStringExtra(Const.EXTRA_SMS_SENDER);
-		
-		timeLeftMessage = getString(R.string.time_left);		
+		final String sender = intent.getStringExtra(Const.EXTRA_SMS_SENDER);		
 		
 		textViewSMSContent = (TextView)findViewById(R.id.textViewSMSContent);
 		textViewSMSSender = (TextView)findViewById(R.id.textViewSMSSender);
@@ -166,11 +149,6 @@ public class SMSActivity extends Activity {
 		textViewSMSContent.setText(spannableText);		
 		textViewSMSSender.setText(sender);
 		
-		if (savedInstanceState == null) {			
-			remainingTime = Const.SMS_TIMEOUT_MS;			
-		} 
-		mHandler.post(tick);
-		
 		IntentFilter filter;
 		filter = new IntentFilter();
 		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
@@ -180,7 +158,6 @@ public class SMSActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {	      
-	      mHandler.removeCallbacks(tick);
 	      unregisterReceiver(receiver);
 	      super.onDestroy();
 	}	
