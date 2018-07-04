@@ -92,6 +92,7 @@
         </activity>
         <activity
             android:name=".MacroExecuteActivity"
+            android:excludeFromRecents="true"
             android:label="@string/title_activity_macro_execute"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
