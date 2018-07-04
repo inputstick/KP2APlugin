@@ -31,7 +31,7 @@ public class MacroExecuteActivity extends Activity {
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(MacroExecuteActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+			Toast.makeText(MacroExecuteActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
 			finish();
 		}
 	};
