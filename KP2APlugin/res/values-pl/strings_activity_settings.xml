@@ -19,10 +19,6 @@
   	<string name="help_and_info_settings_title">Pomoc i info</string>
     <string name="general_settings_title">Ogólne</string>
     
-	<string name="show_notification_title">Pokazuj powiadomienie</string>       
-    <string name="show_notification_summary_on">Pokazuj powiadomienie gdy plugin jest uruchomiony</string>           
-    <string name="show_notification_summary_off">Nie pokazuj powiadomienia</string>	
-    
     <string name="typing_settings_title">Układ klawiatury hosta USB</string>
     <string name="connection_settings_title">Połączenie z InputStick</string>    
 

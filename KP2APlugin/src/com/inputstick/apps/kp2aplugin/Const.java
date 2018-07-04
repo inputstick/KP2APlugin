@@ -162,10 +162,7 @@ public class Const {
 	public static final boolean PREF_SMART_AUTO_CONNECT_VALUE = true;
 	
 	public static final String PREF_MAX_IDLE_PERIOD = "connection_max_idle_period";
-	public static final int PREF_MAX_IDLE_PERIOD_VALUE = 180000;	
-	
-	public static final String PREF_SHOW_NOTIFICATION = "show_notification";
-	public static final boolean PREF_SHOW_NOTIFICATION_VALUE = true;				
+	public static final int PREF_MAX_IDLE_PERIOD_VALUE = 180000;				
 	
 	public static final String PREF_TYPING_SPEED = "typing_speed";
 	public static final int PREF_TYPING_SPEED_VALUE = 1;

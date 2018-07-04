@@ -72,11 +72,12 @@
     <string name="never">Never</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
-    
-    <string name="notification_state_ready">InputStick plugin: connected (USB OK)</string>
-    <string name="notification_state_connected">InputStick plugin: connected (waiting for USB)</string>
-    <string name="notification_state_connecting">InputStick plugin: connecting&#8230;</string>
-    <string name="notification_state_not_connected">InputStick plugin: not connected</string>
+        
+    <string name="notification_text">InputStick KP2A plugin is active</string>
+    <string name="notification_state_ready">connected</string>
+    <string name="notification_state_connected">waiting for USB</string>
+    <string name="notification_state_connecting">connecting&#8230;</string>
+    <string name="notification_state_not_connected">not connected</string>
     <string name="notification_sms">Type from SMS</string>
     
     <string name="title_activity_about">About application</string>

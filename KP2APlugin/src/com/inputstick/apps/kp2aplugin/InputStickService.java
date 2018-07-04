@@ -43,7 +43,6 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static final String _TAG = "KP2AINPUTSTICK SERVICE";
 
 	private SharedPreferences prefs;
-	private boolean canShowNotification;
 	private boolean addEnterAfterURL;
 	private int defaultTypingSpeed;
 	private int autoConnect;
@@ -64,6 +63,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
 
 	NotificationManager mNotificationManager;
+	NotificationCompat.Builder mBuilder;
 
 	private Handler delayHandler = new Handler();
 	private Runnable mUpdateTimeTask = new Runnable() {
@@ -274,6 +274,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	}
 
 	private void closeDbAction() {
+		stopForeground(true);
 		stopSelf();
 	}
 
@@ -306,10 +307,26 @@ public class InputStickService extends Service implements InputStickStateListene
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(mSharedPrefsListener);
 
+		//notification:
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				
+		mBuilder = new NotificationCompat.Builder(this);
+		mBuilder.setContentTitle(getString(R.string.app_name));		
+		mBuilder.setContentText(getString(R.string.notification_text)); 
+		mBuilder.setSmallIcon(R.drawable.ic_notification);
+		mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
 
+		Intent showInfoIntent = new Intent(this, SettingsActivity.class);
+		showInfoIntent.putExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, true);
+		mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, showInfoIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+		Intent forceStopIntent = new Intent(this, InputStickService.class);
+		forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);
+		mBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+					
+		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());		
+		
 		loadPreference(null);
-		showNotification(canShowNotification);		
 		if (smsEnabled) {
 			setupSMS();
 		}
@@ -323,42 +340,27 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 
-	private void showNotification(boolean show) {
-		if (show) {
-			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-			mBuilder.setContentTitle(getString(R.string.app_name));
-			int resId;
-			int state = InputStickHID.getState();
-			switch (state) {
-			case ConnectionManager.STATE_READY:
-				resId = R.string.notification_state_ready;
-				break;
-			case ConnectionManager.STATE_CONNECTED:
-				resId = R.string.notification_state_connected;
-				break;
-			case ConnectionManager.STATE_CONNECTING:
-				resId = R.string.notification_state_connecting;
-				break;
-			default:
-				resId = R.string.notification_state_not_connected;
-				break;
-			}
-			mBuilder.setContentText(getString(resId));
-			mBuilder.setSmallIcon(R.drawable.ic_notification);
-
-			Intent showInfoIntent = new Intent(this, SettingsActivity.class);
-			showInfoIntent.putExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, true);
-			mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, showInfoIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-			Intent forceStopIntent = new Intent(this, InputStickService.class);
-			forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);
-			mBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, PendingIntent.FLAG_CANCEL_CURRENT));
-
-			mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-			mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());
-		} else {
-			mNotificationManager.cancel(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID);
+	private void updateNotification() {
+		int resId;
+		int state = InputStickHID.getState();
+		switch (state) {
+		case ConnectionManager.STATE_READY:
+			resId = R.string.notification_state_ready;
+			break;
+		case ConnectionManager.STATE_CONNECTED:
+			resId = R.string.notification_state_connected;
+			break;
+		case ConnectionManager.STATE_CONNECTING:
+			resId = R.string.notification_state_connecting;
+			break;
+		default:
+			resId = R.string.notification_state_not_connected;
+			break;
 		}
+		String contentText =  getString(resId) + " (" + getString(resId) + ")";
+		
+		mBuilder.setContentText(contentText);
+		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());
 	}
 	
 	private void showSMSNotification(boolean show) {
@@ -389,12 +391,6 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	// if key == null load all preferences; if not, only single preference was changed
 	private void loadPreference(String key) {
-		if (key == null || Const.PREF_SHOW_NOTIFICATION.equals(key)) {
-			canShowNotification = PreferencesHelper.canShowNotification(prefs);
-			if (key != null) {
-				showNotification(canShowNotification);
-			}
-		}
 		if (key == null || Const.PREF_ENTER_AFTER_URL.equals(key)) {
 			addEnterAfterURL = PreferencesHelper.addEnterAfterURL(prefs);
 		}
@@ -448,6 +444,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					Toast.makeText(this, R.string.text_plugin_restarted, Toast.LENGTH_LONG).show();
 				}
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
+				stopForeground(true);
 				stopSelf(); // onDestroy() will disconnect if connecting/connected
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
 				showSMSNotification(false);				
@@ -465,7 +462,6 @@ public class InputStickService extends Service implements InputStickStateListene
 	@Override
 	public void onDestroy() {
 		Log.d(_TAG, "onDestroy");
-		showNotification(false);
 		isRunning = false;
 		unregisterReceiver(receiver);
 		if (smsEnabled) {
@@ -543,7 +539,8 @@ public class InputStickService extends Service implements InputStickStateListene
 		if (messageResId != 0) {
 			Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
 		}
-		showNotification(canShowNotification);		
+		
+		updateNotification();	
 	}
 
 	private void queueText(String text, TypingParams params, boolean canClearQueue) {

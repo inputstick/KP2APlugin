@@ -26,14 +26,8 @@
         
 	    <Preference
 	        android:key="enable_plugin_pref"
-	        android:title="@string/configure_plugin" />        
-        
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="show_notification"
-            android:summaryOn="@string/show_notification_summary_on"
-            android:summaryOff="@string/show_notification_summary_off"            
-            android:title="@string/show_notification_title" />                 
+	        android:title="@string/configure_plugin" />            
+	              
     </PreferenceCategory>     
 
     <PreferenceCategory android:title="@string/typing_settings_title" >        

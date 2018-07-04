@@ -17,11 +17,7 @@
   	<string name="show_about_app_title">About app</string>  	
   	
   	<string name="help_and_info_settings_title">Help and info</string>
-    <string name="general_settings_title">General</string>
-    
-	<string name="show_notification_title">Show notification</string>       
-    <string name="show_notification_summary_on">Show notification when the plugin is running</string>           
-    <string name="show_notification_summary_off">Do not show notification</string>    		
+    <string name="general_settings_title">General</string>  		
     
     <string name="typing_settings_title">Typing settings</string>
     <string name="connection_settings_title">InputStick connection settings</string>    

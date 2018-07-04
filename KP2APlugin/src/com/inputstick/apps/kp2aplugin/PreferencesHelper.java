@@ -85,10 +85,6 @@ public abstract class PreferencesHelper {
 	
 	//display options
 	
-	public static boolean canShowNotification(SharedPreferences prefs) {
-		return prefs.getBoolean(Const.PREF_SHOW_NOTIFICATION, Const.PREF_SHOW_NOTIFICATION_VALUE);
-	}
-	
 	public static boolean inputStickTextEnabled(SharedPreferences prefs) {
 		return prefs.getBoolean(Const.PREF_DISPLAY_IS_TEXT, Const.PREF_DISPLAY_IS_TEXT_VALUE);
 	}
