@@ -357,7 +357,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			resId = R.string.notification_state_not_connected;
 			break;
 		}
-		String contentText =  getString(resId) + " (" + getString(resId) + ")";
+		String contentText =  getString(R.string.notification_text) + " (" + getString(resId) + ")";
 		
 		mBuilder.setContentText(contentText);
 		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());
