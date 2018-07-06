@@ -316,9 +316,8 @@ public class InputStickService extends Service implements InputStickStateListene
 		mBuilder.setSmallIcon(R.drawable.ic_notification);
 		mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
 
-		Intent showInfoIntent = new Intent(this, SettingsActivity.class);
-		showInfoIntent.putExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, true);
-		mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, showInfoIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+		Intent openServiceIntent = new Intent(this, SettingsActivity.class);
+		mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
 		Intent forceStopIntent = new Intent(this, InputStickService.class);
 		forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);

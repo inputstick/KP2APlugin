@@ -119,11 +119,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			
 			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_SCOPE, false)) && ( !dismissed)) {
 				showRequestDbScopeDialog();
-			}		
-			
-			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_NOTIFICATION_INFO, false)) && ( !dismissed)) {
-				showNotificationInfoDialog();
-			}				
+			}								
 		}
 	}
 	
@@ -566,27 +562,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});
 		alert.show();		
-	}
-	
-	private void showNotificationInfoDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle(R.string.app_name);
-		alert.setMessage(R.string.text_notification_info);
-		alert.setPositiveButton(R.string.ok, new OnClickListener() {					
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dismissed = true;			
-			}
-		});
-		alert.setNegativeButton(R.string.text_stop_plugin, new OnClickListener() {					
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dismissed = true;
-				ActionHelper.forceStopService(SettingsActivity.this);
-			}
-		});
-		alert.show();		
-	}
+	}	
 	
 	
 	private void displayTip(int tipId) {

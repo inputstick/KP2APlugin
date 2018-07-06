@@ -147,9 +147,7 @@
     <string name="tip_title">Tip:</string>
     <string name="tip_empty">Error: empty message</string>
 	<string name="tip_typing_speed">Please check if this works correctly with your system! May not work properly before OS boots (when in BIOS).</string>
-	
-	<string name="text_notification_info">Notification indicates that KP2A InputStick plugin is running in the background. You can disable this notification in settings. Plugin will stop automatically when KP2A database is locked or closed. If this does not work make sure plugin has necessary KP2A permissions: Configure as plugin -> Accept</string>
-		
+
 	<string name="sms_dialog_title">SMS permission</string>
 	<string name="sms_dialog_message">Application needs permission to be able to read incomins SMS messages. This feature will work only when the plugin is active (when you are using Keepass2Android). The plugin does not store any received SMS. Click OK to continue.</string>		
 	<string name="sms_missing_permission">Listening for incoming SMS disabled (due to missing permission)</string>

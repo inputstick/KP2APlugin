@@ -71,9 +71,7 @@ public class Const {
 	public static final String EXTRA_TYPE_MASKED = "type_masked";
 	public static final String EXTRA_ADD_KEY = "add_key";
 	public static final String EXTRA_SHOW_CHANGELOG = "show_changelog";
-	public static final String EXTRA_SHOW_SCOPE = "show_scope"; 
-	public static final String EXTRA_SHOW_NOTIFICATION_INFO = "show_notification_info";
-	
+	public static final String EXTRA_SHOW_SCOPE = "show_scope"; 	
 	
 	
 	public static final int TYPING_SPEED_DEFAULT= 1;
