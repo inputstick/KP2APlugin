@@ -2,6 +2,8 @@
 <resources>
     
     <string name="title_activity_sms">Pisz z SMS</string>
+    
+    <string name="sms_type_all">Wpisz całość</string>
     <string name="sms_done">Zakończ</string>    
     <string name="sms_sender">Nadawca:</string>
     <string name="sms_content">Wiadomość:</string>
