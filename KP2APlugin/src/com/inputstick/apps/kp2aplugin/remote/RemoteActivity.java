@@ -2,9 +2,11 @@ package com.inputstick.apps.kp2aplugin.remote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Rect;
@@ -75,7 +77,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	//keep service alive (in case KP2A db is closed/locked)
 	//notify service than an action was performed to avoid disconnecting (reaching max idle time)
 	private final Handler mHandler = new Handler();
-	private final Runnable tick = new Runnable(){
+	private final Runnable tick = new Runnable() {
 	    public void run() {
 	    	if (InputStickHID.isReady() && mRemote != null) {
 	    		long lastActionTime = mRemote.getLastActionTime();
@@ -87,6 +89,15 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	    	InputStickService.extendServiceKeepAliveTime(1000);
 	    	mHandler.postDelayed(this, 1000); 
 	    }
+	};
+	
+	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Toast.makeText(RemoteActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+			finish();
+		}
 	};
 	
 	private void sendToService(String action) {
@@ -218,12 +229,18 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 						}
 					}
 				});						
+		
+		IntentFilter filter;
+		filter = new IntentFilter();
+		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
+		registerReceiver(finishReceiver, filter);				
 	}
 	
 	@Override
-	protected void onDestroy() {
-	      super.onDestroy();
+	protected void onDestroy() {	      
+	      unregisterReceiver(finishReceiver);
 	      mHandler.removeCallbacks(tick);
+	      super.onDestroy();
 	}
 	
 	private void manageUI(int state) {

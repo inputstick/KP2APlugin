@@ -35,6 +35,9 @@ public class Const {
 	public static final int ACTIVITY_LOCK_TIMEOUT_MS = 180000; //3min, 
 	public static final int SMS_TIMEOUT_MS = 120000;  //2min 
 	
+	//activities
+	public static final String BROADCAST_FORCE_FINISH_ALL = "BROADCAST_FORCE_FINISH_ALL";
+	public static final String BROADCAST_FORCE_FINISH_SECURE = "BROADCAST_FORCE_FINISH_SECURE";
 	
 	//service
 	public static final String SERVICE_FORCE_STOP = "service_force_stop";	

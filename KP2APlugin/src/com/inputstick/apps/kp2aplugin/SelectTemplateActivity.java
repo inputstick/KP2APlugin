@@ -2,8 +2,6 @@ package com.inputstick.apps.kp2aplugin;
 
 import java.util.ArrayList;
 
-import keepass2android.pluginsdk.Strings;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -26,10 +24,11 @@ public class SelectTemplateActivity extends Activity {
 	private long lastActionTime;
 	private long maxTime;
 	
-	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(SelectTemplateActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
+			Toast.makeText(SelectTemplateActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
 			finish();
 		}
 	};
@@ -91,14 +90,14 @@ public class SelectTemplateActivity extends Activity {
 		
 		IntentFilter filter;
 		filter = new IntentFilter();
-		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
-		filter.addAction(Strings.ACTION_LOCK_DATABASE);
-		registerReceiver(receiver, filter);	
+		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
+		filter.addAction(Const.BROADCAST_FORCE_FINISH_SECURE);
+		registerReceiver(finishReceiver, filter);	
 	}
 	
 	@Override
 	protected void onDestroy() {		
-		unregisterReceiver(receiver);
+		unregisterReceiver(finishReceiver);
 		super.onDestroy();
 	}	
 	

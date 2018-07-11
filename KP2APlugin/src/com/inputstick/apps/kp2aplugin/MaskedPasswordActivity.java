@@ -1,6 +1,5 @@
 package com.inputstick.apps.kp2aplugin;
 
-import keepass2android.pluginsdk.Strings;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -65,10 +64,11 @@ public class MaskedPasswordActivity extends Activity {
 	
 	private Button buttonMaskedClose;
 	
-	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(MaskedPasswordActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
+			Toast.makeText(MaskedPasswordActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
 			finish();
 		}
 	};
@@ -170,9 +170,9 @@ public class MaskedPasswordActivity extends Activity {
 		
 		IntentFilter filter;
 		filter = new IntentFilter();
-		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
-		filter.addAction(Strings.ACTION_LOCK_DATABASE);
-		registerReceiver(receiver, filter);	
+		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
+		filter.addAction(Const.BROADCAST_FORCE_FINISH_SECURE);
+		registerReceiver(finishReceiver, filter);	
 	}
 	
 	@Override
@@ -190,7 +190,7 @@ public class MaskedPasswordActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {		
-		unregisterReceiver(receiver);
+		unregisterReceiver(finishReceiver);
 		super.onDestroy();
 	}	
 	

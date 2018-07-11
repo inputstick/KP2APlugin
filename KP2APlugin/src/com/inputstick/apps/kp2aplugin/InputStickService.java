@@ -45,7 +45,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			;
 	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
 	
-	private static final int FAILSAFE_PERIOD = 60000;	//TODO 10min?
+	private static final int FAILSAFE_PERIOD = 10000;	//TODO 10min?
 	
 	private static final int ACTION_HID = 0;
 	private static final int ACTION_KP2A = 1;
@@ -80,10 +80,8 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private static Handler mHandler = new Handler();
 	private Runnable mTimerTask = new Runnable() {
-
 		public void run() {
-			final long time = System.currentTimeMillis();
-			
+			final long time = System.currentTimeMillis();			
 			//auto disconnect?
 			if (InputStickHID.isConnected()) {																	
 				if ((maxIdlePeriod > 0) && (time > autoDisconnectTime)) {
@@ -91,8 +89,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					Toast.makeText(InputStickService.this, "auto-DISC", Toast.LENGTH_SHORT).show(); //TODO remove
 					InputStickHID.disconnect();
 				}				
-			}
-			
+			}			
 			//stop plugin?
 			if (time > serviceKeepAliveTime) {
 				if (dbClosedTime > 0) {
@@ -101,8 +98,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					//fail safe, in case kp2a crashes
 					stopPlugin("failsafe");
 				}
-			}					
-									
+			}													
 			mHandler.postDelayed(mTimerTask, 1000);
 		}
 	};
@@ -141,6 +137,20 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 	
+	private void sendForceFinishBroadcast(boolean finishAll) {
+		try {
+			Intent intent = new Intent();
+			if (finishAll) {
+				intent.setAction(Const.BROADCAST_FORCE_FINISH_ALL);
+			} else {
+				intent.setAction(Const.BROADCAST_FORCE_FINISH_SECURE);
+			}
+			sendBroadcast(intent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	private final BroadcastReceiver kp2aReceiver = new BroadcastReceiver() {
 
@@ -158,6 +168,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					actionSelectedAction(intent);
 				} else if (action.equals(Strings.ACTION_LOCK_DATABASE) || action.equals(Strings.ACTION_CLOSE_DATABASE)) {
 					dbClosedTime = System.currentTimeMillis();
+					sendForceFinishBroadcast(false);
 				}
 			}
 		}
@@ -334,6 +345,7 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private void stopPlugin(String s) {
 		Toast.makeText(InputStickService.this, "STOP: " + s, Toast.LENGTH_LONG).show(); //TODO remove
+		sendForceFinishBroadcast(true);
 		stopForeground(true);
 		stopSelf();
 	}
