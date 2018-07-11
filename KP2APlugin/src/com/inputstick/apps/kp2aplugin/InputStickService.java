@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.AutoScrollHelper;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -40,53 +41,115 @@ import com.inputstick.api.hid.HIDKeycodes;
 
 public class InputStickService extends Service implements InputStickStateListener {
 
-	private static final String _TAG = "KP2AINPUTSTICK SERVICE";
-
-	private SharedPreferences prefs;
-	private boolean addEnterAfterURL;
-	private int defaultTypingSpeed;
-	private int autoConnect;
-	private int maxIdlePeriod;
-	
-	private boolean smsEnabled;
-	private String smsText;
-	private String smsSender;
-
-	private long lastActionTime;
-
-	private ArrayList<ItemToExecute> items = new ArrayList<ItemToExecute>();
-	public static boolean isRunning;
-	private boolean addDummyKeys;
-	private int cnt;
-
-	private long lastCapsLockWarningTime;
+	private static final String _TAG = "KP2AINPUTSTICK SERVICE"
+			;
 	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
+	
+	private static final int FAILSAFE_PERIOD = 60000;	//TODO 10min?
+	
+	private static final int ACTION_HID = 0;
+	private static final int ACTION_KP2A = 1;
+	private static final int ACTION_SERVICE = 2;
 
-	NotificationManager mNotificationManager;
-	NotificationCompat.Builder mBuilder;
+	private static SharedPreferences prefs;
+	private static boolean addEnterAfterURL;
+	private static int defaultTypingSpeed;
+	private static int autoConnect;
+	private static int maxIdlePeriod;
+	
+	private static boolean smsEnabled;
+	private static String smsText;
+	private static String smsSender;
 
-	private Handler delayHandler = new Handler();
-	private Runnable mUpdateTimeTask = new Runnable() {
+	public static boolean isRunning;
+	private static long dbClosedTime;		
+	private static long lastActionTime;
+	private static long serviceKeepAliveTime;			//if kp2a database was closed/locked but plugin is being kept alive (received SMS, typing from clipboard)
+	private static long autoDisconnectTime;	//if user enabled auto-disconnect in settings
+
+	private static ArrayList<ItemToExecute> items = new ArrayList<ItemToExecute>();
+	
+	private static boolean addDummyKeys;
+	private static int cnt;
+
+	private static long lastCapsLockWarningTime;
+	
+
+	private static NotificationManager mNotificationManager;
+	private static NotificationCompat.Builder mBuilder;
+
+	private static Handler mHandler = new Handler();
+	private Runnable mTimerTask = new Runnable() {
 
 		public void run() {
 			final long time = System.currentTimeMillis();
-			if (InputStickHID.isConnected()) {
-				if ((maxIdlePeriod > 0) && (lastActionTime > 0) && (time > lastActionTime + maxIdlePeriod)) {
+			
+			//auto disconnect?
+			if (InputStickHID.isConnected()) {																	
+				if ((maxIdlePeriod > 0) && (time > autoDisconnectTime)) {
 					Log.d(_TAG, "disconnect (inactivity)");
+					Toast.makeText(InputStickService.this, "auto-DISC", Toast.LENGTH_SHORT).show(); //TODO remove
 					InputStickHID.disconnect();
-				}
-				delayHandler.postDelayed(mUpdateTimeTask, 1000);
+				}				
 			}
+			
+			//stop plugin?
+			if (time > serviceKeepAliveTime) {
+				if (dbClosedTime > 0) {
+					stopPlugin("auto");
+				} else if (time > lastActionTime + FAILSAFE_PERIOD) {
+					//fail safe, in case kp2a crashes
+					stopPlugin("failsafe");
+				}
+			}					
+									
+			mHandler.postDelayed(mTimerTask, 1000);
 		}
 	};
+	
+	//make sure InputStick connection will not be terminated within next %duration ms from now
+	public static void extendConnectionTime(int duration) {
+		if (isRunning) {
+			long tmp = System.currentTimeMillis() + duration;
+			if (tmp > autoDisconnectTime) {
+				autoDisconnectTime = tmp;
+			}
+		}
+	}
+	
+	//make sure the service will not be terminated within next %duration ms from now
+	public static void extendServiceKeepAliveTime(int duration) {
+		if (isRunning) {
+			long tmp = System.currentTimeMillis() + duration;
+			if (tmp > serviceKeepAliveTime) {
+				serviceKeepAliveTime = tmp;
+			}
+		}
+	}
+	
+	public static void onRemoteAction() {
+		if (isRunning) {
+			lastActionTime = System.currentTimeMillis();
+			autoDisconnectTime = lastActionTime + maxIdlePeriod;
+		}
+	}
+	
+	private void onAction(int actionType) {
+		lastActionTime = System.currentTimeMillis();
+		if (actionType == ACTION_HID) {
+			autoDisconnectTime = lastActionTime + maxIdlePeriod;
+		}
+	}
+	
 
-	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+	private final BroadcastReceiver kp2aReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			Log.d(_TAG, "received action " + action);
 			if (action != null) {
+				dbClosedTime = 0;
 				if (action.equals(Strings.ACTION_OPEN_ENTRY)) {
 					onEntryOpened();
 				} else if (action.equals(Strings.ACTION_CLOSE_ENTRY_VIEW)) {
@@ -94,7 +157,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				} else if (action.equals(Strings.ACTION_ENTRY_ACTION_SELECTED)) {
 					actionSelectedAction(intent);
 				} else if (action.equals(Strings.ACTION_LOCK_DATABASE) || action.equals(Strings.ACTION_CLOSE_DATABASE)) {
-					closeDbAction();
+					dbClosedTime = System.currentTimeMillis();
 				}
 			}
 		}
@@ -122,6 +185,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			loadPreference(key);
 		}
 	};
+	
 
 	private void onEntryOpened() {
 		if (autoConnect == Const.AUTO_CONNECT_ALWAYS) {
@@ -214,7 +278,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		} else if (Const.ACTION_MACRO_RUN.equals(uiAction)) {
 			connectAction();
 			if (ActionHelper.runMacroAction(this, entryData, params)) {
-				lastActionTime = System.currentTimeMillis(); // macro was  executed
+				onAction(ACTION_HID); // macro was  executed
 			}
 		} else if (Const.ACTION_TAB.equals(uiAction)) {
 			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, true);
@@ -239,11 +303,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			ActionHelper.startRemoteActivityAction(this); 
 		} else if (Const.ACTION_SMS.equals(uiAction)) {
 			ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
-		} else if (Const.ACTION_DUMMY.equals(uiAction)) {
-			if (InputStickHID.isReady()) {
-				lastActionTime = System.currentTimeMillis();
-			}
-		}
+		} 
 	}
 	
 	private void executeQuickAction(int id, TypingParams params) {
@@ -267,13 +327,13 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private void connectAction() {
 		int state = InputStickHID.getState();
-		if (state == ConnectionManager.STATE_DISCONNECTED || state == ConnectionManager.STATE_FAILURE) {
-			lastActionTime = 0;
+		if (state == ConnectionManager.STATE_DISCONNECTED || state == ConnectionManager.STATE_FAILURE) {		
 			InputStickHID.connect(getApplication());
 		}
 	}
 
-	private void closeDbAction() {
+	private void stopPlugin(String s) {
+		Toast.makeText(InputStickService.this, "STOP: " + s, Toast.LENGTH_LONG).show(); //TODO remove
 		stopForeground(true);
 		stopSelf();
 	}
@@ -289,6 +349,11 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		isRunning = true;
 		cnt = 0;
+		
+		dbClosedTime = 0;
+		lastActionTime = 0;
+		serviceKeepAliveTime = 0;
+		autoDisconnectTime = 0;
 
 		InputStickHID.addStateListener(this);
 
@@ -299,10 +364,10 @@ public class InputStickService extends Service implements InputStickStateListene
 		filter.addAction(Strings.ACTION_CLOSE_ENTRY_VIEW);
 		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
 		filter.addAction(Strings.ACTION_LOCK_DATABASE);
-		registerReceiver(receiver, filter);		
+		registerReceiver(kp2aReceiver, filter);		
 
-		delayHandler.removeCallbacksAndMessages(null);
-		delayHandler.postDelayed(mUpdateTimeTask, 30000);
+		mHandler.removeCallbacksAndMessages(null);
+		mHandler.postDelayed(mTimerTask, 1000);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(mSharedPrefsListener);
@@ -419,6 +484,7 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		onAction(ACTION_SERVICE);
 		Log.d(_TAG, "onStartCommand");
 		if (intent != null) {
 			final String action = intent.getAction();
@@ -443,8 +509,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					Toast.makeText(this, R.string.text_plugin_restarted, Toast.LENGTH_LONG).show();
 				}
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
-				stopForeground(true);
-				stopSelf(); // onDestroy() will disconnect if connecting/connected
+				stopPlugin("manual");
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
 				showSMSNotification(false);				
 			}
@@ -462,13 +527,13 @@ public class InputStickService extends Service implements InputStickStateListene
 	public void onDestroy() {
 		Log.d(_TAG, "onDestroy");
 		isRunning = false;
-		unregisterReceiver(receiver);
+		unregisterReceiver(kp2aReceiver);
 		if (smsEnabled) {
 			unregisterReceiver(smsReceiver);
 			showSMSNotification(false);
 		}
 		prefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefsListener);
-		delayHandler.removeCallbacksAndMessages(null);
+		mHandler.removeCallbacksAndMessages(null);
 		items.clear();
 		InputStickHID.removeStateListener(this);
 		InputStickHID.disconnect();
@@ -481,11 +546,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		int messageResId = 0;
 		switch (state) {
 		case ConnectionManager.STATE_CONNECTED:
-			if (lastActionTime == 0) {
-				lastActionTime = System.currentTimeMillis();
-			}
-			delayHandler.removeCallbacksAndMessages(null);
-			delayHandler.postDelayed(mUpdateTimeTask, 1000);
+			onAction(ACTION_HID);
 			break;
 		case ConnectionManager.STATE_READY:
 			addDummyKeys = true;
@@ -587,7 +648,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		} else {
 			//connected & ready
 			item.execute(this);
-			lastActionTime = System.currentTimeMillis();
+			onAction(ACTION_HID);
 		}
 	}
 	
@@ -604,7 +665,6 @@ public class InputStickService extends Service implements InputStickStateListene
 			}
 			items.clear();
 		}
-		lastActionTime = System.currentTimeMillis();
-	}
+		onAction(ACTION_HID);	}
 
 }

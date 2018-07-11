@@ -124,7 +124,6 @@ public class Const {
 	public static final String ACTION_TAB = "com.inputstick.apps.kp2aplugin.tab";
 	public static final String ACTION_ENTER = "com.inputstick.apps.kp2aplugin.enter";
 	public static final String ACTION_REMOTE = "com.inputstick.apps.kp2aplugin.remote";
-	public static final String ACTION_DUMMY = "com.inputstick.apps.kp2aplugin.dummy";
 	
 	
 	public static final String ACTION_MACRO_ADDEDIT = "com.inputstick.apps.kp2aplugin.macro_addedit";	

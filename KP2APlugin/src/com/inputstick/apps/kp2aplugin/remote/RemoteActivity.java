@@ -72,6 +72,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	private MousePadSupport mMouse;
 	private ModifiersSupport mModifiers;
 	
+	//keep service alive (in case KP2A db is closed/locked)
 	//notify service than an action was performed to avoid disconnecting (reaching max idle time)
 	private final Handler mHandler = new Handler();
 	private final Runnable tick = new Runnable(){
@@ -79,10 +80,11 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	    	if (InputStickHID.isReady() && mRemote != null) {
 	    		long lastActionTime = mRemote.getLastActionTime();
 	    		long time = System.currentTimeMillis();
-	    		if (time - lastActionTime < 2000) {
-	    			sendToService(Const.ACTION_DUMMY);
+	    		if (time - lastActionTime < 2000) {	    				    			
+	    			InputStickService.onRemoteAction();
 	    		}
 	    	}
+	    	InputStickService.extendServiceKeepAliveTime(1000);
 	    	mHandler.postDelayed(this, 1000); 
 	    }
 	};
