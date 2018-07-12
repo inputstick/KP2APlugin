@@ -26,8 +26,8 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.setOptions(true, true, true);
 		super.onCreate(savedInstanceState);
-		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_macro_execute);
 		
 		Intent intent = getIntent();		

@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class AllActionsActivity extends Activity {
+public class AllActionsActivity extends PluginPopupActivity {
 	
 	public enum ActionId {
 		OPEN_SETTINGS,
@@ -62,8 +62,8 @@ public class AllActionsActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.setOptions(false, true, true);
 		super.onCreate(savedInstanceState);
-		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_all_actions);
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
