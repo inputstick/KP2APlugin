@@ -66,14 +66,23 @@ public class EntryMacro {
 	}
 	
 	public void executeInBackground(Context ctx) {
+		boolean executedHIDAction = false;
 		for (ItemToExecute ite : listItems) {
-			ite.execute(ctx);
+			if (ite.execute(ctx)) {
+				executedHIDAction = true;
+			}
 		}
+		if (executedHIDAction) {
+			InputStickService.onHIDAction();
+		}
+
 	}
 	
 	public void executeActionAtIndex(Context ctx, int index) {
 		ItemToExecute ite = listItems.get(index);
-		ite.execute(ctx);
+		if (ite.execute(ctx)) {
+			InputStickService.onHIDAction();
+		}
 	}
 	
 	public ItemToExecute getActionAtIndex(Context ctx, int index) {

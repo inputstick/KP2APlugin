@@ -77,34 +77,35 @@ public class ItemToExecute {
 		}
 	}
 	
-	public void execute(Context ctx) {			
+	public boolean execute(Context ctx) {			
 		if (InputStickHID.getState() == ConnectionManager.STATE_READY) {					
 			switch (mType) {
 				case ITEM_TYPE_TEXT:
 					InputStickKeyboard.type(mText, mParams.getLayoutCode(), mParams.getTypingSpeed());
-					break;
+					return true;
 				case ITEM_TYPE_KEY:
 					InputStickKeyboard.pressAndRelease(mModifiers, mKey, mParams.getTypingSpeed());
-					break;
+					return true;
 				case ITEM_TYPE_DELAY:
 					HIDTransaction t = new HIDTransaction();
 					for (int i = 0; i < mDelayKeys * 3; i++) {  // 1 keypress = 3 HID reports (modifier, modifier+mKey, all released)
 						t.addReport(new KeyboardReport((byte)0x00, (byte)0x00));
 					}
 					InputStickHID.addKeyboardTransaction(t);
-					break;
+					return true;
 				//macro actions:			
 				case ITEM_TYPE_MASKED_PASSWORD_BACKGROUND:
 					ActionHelper.startMaskedPasswordActivity(ctx, mText, mParams, true);
-					break;
+					return false;
 				case ITEM_TYPE_MASKED_PASSWORD_FOREGROUND:
 					ActionHelper.startMaskedPasswordActivity(ctx, mText, mParams, false);
-					break;					
+					return false;			
 				case ITEM_TYPE_CLIPBOARD_TYPING:
 					ActionHelper.startClipboardTyping(ctx, mParams);
-					break;					
+					return false;				
 			}	
 		}
+		return false;
 	}	
 	
 	

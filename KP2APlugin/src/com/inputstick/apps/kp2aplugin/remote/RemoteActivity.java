@@ -83,7 +83,7 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 	    		long lastActionTime = mRemote.getLastActionTime();
 	    		long time = System.currentTimeMillis();
 	    		if (time - lastActionTime < 2000) {	    				    			
-	    			InputStickService.onRemoteAction();
+	    			InputStickService.onHIDAction();
 	    		}
 	    	}
 	    	InputStickService.extendServiceKeepAliveTime(1000);

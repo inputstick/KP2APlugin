@@ -160,7 +160,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 	
-	public static void onRemoteAction() {
+	public static void onHIDAction() {
 		if (isRunning) {
 			lastActionTime = System.currentTimeMillis();
 			autoDisconnectTime = lastActionTime + maxIdlePeriod;
@@ -821,24 +821,31 @@ public class InputStickService extends Service implements InputStickStateListene
 			}
 		} else {
 			//connected & ready
-			item.execute(this);
-			onAction(ACTION_HID);
+			if (item.execute(this)) {
+				onAction(ACTION_HID);
+			}
 		}
 	}
 	
 
 	private void executeQueue() {
-		Log.d(_TAG, "executeQueue");
+		Log.d(_TAG, "executeQueue");		
 		if (addDummyKeys) {
 			new ItemToExecute(15).execute(this); // 15 dummy keys delay; in some cases it will prevent missing characters when typing
 			addDummyKeys = false;
 		}
+		boolean executedHIDAction = false;
 		synchronized (items) {
 			for (ItemToExecute item : items) {
-				item.execute(this);
+				if (item.execute(this)) {
+					executedHIDAction = true;
+				}
 			}
 			items.clear();
 		}
-		onAction(ACTION_HID);	}
+		if (executedHIDAction) {
+			onAction(ACTION_HID);	
+		}
+	}
 
 }
