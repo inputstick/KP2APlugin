@@ -101,7 +101,7 @@ public class ItemToExecute {
 					ActionHelper.startMaskedPasswordActivity(ctx, mText, mParams, false);
 					break;					
 				case ITEM_TYPE_CLIPBOARD_TYPING:
-					ActionHelper.startClipboardTypingService(ctx,  mParams);
+					ActionHelper.startClipboardTyping(ctx, mParams);
 					break;					
 			}	
 		}

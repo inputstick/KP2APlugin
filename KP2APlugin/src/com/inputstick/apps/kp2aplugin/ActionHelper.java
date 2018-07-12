@@ -78,7 +78,15 @@ public abstract class ActionHelper {
 	}
 	
 	
-	public static void startClipboardTypingService(Context ctx, TypingParams params) {
+	public static void startClipboardTyping(Context ctx, TypingParams params) {
+		Intent i = new Intent(ctx, InputStickService.class);
+		i.setAction(Const.SERVICE_ENTRY_ACTION);
+		i.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
+		i.putExtra(Const.EXTRA_LAYOUT, params.getLayoutCode());
+		ctx.startService(i);
+	}
+	
+	public static void startClipboardApp(Context ctx) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		if (PreferencesHelper.isClipboardLaunchAuthenticator(prefs)) {
 			Intent launchIntent = ctx.getPackageManager().getLaunchIntentForPackage(Const.PACKAGE_AUTHENTICATOR);
@@ -101,10 +109,6 @@ public abstract class ActionHelper {
 				}		
 			}
 		}		
-		
-		Intent i = new Intent(ctx, ClipboardService.class);
-		i.putExtras(params.getBundle());
-		ctx.startService(i);
 	}		
 
 	

@@ -8,7 +8,7 @@ public class Const {
 	public static final int IC = R.drawable.ic_launcher;
 	
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;
-	public static final int CLIPBOARD_SERVICE_NOTIFICATION_ID = 2;
+	public static final int CLIPBOARD_TYPING_NOTIFICATION_ID = 2;
 	public static final int UPDATE_NOTIFICATION_ID = 3;
 	public static final int SMS_NOTIFICATION_ID = 4;
 	
@@ -30,10 +30,14 @@ public class Const {
 	public static final int AUTO_DISCONNECT_CLOSED_IDLE_LOCKED = 1;
 	
 	
-	public static final int MASKED_PASSWORD_TIMEOUT_MS = 120000;  //2min 
-	public static final int CLIPBOARD_TIMEOUT_MS = 30000; //30s
+	public static final int MASKED_PASSWORD_TIMEOUT_MS = 120000;  //2min 	
 	public static final int ACTIVITY_LOCK_TIMEOUT_MS = 180000; //3min, 
-	public static final int SMS_TIMEOUT_MS = 120000;  //2min 
+	
+	public static final int SMS_TIMEOUT_MS = 2 * 10 * 1000;  //2min 
+	public static final int CLIPBOARD_INITIAL_TIMEOUT_MS = 30 * 1000; //30s, change strings if modified!
+	public static final int CLIPBOARD_MAX_TIMEOUT_MS = 999 * 1000; //999s
+	public static final int CLIPBOARD_TIMEOUT_EXTEND_MS = 3 * 60 * 1000; //3min, change notification text if modified
+	public static final int CLIPBOARD_MAX_LENGTH = 64; 
 	
 	//activities
 	public static final String BROADCAST_FORCE_FINISH_ALL = "BROADCAST_FORCE_FINISH_ALL";
@@ -66,8 +70,6 @@ public class Const {
 	
 	public static final String EXTRA_MAX_TIME = "max_time";	
 	public static final String EXTRA_LAUNCHED_FROM_KP2A = "kp2a_launch";
-	//Clipboard 
-	public static final String EXTRA_NOTIFICATION_ACTION = "notification_action";  //clipboardservice
 	
 		
 	public static final String EXTRA_TYPE_SLOW = "type_slow";
@@ -77,8 +79,8 @@ public class Const {
 	public static final String EXTRA_SHOW_SCOPE = "show_scope"; 	
 	
 	
-	public static final int TYPING_SPEED_DEFAULT= 1;
-	public static final int TYPING_SPEED_SLOW= 10;
+	public static final int TYPING_SPEED_DEFAULT = 1;
+	public static final int TYPING_SPEED_SLOW = 10;
 
 	public static final String MACRO_PREF_PREFIX = "m_";
 	public static final String TEMPLATE_PREF_PREFIX = "t_";
@@ -151,7 +153,10 @@ public class Const {
 	public static final String ACTION_FIELD_TYPE_SLOW_SECONDARY = "com.inputstick.apps.kp2aplugin.type_slow_secondary";
 	public static final String ACTION_FIELD_TYPE_MASKED_SECONDARY = "com.inputstick.apps.kp2aplugin.type_masked_secondary";
 	
-	public static final String ACTION_SMS = "com.inputstick.apps.kp2aplugin.sms";	//from notification only
+	//notification actions:
+	public static final String ACTION_SMS = "com.inputstick.apps.kp2aplugin.sms";	
+	public static final String ACTION_CLIPBOARD_EXTEND = "com.inputstick.apps.kp2aplugin.clipboard_extend";	
+	public static final String ACTION_CLIPBOARD_STOP = "com.inputstick.apps.kp2aplugin.clipboard_stop";	
 	
 	//PREFERENCES:	
 	

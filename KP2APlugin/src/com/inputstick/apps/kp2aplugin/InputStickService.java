@@ -15,6 +15,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -40,15 +43,14 @@ import com.inputstick.api.hid.HIDKeycodes;
 
 public class InputStickService extends Service implements InputStickStateListener {
 
-	private static final String _TAG = "KP2AINPUTSTICK SERVICE"
-			;
+	private static final String _TAG = "KP2AINPUTSTICK SERVICE";
+	private static final int TIMER_INTERVAL_MS = 1000;
 	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
 	
-	private static final int FAILSAFE_PERIOD = 10 * 60 * 1000;	//TODO 10min?
+	private static final int FAILSAFE_PERIOD = 10 * 60 * 1000;	//10min; stop plugin after FAILSAFE_PERIOD inactivity in case KP2A crashes
 	
 	private static final int ACTION_HID = 0;
-	private static final int ACTION_KP2A = 1;
-	private static final int ACTION_SERVICE = 2;
+	private static final int ACTION_OTHER = 1;
 
 	private static SharedPreferences prefs;
 	private static boolean addEnterAfterURL;
@@ -56,10 +58,16 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static int autoConnect;
 	private static int maxIdlePeriod;
 	
+	//SMS:
 	private static boolean smsEnabled;
 	private static String smsText;
 	private static String smsSender;
 	private static int smsRemainingTime;
+	
+	//Clipboard
+	private static ClipboardManager mClipboardManager;
+	private static int clipboardRemainingTime;
+	private static TypingParams mClipboardTypingParams;
 
 	public static boolean isRunning;
 	private static long dbClosedTime;		
@@ -77,6 +85,12 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static NotificationManager mNotificationManager;
 	private static NotificationCompat.Builder mPluginNotificationBuilder;
 	private static NotificationCompat.Builder mSMSNotificationBuilder;
+	private static NotificationCompat.Builder mClipboardNotificationBuilder;
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//stopping plugin / terminating InputStick connection:
 
 	private static Handler mHandler = new Handler();
 	private Runnable mTimerTask = new Runnable() {
@@ -84,15 +98,26 @@ public class InputStickService extends Service implements InputStickStateListene
 			final long time = System.currentTimeMillis();
 			//update SMS notification & extend keep alive for service and InputStick connection
 			if (smsRemainingTime > 0) {		
-				extendConnectionTime(1000);
-				extendServiceKeepAliveTime(1000);
-				
-				updateSMSNotification();
-				smsRemainingTime--;
-				if (smsRemainingTime == 0) {
-					cancelSMSNotification();
+				extendConnectionTime(TIMER_INTERVAL_MS);
+				extendServiceKeepAliveTime(TIMER_INTERVAL_MS);								
+				smsRemainingTime -= TIMER_INTERVAL_MS;
+				if (smsRemainingTime > 0) {
+					updateSMSNotification();
+				} else {
+					clearSMS();
 				}
 			}
+			//same for clipboard typing
+			if (clipboardRemainingTime > 0) {		
+				extendConnectionTime(TIMER_INTERVAL_MS);
+				extendServiceKeepAliveTime(TIMER_INTERVAL_MS);							
+				clipboardRemainingTime -= TIMER_INTERVAL_MS;
+				if (clipboardRemainingTime > 0) {
+					updateClipboardNotification();					
+				} else {
+					stopClipboardMonitoring(true);
+				}
+			}			
 			
 			//auto disconnect?
 			if (InputStickHID.isConnected()) {																	
@@ -111,7 +136,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					stopPlugin("failsafe");
 				}
 			}													
-			mHandler.postDelayed(mTimerTask, 1000);
+			mHandler.postDelayed(mTimerTask, TIMER_INTERVAL_MS);
 		}
 	};
 	
@@ -186,6 +211,10 @@ public class InputStickService extends Service implements InputStickStateListene
 	};
 	
 	
+	//************************************************************************************
+	//************************************************************************************
+	//SMS:	
+	
 	private final BroadcastReceiver smsReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -196,11 +225,11 @@ public class InputStickService extends Service implements InputStickStateListene
 	            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
 	            smsText = smsMessage.getMessageBody();
 	            smsSender = smsMessage.getDisplayOriginatingAddress();
-	            smsRemainingTime = Const.SMS_TIMEOUT_MS / 1000;
+	            smsRemainingTime = Const.SMS_TIMEOUT_MS;
 	            //notification:
 	            mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this);
 	            mSMSNotificationBuilder.setContentTitle(getString(R.string.app_name));
-	            mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + smsRemainingTime + "s)"); 
+	            mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + (smsRemainingTime/1000) + "s)"); 
 	            mSMSNotificationBuilder.setSmallIcon(R.drawable.ic_sms);
 		
 				Intent smsIntent = new Intent(InputStickService.this, InputStickService.class);
@@ -214,11 +243,126 @@ public class InputStickService extends Service implements InputStickStateListene
 			    mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));					
 		
 			    mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build()); //TODO zamiast tego daj update?
+				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build()); 
 	        }
 		}
 	};
 	
+	private void startSMSMonitoring() {
+		if (ContextCompat.checkSelfPermission(InputStickService.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+			intentFilter.setPriority(100);
+			registerReceiver(smsReceiver, intentFilter);
+		}
+	}
+	
+	private void stopSMSMonitoring() {
+		unregisterReceiver(smsReceiver); 
+		clearSMS();
+	}
+	
+	private void updateSMSNotification() {
+		mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + (smsRemainingTime/1000) + "s)"); 
+		mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
+	}
+	
+	private void clearSMS() {
+		smsText = null;
+		smsSender = null;
+		smsRemainingTime = 0;
+		mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
+	}
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//Clipboard
+	
+	ClipboardManager.OnPrimaryClipChangedListener mPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+	    public void onPrimaryClipChanged() {
+	        final ClipData clipData = mClipboardManager.getPrimaryClip();	        
+	        if (clipData.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+	           String text = clipData.getItemAt(0).getText().toString();
+	           if (text != null) {
+	        	   if ((text.length() > Const.CLIPBOARD_MAX_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
+	        		   Toast.makeText(InputStickService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
+	        	   } else {	  
+	        			queueText(text, mClipboardTypingParams, true);
+	        			queueDelay(15, false);
+	        			 //do not clear queue - this would remove previous item (typing text form clipboard)!
+	        			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, mClipboardTypingParams, false);
+		        	   if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
+		        		   stopClipboardMonitoring(true);
+		        	   }
+	        	   }
+	           }
+	    	}
+	    }
+	};
+	
+	private void startClipboardMonitoring(TypingParams params) {
+		clipboardRemainingTime = Const.CLIPBOARD_INITIAL_TIMEOUT_MS; 
+		mClipboardTypingParams = params;
+		if (mClipboardManager == null) {
+			mClipboardManager = (ClipboardManager)getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+			mClipboardManager.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
+		}		
+		Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
+		
+		mClipboardNotificationBuilder = new NotificationCompat.Builder(this);
+		
+		mClipboardNotificationBuilder.setContentTitle(getString(R.string.app_name));		
+		mClipboardNotificationBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + (clipboardRemainingTime/1000) + "s)");
+		mClipboardNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
+			
+		Intent disableActionIntent = new Intent(this, InputStickService.class);
+		disableActionIntent.setAction(Const.ACTION_CLIPBOARD_STOP);
+		PendingIntent disableActionPendingIntent = PendingIntent.getService(this, 0, disableActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		Intent extendActionIntent = new Intent(this, InputStickService.class);
+		extendActionIntent.setAction(Const.ACTION_CLIPBOARD_EXTEND);
+		PendingIntent extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);		
+		
+		
+		mClipboardNotificationBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
+		mClipboardNotificationBuilder.addAction(0, "+3min", extendActionPendingIntent);
+		
+		mClipboardNotificationBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+
+		mNotificationManager.notify(Const.CLIPBOARD_TYPING_NOTIFICATION_ID, mClipboardNotificationBuilder.build());				
+	}	
+	
+	private void updateClipboardNotification() {
+		mClipboardNotificationBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + (clipboardRemainingTime/1000) + "s)");
+		mNotificationManager.notify(Const.CLIPBOARD_TYPING_NOTIFICATION_ID, mClipboardNotificationBuilder.build());
+	}
+	
+	private void stopClipboardMonitoring(boolean showToast) {
+		if (showToast) {
+			Toast.makeText(this, R.string.text_clipboard_disabled, Toast.LENGTH_SHORT).show();
+		}
+		if (mClipboardManager != null) {
+			mClipboardManager.removePrimaryClipChangedListener(mPrimaryClipChangedListener);
+			mClipboardManager = null;
+		}		
+		clipboardRemainingTime = 0;
+		mNotificationManager.cancel(Const.CLIPBOARD_TYPING_NOTIFICATION_ID);
+	}
+	
+	private void extendClipboardTime() {
+		if (clipboardRemainingTime > 0) {
+			clipboardRemainingTime += Const.CLIPBOARD_TIMEOUT_EXTEND_MS;
+			if (clipboardRemainingTime > Const.CLIPBOARD_MAX_TIMEOUT_MS) {
+				clipboardRemainingTime = Const.CLIPBOARD_MAX_TIMEOUT_MS;
+			}
+			updateClipboardNotification();
+		}		
+	}
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//Preferences		
 
 	private final OnSharedPreferenceChangeListener mSharedPrefsListener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
@@ -226,6 +370,39 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	};
 	
+	// if key == null load all preferences; if not, only single preference was changed
+	private void loadPreference(String key) {
+		if (key == null || Const.PREF_ENTER_AFTER_URL.equals(key)) {
+			addEnterAfterURL = PreferencesHelper.addEnterAfterURL(prefs);
+		}
+		if (key == null || Const.PREF_TYPING_SPEED.equals(key)) {
+			defaultTypingSpeed = PreferencesHelper.getTypingSpeed(prefs);
+		}
+		if (key == null || Const.PREF_AUTO_CONNECT.equals(key)) {
+			autoConnect = PreferencesHelper.getAutoConnect(prefs);
+		}
+		if (key == null || Const.PREF_MAX_IDLE_PERIOD.equals(key)) {
+			maxIdlePeriod = PreferencesHelper.getMaxIdlePeriod(prefs);
+		}
+		
+		if (key == null || Const.PREF_SMS.equals(key)) {
+			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);
+			if (key != null) {
+				if (smsEnabled) {
+					startSMSMonitoring();
+				} else {
+					stopSMSMonitoring();
+				}
+			}
+		}
+		
+	}
+
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//Plugin actions:
 
 	private void onEntryOpened() {
 		if (autoConnect == Const.AUTO_CONNECT_ALWAYS) {
@@ -314,7 +491,8 @@ public class InputStickService extends Service implements InputStickStateListene
 			ActionHelper.addEditMacroAction(this, entryData, false);
 		} else if (Const.ACTION_CLIPBOARD.equals(uiAction)) {
 			connectAction();
-			ActionHelper.startClipboardTypingService(this, params);
+			startClipboardMonitoring(params);
+			ActionHelper.startClipboardApp(this);
 		} else if (Const.ACTION_MACRO_RUN.equals(uiAction)) {
 			connectAction();
 			if (ActionHelper.runMacroAction(this, entryData, params)) {
@@ -372,16 +550,8 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 
-	private void stopPlugin(String s) {
-		Toast.makeText(InputStickService.this, "STOP: " + s, Toast.LENGTH_LONG).show(); //TODO remove
-		sendForceFinishBroadcast(true);
-		stopForeground(true);
-		stopSelf();
-	}
 
-	public static boolean isRunning() {
-		return isRunning;
-	}
+	
 
 	@Override
 	public void onCreate() {
@@ -408,7 +578,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		registerReceiver(kp2aReceiver, filter);		
 
 		mHandler.removeCallbacksAndMessages(null);
-		mHandler.postDelayed(mTimerTask, 1000);
+		mHandler.postDelayed(mTimerTask, TIMER_INTERVAL_MS);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(mSharedPrefsListener);
@@ -433,85 +603,14 @@ public class InputStickService extends Service implements InputStickStateListene
 		
 		loadPreference(null);
 		if (smsEnabled) {
-			setupSMS();
-		}
-	}
-	
-	private void setupSMS() {
-		if (ContextCompat.checkSelfPermission(InputStickService.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-			intentFilter.setPriority(100);
-			registerReceiver(smsReceiver, intentFilter);
+			startSMSMonitoring();
 		}
 	}
 
-	private void updatePluginNotification() {
-		int resId;
-		int state = InputStickHID.getState();
-		switch (state) {
-		case ConnectionManager.STATE_READY:
-			resId = R.string.notification_state_ready;
-			break;
-		case ConnectionManager.STATE_CONNECTED:
-			resId = R.string.notification_state_connected;
-			break;
-		case ConnectionManager.STATE_CONNECTING:
-			resId = R.string.notification_state_connecting;
-			break;
-		default:
-			resId = R.string.notification_state_not_connected;
-			break;
-		}
-		String contentText =  getString(R.string.notification_text) + " (" + getString(resId) + ")";
-		
-		mPluginNotificationBuilder.setContentText(contentText);
-		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());
-	}
-	
-	private void updateSMSNotification() {
-		mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + smsRemainingTime + "s)"); 
-		mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
-	}
-	
-	private void cancelSMSNotification() {
-		smsText = null;
-		smsSender = null;
-		smsRemainingTime = 0;
-		mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
-	}
-
-	// if key == null load all preferences; if not, only single preference was changed
-	private void loadPreference(String key) {
-		if (key == null || Const.PREF_ENTER_AFTER_URL.equals(key)) {
-			addEnterAfterURL = PreferencesHelper.addEnterAfterURL(prefs);
-		}
-		if (key == null || Const.PREF_TYPING_SPEED.equals(key)) {
-			defaultTypingSpeed = PreferencesHelper.getTypingSpeed(prefs);
-		}
-		if (key == null || Const.PREF_AUTO_CONNECT.equals(key)) {
-			autoConnect = PreferencesHelper.getAutoConnect(prefs);
-		}
-		if (key == null || Const.PREF_MAX_IDLE_PERIOD.equals(key)) {
-			maxIdlePeriod = PreferencesHelper.getMaxIdlePeriod(prefs);
-		}
-		
-		if (key == null || Const.PREF_SMS.equals(key)) {
-			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);
-			if (key != null) {
-				if (smsEnabled) {
-					setupSMS();
-				} else {
-					unregisterReceiver(smsReceiver);
-					cancelSMSNotification();
-				}
-			}
-		}
-		
-	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		onAction(ACTION_SERVICE);
+		onAction(ACTION_OTHER);
 		Log.d(_TAG, "onStartCommand");
 		if (intent != null) {
 			final String action = intent.getAction();
@@ -538,8 +637,13 @@ public class InputStickService extends Service implements InputStickStateListene
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
 				stopPlugin("manual");
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
-				cancelSMSNotification();	
-			}
+				clearSMS();	
+			} else if (Const.ACTION_CLIPBOARD_STOP.equals(action)) {				 				
+				stopClipboardMonitoring(false);
+			} else if (Const.ACTION_CLIPBOARD_EXTEND.equals(action)) {				 				
+				extendClipboardTime();
+			}			
+			
 			cnt++;
 		}
 		return Service.START_NOT_STICKY;
@@ -555,10 +659,8 @@ public class InputStickService extends Service implements InputStickStateListene
 		Log.d(_TAG, "onDestroy");
 		isRunning = false;
 		unregisterReceiver(kp2aReceiver);
-		if (smsEnabled) {
-			unregisterReceiver(smsReceiver);
-			cancelSMSNotification();
-		}
+		stopSMSMonitoring();
+		stopClipboardMonitoring(false);
 		prefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefsListener);
 		mHandler.removeCallbacksAndMessages(null);
 		items.clear();
@@ -566,6 +668,46 @@ public class InputStickService extends Service implements InputStickStateListene
 		InputStickHID.disconnect();
 		super.onDestroy();
 	}
+	
+	
+	private void stopPlugin(String s) {
+		Toast.makeText(InputStickService.this, "STOP: " + s, Toast.LENGTH_LONG).show(); //TODO remove
+		sendForceFinishBroadcast(true);
+		stopForeground(true);
+		stopSelf();
+	}
+
+	public static boolean isRunning() {
+		return isRunning;
+	}
+
+	private void updatePluginNotification() {
+		int resId;
+		int state = InputStickHID.getState();
+		switch (state) {
+		case ConnectionManager.STATE_READY:
+			resId = R.string.notification_state_ready;
+			break;
+		case ConnectionManager.STATE_CONNECTED:
+			resId = R.string.notification_state_connected;
+			break;
+		case ConnectionManager.STATE_CONNECTING:
+			resId = R.string.notification_state_connecting;
+			break;
+		default:
+			resId = R.string.notification_state_not_connected;
+			break;
+		}
+		String contentText =  getString(R.string.notification_text) + " (" + getString(resId) + ")";
+		
+		mPluginNotificationBuilder.setContentText(contentText);
+		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());
+	}
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//InputStick connection:
 
 	@Override
 	public void onStateChanged(int state) {
@@ -629,6 +771,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		
 		updatePluginNotification();	
 	}
+	
+	
+	//************************************************************************************
+	//************************************************************************************
+	//HID actions:
 
 	private void queueText(String text, TypingParams params, boolean canClearQueue) {
 		ItemToExecute item = new ItemToExecute(text, params);
