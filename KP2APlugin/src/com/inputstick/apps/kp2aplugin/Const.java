@@ -33,11 +33,20 @@ public class Const {
 	public static final int MASKED_PASSWORD_TIMEOUT_MS = 120000;  //2min 	
 	public static final int ACTIVITY_LOCK_TIMEOUT_MS = 180000; //3min, 
 	
+	//service
+	public static final int SERVICE_CAPSLOCK_WARNING_TIMEOUT = 10 * 1000;	
+	public static final int SERVICE_FAILSAFE_PERIOD = 10 * 60 * 1000;	//10min; stop plugin after FAILSAFE_PERIOD inactivity in case KP2A crashes
+	
 	public static final int SMS_TIMEOUT_MS = 2 * 10 * 1000;  //2min 
 	public static final int CLIPBOARD_INITIAL_TIMEOUT_MS = 30 * 1000; //30s, change strings if modified!
 	public static final int CLIPBOARD_MAX_TIMEOUT_MS = 999 * 1000; //999s
 	public static final int CLIPBOARD_TIMEOUT_EXTEND_MS = 3 * 60 * 1000; //3min, change notification text if modified
 	public static final int CLIPBOARD_MAX_LENGTH = 64; 
+	
+	//popup activities
+	public static final int POPUP_MAX_KEEP_ALIVE_EXTENSION_TIME = 10 * 60 * 1000; //do not allow to increase keep alive time by more than this
+	public static final int POPUP_REMAINING_TIME_INITIAL_VALUE = 60 * 1000;
+	public static final int POPUP_REMAINING_TIME_DISPLAY_THRESHOLD = 15 * 1000; //display time left as title when below this value
 	
 	//activities
 	public static final String BROADCAST_FORCE_FINISH_ALL = "BROADCAST_FORCE_FINISH_ALL";

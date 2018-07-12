@@ -45,9 +45,6 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private static final String _TAG = "KP2AINPUTSTICK SERVICE";
 	private static final int TIMER_INTERVAL_MS = 1000;
-	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
-	
-	private static final int FAILSAFE_PERIOD = 10 * 60 * 1000;	//10min; stop plugin after FAILSAFE_PERIOD inactivity in case KP2A crashes
 	
 	private static final int ACTION_HID = 0;
 	private static final int ACTION_OTHER = 1;
@@ -131,7 +128,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (time > serviceKeepAliveTime) {
 				if (dbClosedTime > 0) {
 					stopPlugin("auto");
-				} else if (time > lastActionTime + FAILSAFE_PERIOD) {
+				} else if (time > lastActionTime + Const.SERVICE_FAILSAFE_PERIOD) {
 					//fail safe, in case kp2a crashes
 					stopPlugin("failsafe");
 				}
@@ -783,7 +780,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		queueItem(item);
 		if (InputStickKeyboard.isCapsLock()) {
 			long now = System.currentTimeMillis();
-			if (now > lastCapsLockWarningTime + CAPSLOCK_WARNING_TIMEOUT) {
+			if (now > lastCapsLockWarningTime + Const.SERVICE_CAPSLOCK_WARNING_TIMEOUT) {
 				lastCapsLockWarningTime = now;
 				Toast.makeText(InputStickService.this, R.string.text_capslock_warning, Toast.LENGTH_LONG).show();
 			}

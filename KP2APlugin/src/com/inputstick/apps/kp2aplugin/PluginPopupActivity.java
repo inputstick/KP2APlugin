@@ -12,10 +12,7 @@ import android.widget.Toast;
 
 public class PluginPopupActivity extends Activity {
 	
-	private static final int INTERVAL = 1000;
-	private static final int MAX_KEEP_ALIVE_EXTENSION_TIME = 10 * 60 * 1000; //do not allow to increase keep alive time by more than this
-	private static final int REMAINING_TIME_INITIAL_VALUE = 60 * 1000;
-	private static final int REMAINING_TIME_DISPLAY_THRESHOLD = 15 * 1000; //display time left as title when below this value
+	private static final int TIMER_INTERVAL_MS = 1000;
 		
 	private boolean mProtectDisplayedContent;
 	private boolean mHasEntryData;
@@ -29,22 +26,22 @@ public class PluginPopupActivity extends Activity {
 	private final Handler mHandler = new Handler();
 	private final Runnable tick = new Runnable() {
 	    public void run() {
-	    	if (mTotalTime < MAX_KEEP_ALIVE_EXTENSION_TIME) {
-		    	InputStickService.extendConnectionTime(INTERVAL);
-		    	InputStickService.extendServiceKeepAliveTime(INTERVAL);
-		    	mTotalTime += INTERVAL;
+	    	if (mTotalTime < Const.POPUP_MAX_KEEP_ALIVE_EXTENSION_TIME) {
+		    	InputStickService.extendConnectionTime(TIMER_INTERVAL_MS);
+		    	InputStickService.extendServiceKeepAliveTime(TIMER_INTERVAL_MS);
+		    	mTotalTime += TIMER_INTERVAL_MS;
 	    	}
 	    	
 	    	if (mCountdownEnabled) {
 		    	if (mRemainingTime <= 0) {
 		    		finish();
 		    	} else {
-		    		mRemainingTime -= INTERVAL;
+		    		mRemainingTime -= TIMER_INTERVAL_MS;
 		    		updateTitle();
 		    	}
 	    	}
 	    	
-	    	mHandler.postDelayed(this, INTERVAL);	    	
+	    	mHandler.postDelayed(this, TIMER_INTERVAL_MS);	    	
 	    }
 	};
 	
@@ -68,7 +65,7 @@ public class PluginPopupActivity extends Activity {
 	}
 	
 	private void updateTitle() {
-		if (mRemainingTime < REMAINING_TIME_DISPLAY_THRESHOLD) {
+		if (mRemainingTime < Const.POPUP_REMAINING_TIME_DISPLAY_THRESHOLD) {
 			setTitle(getString(R.string.text_time_left) + " " + (mRemainingTime/1000) + "s");
 		}
 	}
@@ -84,7 +81,7 @@ public class PluginPopupActivity extends Activity {
 		if (savedInstanceState == null) {				
 			mTotalTime = 0;			
 			if (mCountdownEnabled) {
-				mRemainingTime = REMAINING_TIME_INITIAL_VALUE;
+				mRemainingTime = Const.POPUP_REMAINING_TIME_INITIAL_VALUE;
 				updateTitle();
 			}
 		} 
