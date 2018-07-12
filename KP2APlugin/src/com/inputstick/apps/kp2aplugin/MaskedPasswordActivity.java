@@ -60,7 +60,7 @@ public class MaskedPasswordActivity extends PluginPopupActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.setSecure();
+		super.setOptions(true, true, true);
 		super.onCreate(savedInstanceState);		
 
 		setContentView(R.layout.activity_masked_password);

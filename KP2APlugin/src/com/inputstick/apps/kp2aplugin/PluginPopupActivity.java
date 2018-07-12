@@ -12,21 +12,38 @@ import android.widget.Toast;
 
 public class PluginPopupActivity extends Activity {
 	
-	private static final int INTERVAL = 3000;
-	private static final int MAX_TIME = 10 * 60 * 1000; //max keep alive time
+	private static final int INTERVAL = 1000;
+	private static final int MAX_KEEP_ALIVE_EXTENSION_TIME = 10 * 60 * 1000; //do not allow to increase keep alive time by more than this
+	private static final int REMAINING_TIME_INITIAL_VALUE = 60 * 1000;
+	private static final int REMAINING_TIME_DISPLAY_THRESHOLD = 15 * 1000; //display time left as title when below this value
 		
-	private boolean isSecure;
-	private int totalTime;
+	private boolean mProtectDisplayedContent;
+	private boolean mHasEntryData;
+	
+	private boolean mCountdownEnabled;
+	private int mRemainingTime;
+	
+	private int mTotalTime;
 	
 	//keeps InputStick connection alive, keeps InputStickService alive (in case KP2A db is closed/locked)		
 	private final Handler mHandler = new Handler();
 	private final Runnable tick = new Runnable() {
 	    public void run() {
-	    	if (totalTime < MAX_TIME) {
+	    	if (mTotalTime < MAX_KEEP_ALIVE_EXTENSION_TIME) {
 		    	InputStickService.extendConnectionTime(INTERVAL);
 		    	InputStickService.extendServiceKeepAliveTime(INTERVAL);
-		    	totalTime += INTERVAL;
+		    	mTotalTime += INTERVAL;
 	    	}
+	    	
+	    	if (mCountdownEnabled) {
+		    	if (mRemainingTime <= 0) {
+		    		finish();
+		    	} else {
+		    		mRemainingTime -= INTERVAL;
+		    		updateTitle();
+		    	}
+	    	}
+	    	
 	    	mHandler.postDelayed(this, INTERVAL);	    	
 	    }
 	};
@@ -37,34 +54,45 @@ public class PluginPopupActivity extends Activity {
 			final String action = intent.getAction();
 			if (action != null) {				
 				if (action.equals(Const.BROADCAST_FORCE_FINISH_SECURE)) {
-					Toast.makeText(PluginPopupActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
+					Toast.makeText(PluginPopupActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
 				}
-			}
-			
+			}			
 			finish();
 		}
 	};
 	
-	protected void setSecure() {
-		isSecure = true;
+	protected void setOptions(boolean protectDisplayedContent, boolean hasEntryData, boolean countdownEnabled) {
+		mProtectDisplayedContent = protectDisplayedContent;
+		mHasEntryData = hasEntryData;
+		mCountdownEnabled = countdownEnabled;
+	}
+	
+	private void updateTitle() {
+		if (mRemainingTime < REMAINING_TIME_DISPLAY_THRESHOLD) {
+			setTitle(getString(R.string.text_time_left) + " " + (mRemainingTime/1000) + "s");
+		}
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setTheme(android.R.style.Theme_Holo_Dialog);
-		if (isSecure) {
+		if (mProtectDisplayedContent) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 		}
 		
-		if (savedInstanceState == null) {	
-			totalTime = 0;
+		if (savedInstanceState == null) {				
+			mTotalTime = 0;			
+			if (mCountdownEnabled) {
+				mRemainingTime = REMAINING_TIME_INITIAL_VALUE;
+				updateTitle();
+			}
 		} 
 		
 		IntentFilter filter;
 		filter = new IntentFilter();
 		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		if (isSecure) {
+		if (mHasEntryData) {
 			filter.addAction(Const.BROADCAST_FORCE_FINISH_SECURE);
 		}
 		registerReceiver(finishReceiver, filter);

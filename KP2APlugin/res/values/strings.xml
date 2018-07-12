@@ -31,6 +31,7 @@
     <string name="text_plugin_restarted">Plugin restarted, select action again</string>
     <string name="text_stop_plugin">Stop plugin</string>
     <string name="text_activity_closed">Popup closed (because KP2A DB got locked/closed)</string>
+    <string name="text_time_left">Time left:</string>
     <string name="action_field_type">Type</string>
     <string name="action_field_type_enter">Type+Enter</string>
     <string name="action_field_type_tab">Type+Tab</string>
