@@ -59,6 +59,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static boolean smsEnabled;
 	private static String smsText;
 	private static String smsSender;
+	private static int smsRemainingTime;
 
 	public static boolean isRunning;
 	private static long dbClosedTime;		
@@ -71,16 +72,28 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static boolean addDummyKeys;
 	private static int cnt;
 
-	private static long lastCapsLockWarningTime;
-	
+	private static long lastCapsLockWarningTime;	
 
 	private static NotificationManager mNotificationManager;
-	private static NotificationCompat.Builder mBuilder;
+	private static NotificationCompat.Builder mPluginNotificationBuilder;
+	private static NotificationCompat.Builder mSMSNotificationBuilder;
 
 	private static Handler mHandler = new Handler();
 	private Runnable mTimerTask = new Runnable() {
 		public void run() {
-			final long time = System.currentTimeMillis();			
+			final long time = System.currentTimeMillis();
+			//update SMS notification & extend keep alive for service and InputStick connection
+			if (smsRemainingTime > 0) {		
+				extendConnectionTime(1000);
+				extendServiceKeepAliveTime(1000);
+				
+				updateSMSNotification();
+				smsRemainingTime--;
+				if (smsRemainingTime == 0) {
+					cancelSMSNotification();
+				}
+			}
+			
 			//auto disconnect?
 			if (InputStickHID.isConnected()) {																	
 				if ((maxIdlePeriod > 0) && (time > autoDisconnectTime)) {
@@ -183,7 +196,25 @@ public class InputStickService extends Service implements InputStickStateListene
 	            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
 	            smsText = smsMessage.getMessageBody();
 	            smsSender = smsMessage.getDisplayOriginatingAddress();
-	            showSMSNotification(true);
+	            smsRemainingTime = Const.SMS_TIMEOUT_MS / 1000;
+	            //notification:
+	            mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this);
+	            mSMSNotificationBuilder.setContentTitle(getString(R.string.app_name));
+	            mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + smsRemainingTime + "s)"); 
+	            mSMSNotificationBuilder.setSmallIcon(R.drawable.ic_sms);
+		
+				Intent smsIntent = new Intent(InputStickService.this, InputStickService.class);
+				smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
+				smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
+				smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
+				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+				
+			    Intent dismissIntent = new Intent(InputStickService.this, InputStickService.class);
+			    dismissIntent.setAction(Const.SERVICE_DISMISS_SMS); 
+			    mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));					
+		
+			    mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build()); //TODO zamiast tego daj update?
 	        }
 		}
 	};
@@ -385,20 +416,20 @@ public class InputStickService extends Service implements InputStickStateListene
 		//notification:
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				
-		mBuilder = new NotificationCompat.Builder(this);
-		mBuilder.setContentTitle(getString(R.string.app_name));		
-		mBuilder.setContentText(getString(R.string.notification_text)); 
-		mBuilder.setSmallIcon(R.drawable.ic_notification);
-		mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
+		mPluginNotificationBuilder = new NotificationCompat.Builder(this);
+		mPluginNotificationBuilder.setContentTitle(getString(R.string.app_name));		
+		mPluginNotificationBuilder.setContentText(getString(R.string.notification_text)); 
+		mPluginNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
+		mPluginNotificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
 
 		Intent openServiceIntent = new Intent(this, SettingsActivity.class);
-		mBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+		mPluginNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
 		Intent forceStopIntent = new Intent(this, InputStickService.class);
 		forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);
-		mBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+		mPluginNotificationBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 					
-		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());		
+		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());		
 		
 		loadPreference(null);
 		if (smsEnabled) {
@@ -414,7 +445,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 	}
 
-	private void updateNotification() {
+	private void updatePluginNotification() {
 		int resId;
 		int state = InputStickHID.getState();
 		switch (state) {
@@ -433,34 +464,20 @@ public class InputStickService extends Service implements InputStickStateListene
 		}
 		String contentText =  getString(R.string.notification_text) + " (" + getString(resId) + ")";
 		
-		mBuilder.setContentText(contentText);
-		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mBuilder.build());
+		mPluginNotificationBuilder.setContentText(contentText);
+		mNotificationManager.notify(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());
 	}
 	
-	private void showSMSNotification(boolean show) {
-		if (show) {
-			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-			mBuilder.setContentTitle(getString(R.string.app_name));
-			mBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")"); 
-			mBuilder.setSmallIcon(R.drawable.ic_sms);
+	private void updateSMSNotification() {
+		mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + smsRemainingTime + "s)"); 
+		mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
+	}
 	
-			Intent smsIntent = new Intent(this, InputStickService.class);
-			smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
-			smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
-			smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
-			mBuilder.setContentIntent(PendingIntent.getService(this, 0, smsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
-			
-		    Intent dismissIntent = new Intent(this, InputStickService.class);
-		    dismissIntent.setAction(Const.SERVICE_DISMISS_SMS); 
-		    mBuilder.setDeleteIntent(PendingIntent.getService(this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));					
-	
-			mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-			mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mBuilder.build());
-		} else {			
-			smsText = null;
-			smsSender = null;
-			mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
-		}
+	private void cancelSMSNotification() {
+		smsText = null;
+		smsSender = null;
+		smsRemainingTime = 0;
+		mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
 	}
 
 	// if key == null load all preferences; if not, only single preference was changed
@@ -485,7 +502,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					setupSMS();
 				} else {
 					unregisterReceiver(smsReceiver);
-					showSMSNotification(false);
+					cancelSMSNotification();
 				}
 			}
 		}
@@ -521,7 +538,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
 				stopPlugin("manual");
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
-				showSMSNotification(false);				
+				cancelSMSNotification();	
 			}
 			cnt++;
 		}
@@ -540,7 +557,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		unregisterReceiver(kp2aReceiver);
 		if (smsEnabled) {
 			unregisterReceiver(smsReceiver);
-			showSMSNotification(false);
+			cancelSMSNotification();
 		}
 		prefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefsListener);
 		mHandler.removeCallbacksAndMessages(null);
@@ -610,7 +627,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show();
 		}
 		
-		updateNotification();	
+		updatePluginNotification();	
 	}
 
 	private void queueText(String text, TypingParams params, boolean canClearQueue) {
