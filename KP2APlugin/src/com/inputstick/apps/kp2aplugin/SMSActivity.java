@@ -32,7 +32,6 @@ public class SMSActivity extends PluginPopupActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		
 		setContentView(R.layout.activity_sms);
 		
