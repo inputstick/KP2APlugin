@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -61,15 +58,6 @@ public class AllActionsActivity extends Activity {
 	private ArrayList<String> list;
 	private ArrayAdapter<String> listAdapter;
 	private List<ActionId> actionsLUT;
-	
-	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(AllActionsActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
-			finish();
-		}
-	};
 	
 	
 	@Override
@@ -257,19 +245,9 @@ public class AllActionsActivity extends Activity {
 					}
 				}
 			}			
-		});
-		
-		IntentFilter filter;
-		filter = new IntentFilter();
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		registerReceiver(finishReceiver, filter);	
+		});		
 	}
-	
-	@Override
-	protected void onDestroy() {		
-		unregisterReceiver(finishReceiver);
-		super.onDestroy();
-	}	
+
 	
 	private void addAction(String label, ActionId actionId) {
 		listAdapter.add(label);

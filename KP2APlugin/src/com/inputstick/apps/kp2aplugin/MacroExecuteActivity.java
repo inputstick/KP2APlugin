@@ -1,10 +1,6 @@
 package com.inputstick.apps.kp2aplugin;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MacroExecuteActivity extends Activity {
+public class MacroExecuteActivity extends PluginPopupActivity {
 	
 	private static final String INDEX_KEY = "index";
 	
@@ -26,15 +22,6 @@ public class MacroExecuteActivity extends Activity {
 	private Button buttonActionPrev;
 	private Button buttonActionNext;
 	private TextView textViewActionPreview;
-	
-	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(MacroExecuteActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
-			finish();
-		}
-	};
 	
 
 	@Override
@@ -97,18 +84,6 @@ public class MacroExecuteActivity extends Activity {
 			index = savedInstanceState.getInt(INDEX_KEY);
 		}
 		manageUI();		
-		
-		IntentFilter filter;
-		filter = new IntentFilter();
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_SECURE);
-		registerReceiver(finishReceiver, filter);
-	}
-	
-	@Override
-	protected void onDestroy() {		
-		unregisterReceiver(finishReceiver);
-		super.onDestroy();
 	}	
 
 

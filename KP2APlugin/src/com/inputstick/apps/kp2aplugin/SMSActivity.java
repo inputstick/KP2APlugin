@@ -1,10 +1,6 @@
 package com.inputstick.apps.kp2aplugin;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -13,14 +9,12 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
-public class SMSActivity extends Activity {
+public class SMSActivity extends PluginPopupActivity {
 
 	private TextView textViewSMSContent;
 	private TextView textViewSMSSender;
@@ -34,22 +28,11 @@ public class SMSActivity extends Activity {
 	private Button buttonSMSDone;
 	private Button buttonSMSTypeAll;	
 	
-	
-	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(SMSActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
-			finish();
-		}
-	};
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setTheme( android.R.style.Theme_Holo_Dialog);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,  WindowManager.LayoutParams.FLAG_SECURE);
 		
 		setContentView(R.layout.activity_sms);
 		
@@ -148,17 +131,6 @@ public class SMSActivity extends Activity {
 		textViewSMSContent.setMovementMethod(LinkMovementMethod.getInstance()); 
 		textViewSMSContent.setText(spannableText);		
 		textViewSMSSender.setText(sender);
-		
-		IntentFilter filter;
-		filter = new IntentFilter();
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		registerReceiver(finishReceiver, filter);	
-	}
-	
-	@Override
-	protected void onDestroy() {	      
-	      unregisterReceiver(finishReceiver);
-	      super.onDestroy();
 	}	
 	
 }

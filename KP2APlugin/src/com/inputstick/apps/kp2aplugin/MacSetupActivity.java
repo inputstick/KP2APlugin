@@ -1,10 +1,5 @@
 package com.inputstick.apps.kp2aplugin;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,24 +14,13 @@ import com.inputstick.api.basic.InputStickHID;
 import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
 
-public class MacSetupActivity extends Activity {
+public class MacSetupActivity extends PluginPopupActivity {
 	
 	private boolean nonUS;
-	
-	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(MacSetupActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
-			finish();
-		}
-	};
-
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		super.setTheme( android.R.style.Theme_Holo_Dialog);
 		setContentView(R.layout.activity_mac_setup);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -94,18 +78,6 @@ public class MacSetupActivity extends Activity {
 			buttonNextToShiftLeft.setText(String.valueOf(primaryLayout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_Z), false, false, false)));
 		}
 		buttonNextToShiftRight.setText(String.valueOf(primaryLayout.getChar(KeyboardLayout.hidToScanCode(HIDKeycodes.KEY_SLASH), false, false, false)));
-		
-		IntentFilter filter;
-		filter = new IntentFilter();
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		registerReceiver(finishReceiver, filter);
 	}
-	
-	@Override
-	protected void onDestroy() {		
-		unregisterReceiver(finishReceiver);
-		super.onDestroy();
-	}	
-
 
 }

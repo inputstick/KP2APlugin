@@ -1,23 +1,17 @@
 package com.inputstick.apps.kp2aplugin;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
-public class MaskedPasswordActivity extends Activity {
+public class MaskedPasswordActivity extends PluginPopupActivity {
 	
 	private static final String OFFSET_KEY = "offset";
 	private static final String CLICKED_KEY = "clicked";
@@ -62,23 +56,12 @@ public class MaskedPasswordActivity extends Activity {
 	private Button buttonMaskedPassRight;
 	private Button buttonMaskedPassEnter;
 	
-	private Button buttonMaskedClose;
-	
-	private final BroadcastReceiver finishReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(MaskedPasswordActivity.this, R.string.text_activity_closed, Toast.LENGTH_SHORT).show(); 
-			finish();
-		}
-	};
-	
+	private Button buttonMaskedClose;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.setSecure();
 		super.onCreate(savedInstanceState);		
-		super.setTheme( android.R.style.Theme_Holo_Dialog);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,  WindowManager.LayoutParams.FLAG_SECURE);
 
 		setContentView(R.layout.activity_masked_password);
 		
@@ -167,12 +150,6 @@ public class MaskedPasswordActivity extends Activity {
 			offset = savedInstanceState.getInt(OFFSET_KEY);	
 			wasClicked = savedInstanceState.getBooleanArray(CLICKED_KEY);		
 		}
-		
-		IntentFilter filter;
-		filter = new IntentFilter();
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_ALL);
-		filter.addAction(Const.BROADCAST_FORCE_FINISH_SECURE);
-		registerReceiver(finishReceiver, filter);	
 	}
 	
 	@Override
@@ -182,17 +159,12 @@ public class MaskedPasswordActivity extends Activity {
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
+	
 	@Override
 	protected void onResume() {
 		super.onResume();		
 		refreshButtons();
 	}
-	
-	@Override
-	protected void onDestroy() {		
-		unregisterReceiver(finishReceiver);
-		super.onDestroy();
-	}	
 	
 	private void drawButton(int i) {
 		Button b = buttons[i];
