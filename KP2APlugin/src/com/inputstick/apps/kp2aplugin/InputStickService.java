@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.AutoScrollHelper;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -45,7 +44,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			;
 	private static final long CAPSLOCK_WARNING_TIMEOUT = 10000;
 	
-	private static final int FAILSAFE_PERIOD = 10000;	//TODO 10min?
+	private static final int FAILSAFE_PERIOD = 10 * 60 * 1000;	//TODO 10min?
 	
 	private static final int ACTION_HID = 0;
 	private static final int ACTION_KP2A = 1;
@@ -158,13 +157,12 @@ public class InputStickService extends Service implements InputStickStateListene
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			Log.d(_TAG, "received action " + action);
-			if (action != null) {
-				dbClosedTime = 0;
+			if (action != null) {				
 				if (action.equals(Strings.ACTION_OPEN_ENTRY)) {
+					dbClosedTime = 0;
 					onEntryOpened();
-				} else if (action.equals(Strings.ACTION_CLOSE_ENTRY_VIEW)) {
-					//
 				} else if (action.equals(Strings.ACTION_ENTRY_ACTION_SELECTED)) {
+					dbClosedTime = 0;
 					actionSelectedAction(intent);
 				} else if (action.equals(Strings.ACTION_LOCK_DATABASE) || action.equals(Strings.ACTION_CLOSE_DATABASE)) {
 					dbClosedTime = System.currentTimeMillis();
@@ -373,7 +371,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		filter = new IntentFilter();
 		filter.addAction(Strings.ACTION_ENTRY_ACTION_SELECTED);
 		filter.addAction(Strings.ACTION_OPEN_ENTRY);
-		filter.addAction(Strings.ACTION_CLOSE_ENTRY_VIEW);
+		//filter.addAction(Strings.ACTION_CLOSE_ENTRY_VIEW); interferes with dbClosedTime; is called after ACTION_LOCK_DATABASE
 		filter.addAction(Strings.ACTION_CLOSE_DATABASE);
 		filter.addAction(Strings.ACTION_LOCK_DATABASE);
 		registerReceiver(kp2aReceiver, filter);		
