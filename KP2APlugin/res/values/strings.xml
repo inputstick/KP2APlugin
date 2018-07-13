@@ -14,7 +14,6 @@
     <string name="title_activity_all_actions">Select action:</string>
     <string name="title_activity_select_app">Select app:</string>
     <string name="text_please_wait">Please wait</string>
-    <string name="text_locked">Locked after 3 minutes of inactivity. Open again from Keepass2Android application.</string>
     <string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator is NOT installed!</string>
     <string name="text_custom_app_not_found">InputStick plugin: application NOT found!</string>
     <string name="text_custom_app_not_specified">InputStick plugin: application to run NOT specified (fix in plugin settings)!</string>

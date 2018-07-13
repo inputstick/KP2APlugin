@@ -6,14 +6,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MacroExecuteActivity extends PluginPopupActivity {
 	
 	private static final String INDEX_KEY = "index";
 	
-	private long lastActionTime;
-	private long maxTime;	
 	private int index;
 	
 	private EntryMacro macro;
@@ -33,7 +30,6 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 		Intent intent = getIntent();		
 		final TypingParams params = new TypingParams(intent);
 		final EntryData entryData = new EntryData(intent);
-		maxTime = intent.getLongExtra(Const.EXTRA_MAX_TIME, 0);
 		final String macroData = intent.getStringExtra(Const.EXTRA_MACRO_DATA);
 		
 		if (macroData == null) {
@@ -41,8 +37,6 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 		} else {
 			macro = new EntryMacro(macroData, entryData, params, false);
 		}
-		
-		lastActionTime = System.currentTimeMillis();
 		
 		textViewActionPreview = (TextView)findViewById(R.id.textViewActionPreview);
 		
@@ -52,10 +46,8 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 				if (index >= macro.getActionsCount()) {
 					finish();
 				} else {
-					if (checkTime()) {
-						macro.executeActionAtIndex(MacroExecuteActivity.this, index);  
-						goToNext();
-					}
+					macro.executeActionAtIndex(MacroExecuteActivity.this, index);  
+					goToNext();
 				}
 			}
 		});
@@ -63,18 +55,14 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 		buttonActionPrev = (Button)findViewById(R.id.buttonActionPrev);
 		buttonActionPrev.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				if (checkTime()) {
-					goToPrev();
-				}
+				goToPrev();
 			}
 		});	
 		
 		buttonActionNext = (Button)findViewById(R.id.buttonActionNext);
 		buttonActionNext.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
-				if (checkTime()) {
-					goToNext();
-				}
+				goToNext();
 			}
 		});	
 
@@ -122,18 +110,6 @@ public class MacroExecuteActivity extends PluginPopupActivity {
 			buttonActionPrev.setEnabled(false);
 		} else {
 			buttonActionPrev.setEnabled(true);
-		}
-	}
-	
-	private boolean checkTime() {
-		long now = System.currentTimeMillis();
-		if (now > maxTime) {
-			Toast.makeText(this, R.string.text_locked, Toast.LENGTH_LONG).show();
-			return false;
-		} else {
-			maxTime += (now - lastActionTime);
-			lastActionTime = now;
-			return true;
 		}
 	}
 	

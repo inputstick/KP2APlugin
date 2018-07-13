@@ -13,8 +13,7 @@
     <string name="title_activity_init">Plugin Init</string>
 	<string name="title_activity_all_actions">Wybierz akcję:</string>
 	<string name="title_activity_select_app">Wybierz aplikację:</string>	
-    <string name="text_please_wait">Proszę czekać</string>
-	<string name="text_locked">Zablokowano po 3 minutach bezczynności. Otwórz ponownie z aplikacji Keepass2Android.</string>  
+    <string name="text_please_wait">Proszę czekać</string>  
 	<string name="text_authenticator_app_not_found">InputStick plugin: Google Authenticator NIE jest zainstalowany!</string>
 	<string name="text_custom_app_not_found">InputStick plugin: NIE odnaleziono aplikacji!</string>
     <string name="text_custom_app_not_specified">InputStick plugin: NIE wybrano aplikacji do uruchomienia (napraw w ustawieniach)!</string>

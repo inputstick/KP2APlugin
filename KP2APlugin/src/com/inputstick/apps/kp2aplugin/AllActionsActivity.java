@@ -3,7 +3,6 @@ package com.inputstick.apps.kp2aplugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class AllActionsActivity extends PluginPopupActivity {
 	
@@ -45,11 +43,7 @@ public class AllActionsActivity extends PluginPopupActivity {
 		MACRO_RUN_SECONDARY,
 		TEMPLATE_RUN_SECONDARY,
 		CLIPBOARD_SECONDARY
-	}	
-	
-	
-	private long lastActionTime;
-	private long maxTime;
+	}		
 
 	private boolean isSecondaryLayoutEnabled;
 	private String primaryLayoutCode;
@@ -73,8 +67,6 @@ public class AllActionsActivity extends PluginPopupActivity {
 		
 		Intent intent = getIntent();
 		final EntryData entryData = new EntryData(intent);
-		maxTime = intent.getLongExtra(Const.EXTRA_MAX_TIME, 0);
-		lastActionTime = System.currentTimeMillis();
 
 		ListView listViewActions = (ListView) findViewById(R.id.listViewActions);
 		list = new ArrayList<String>();
@@ -122,127 +114,120 @@ public class AllActionsActivity extends PluginPopupActivity {
 		listViewActions.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int pos, long arg3) {
-				long now = System.currentTimeMillis();
-				if (now > maxTime) {
-					Toast.makeText(AllActionsActivity.this, R.string.text_locked, Toast.LENGTH_LONG).show();
-				} else {
-					maxTime += (now - lastActionTime);
-					lastActionTime = now;
-					boolean finish = true;
-					
-					Intent serviceIntent = new Intent(AllActionsActivity.this, InputStickService.class);
-					serviceIntent.setAction(Const.SERVICE_ENTRY_ACTION); 
-					
-					ActionId actionId = actionsLUT.get(pos);
-					
-					
-					
-					switch (actionId) {
-						//general:
-						case OPEN_SETTINGS:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SETTINGS);
-							break;
-						case CONNECT:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CONNECT);
-							break;
-						case DISCONNECT:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_DISCONNECT);   
-							break;		
-						case REMOTE:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_REMOTE);   
-							break;								
-						case MAC_SETUP:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MAC_SETUP);
-							break;		
-						case TYPE_TAB:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TAB);   
-							finish = false;
-							break;		
-						case TYPE_ENTER:							
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_ENTER);
-							finish = false;
-							break;
-						case MACRO_ADD_EDIT:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_ADDEDIT);  
-							break;
-						case TEMPLATE_MANAGE:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_MANAGE);
-							break;							
-						//quick shortcuts
-						case QUICK_SHORTCUT_1:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_1);
-							finish = false;
-							break;
-						case QUICK_SHORTCUT_2:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_2);
-							finish = false;
-							break;
-						case QUICK_SHORTCUT_3:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_3);
-							finish = false;
-							break;							
-						//entry, primary layout
-						case USER_TAB_PASS_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
-							break;				
-						case USER_TAB_PASS_ENTER_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
-							break;	
-						case MASKED_PASS_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
-							break;		
-						case MACRO_RUN_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
-							break;	
-						case TEMPLATE_RUN_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);	
-							break;															
-						case CLIPBOARD_PRIMARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
-							break;
-						//entry, secondary layout							
-						case USER_TAB_PASS_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;				
-						case USER_TAB_PASS_ENTER_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;	
-						case MASKED_PASS_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;		
-						case MACRO_RUN_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;
-						case TEMPLATE_RUN_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;								
-						case CLIPBOARD_SECONDARY:
-							serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
-							serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
-							break;			
-						default:
-							serviceIntent = null;							
-					}
-					
-					if (serviceIntent != null) {
-						serviceIntent.putExtras(entryData.getBundle());
-						AllActionsActivity.this.startService(serviceIntent);
-					}
-					
-					if (finish){
-						finish();
-					}
+				boolean finish = true;
+				
+				Intent serviceIntent = new Intent(AllActionsActivity.this, InputStickService.class);
+				serviceIntent.setAction(Const.SERVICE_ENTRY_ACTION); 
+				
+				ActionId actionId = actionsLUT.get(pos);
+				
+				
+				
+				switch (actionId) {
+					//general:
+					case OPEN_SETTINGS:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SETTINGS);
+						break;
+					case CONNECT:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CONNECT);
+						break;
+					case DISCONNECT:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_DISCONNECT);   
+						break;		
+					case REMOTE:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_REMOTE);   
+						break;								
+					case MAC_SETUP:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MAC_SETUP);
+						break;		
+					case TYPE_TAB:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TAB);   
+						finish = false;
+						break;		
+					case TYPE_ENTER:							
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_ENTER);
+						finish = false;
+						break;
+					case MACRO_ADD_EDIT:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_ADDEDIT);  
+						break;
+					case TEMPLATE_MANAGE:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_MANAGE);
+						break;							
+					//quick shortcuts
+					case QUICK_SHORTCUT_1:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_1);
+						finish = false;
+						break;
+					case QUICK_SHORTCUT_2:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_2);
+						finish = false;
+						break;
+					case QUICK_SHORTCUT_3:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_QUICK_SHORTCUT_3);
+						finish = false;
+						break;							
+					//entry, primary layout
+					case USER_TAB_PASS_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
+						break;				
+					case USER_TAB_PASS_ENTER_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
+						break;	
+					case MASKED_PASS_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
+						break;		
+					case MACRO_RUN_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);		
+						break;	
+					case TEMPLATE_RUN_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);	
+						break;															
+					case CLIPBOARD_PRIMARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, primaryLayoutCode);
+						break;
+					//entry, secondary layout							
+					case USER_TAB_PASS_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;				
+					case USER_TAB_PASS_ENTER_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_USER_PASS_ENTER);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;	
+					case MASKED_PASS_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MASKED_PASSWORD);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;		
+					case MACRO_RUN_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_MACRO_RUN);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;
+					case TEMPLATE_RUN_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_TEMPLATE_RUN);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;								
+					case CLIPBOARD_SECONDARY:
+						serviceIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
+						serviceIntent.putExtra(Const.EXTRA_LAYOUT, secondaryLayoutCode);
+						break;			
+					default:
+						serviceIntent = null;							
+				}
+				
+				if (serviceIntent != null) {
+					serviceIntent.putExtras(entryData.getBundle());
+					AllActionsActivity.this.startService(serviceIntent);
+				}
+				
+				if (finish){
+					finish();
 				}
 			}			
 		});		

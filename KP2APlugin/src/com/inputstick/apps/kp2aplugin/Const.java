@@ -27,11 +27,7 @@ public class Const {
 	public static final int AUTO_CONNECT_SMART = 2;
 	
 	public static final int AUTO_DISCONNECT_IDLE_LOCKED = 0;
-	public static final int AUTO_DISCONNECT_CLOSED_IDLE_LOCKED = 1;
-	
-	
-	public static final int MASKED_PASSWORD_TIMEOUT_MS = 120000;  //2min 	
-	public static final int ACTIVITY_LOCK_TIMEOUT_MS = 180000; //3min, 
+	public static final int AUTO_DISCONNECT_CLOSED_IDLE_LOCKED = 1;	
 	
 	//service
 	public static final int SERVICE_CAPSLOCK_WARNING_TIMEOUT = 10 * 1000;	
@@ -77,9 +73,7 @@ public class Const {
 	public static final String EXTRA_TEMPLATE_ID = "template_id";
 	public static final String EXTRA_TEMPLATE_MANAGE = "template_manage";					
 	
-	public static final String EXTRA_MAX_TIME = "max_time";	
-	public static final String EXTRA_LAUNCHED_FROM_KP2A = "kp2a_launch";
-	
+	public static final String EXTRA_LAUNCHED_FROM_KP2A = "kp2a_launch";	
 		
 	public static final String EXTRA_TYPE_SLOW = "type_slow";
 	public static final String EXTRA_TYPE_MASKED = "type_masked";

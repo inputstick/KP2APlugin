@@ -26,7 +26,6 @@ public abstract class ActionHelper {
 	public static void startShowAllActivityAction(Context ctx, EntryData entryData) {
 		Intent i = new Intent(ctx, AllActionsActivity.class);		
 		i.putExtras(entryData.getBundle());
-		i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);		
 	}
@@ -60,7 +59,6 @@ public abstract class ActionHelper {
 		Intent i = new Intent(ctx, SelectTemplateActivity.class);	
 		i.putExtras(params.getBundle());
 		i.putExtras(entryData.getBundle());
-		i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 		i.putExtra(Const.EXTRA_TEMPLATE_MANAGE, manage);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);				
@@ -135,7 +133,6 @@ public abstract class ActionHelper {
 				i.putExtras(params.getBundle());
 				i.putExtras(entryData.getBundle());
 				i.putExtra(Const.EXTRA_MACRO_DATA, macroData);
-				i.putExtra(Const.EXTRA_MAX_TIME, System.currentTimeMillis() + Const.ACTIVITY_LOCK_TIMEOUT_MS);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				ctx.getApplicationContext().startActivity(i);	
 			}			
