@@ -23,7 +23,7 @@
     <string name="text_auto_connect_reenabled">InputStick plugin: Auto-łączenie wł</string>
 	<string name="text_clipboard_disabled">InputStick plugin: Pisanie ze schowka zostało wyłączone</string>  
 	<string name="text_clipboard_notification_info">Pisanie ze schowka aktywne</string>
-	<string name="text_clipboard_copy_now">InputStick plugin: Skopiuj kod do schowka (pozostało 30 sekund)</string>  		
+	<string name="text_clipboard_copy_now">InputStick plugin: Skopiuj tekst do schowka (pozostała 1min)</string>  		
     <string name="text_clipboard_too_long">Tekst zbyt długi. Zobacz opcję: Sprawdzaj długość w ustawieniach</string>	
 	<string name="text_capslock_warning">Uwaga: CapsLock JEST WŁĄCZONY!</string>
 	<string name="text_missing_utility_app">Musisz pobrać aplikację InputStickUtility</string>
