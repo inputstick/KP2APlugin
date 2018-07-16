@@ -284,13 +284,15 @@ public class InputStickService extends Service implements InputStickStateListene
 	        	   if ((text.length() > Const.CLIPBOARD_MAX_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
 	        		   Toast.makeText(InputStickService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
 	        	   } else {	  
-	        			queueText(text, mClipboardTypingParams, true);
-	        			queueDelay(15, false);
-	        			 //do not clear queue - this would remove previous item (typing text form clipboard)!
-	        			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, mClipboardTypingParams, false);
-		        	   if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
-		        		   stopClipboardMonitoring(true);
-		        	   }
+						queueText(text, mClipboardTypingParams, true);
+						queueDelay(15, false);
+						if (PreferencesHelper.isClipboardAutoEnter(prefs)) {
+							// do not clear queue - this would remove previous item (typing text form clipboard)!
+							queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, mClipboardTypingParams, false);
+						}
+						if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
+							stopClipboardMonitoring(true);
+						}
 	        	   }
 	           }
 	    	}
