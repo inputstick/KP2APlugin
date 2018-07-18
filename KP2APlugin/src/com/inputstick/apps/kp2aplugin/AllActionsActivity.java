@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class AllActionsActivity extends PluginPopupActivity {
+public class AllActionsActivity extends PluginDialogActivity {
 	
 	public enum ActionId {
 		OPEN_SETTINGS,

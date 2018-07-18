@@ -14,7 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SelectTemplateActivity extends PluginPopupActivity {
+public class SelectTemplateActivity extends PluginDialogActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

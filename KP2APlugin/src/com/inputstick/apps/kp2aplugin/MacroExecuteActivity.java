@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MacroExecuteActivity extends PluginPopupActivity {
+public class MacroExecuteActivity extends PluginDialogActivity {
 	
 	private static final String INDEX_KEY = "index";
 	

@@ -14,7 +14,7 @@ import com.inputstick.api.basic.InputStickHID;
 import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
 
-public class MacSetupActivity extends PluginPopupActivity {
+public class MacSetupActivity extends PluginDialogActivity {
 	
 	private boolean nonUS;
 	

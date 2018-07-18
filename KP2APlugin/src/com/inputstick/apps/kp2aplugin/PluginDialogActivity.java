@@ -10,10 +10,12 @@ import android.os.Handler;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class PluginPopupActivity extends Activity {
+public class PluginDialogActivity extends Activity {
 	
 	private static final int TIMER_INTERVAL_MS = 1000;
-		
+	private static final String REMAINING_TIME_KEY = "kp2a_dialog_remaining_time";
+	private static final String TOTAL_TIME_KEY = "kp2a_dialog_total_time";
+	
 	private boolean mProtectDisplayedContent;
 	private boolean mHasEntryData;
 	
@@ -51,7 +53,7 @@ public class PluginPopupActivity extends Activity {
 			final String action = intent.getAction();
 			if (action != null) {				
 				if (action.equals(Const.BROADCAST_FORCE_FINISH_SECURE)) {
-					Toast.makeText(PluginPopupActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
+					Toast.makeText(PluginDialogActivity.this, R.string.text_activity_closed, Toast.LENGTH_LONG).show(); 
 				}
 			}			
 			finish();
@@ -84,7 +86,12 @@ public class PluginPopupActivity extends Activity {
 				mRemainingTime = Const.POPUP_REMAINING_TIME_INITIAL_VALUE;
 				updateTitle();
 			}
-		} 
+		} else {
+			mTotalTime = savedInstanceState.getInt(TOTAL_TIME_KEY);
+			if (mCountdownEnabled) {
+				mRemainingTime = savedInstanceState.getInt(REMAINING_TIME_KEY);
+			}
+		}
 		
 		IntentFilter filter;
 		filter = new IntentFilter();
@@ -96,6 +103,13 @@ public class PluginPopupActivity extends Activity {
 		
 		
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putInt(REMAINING_TIME_KEY, mRemainingTime);
+	    savedInstanceState.putInt(TOTAL_TIME_KEY, mTotalTime);	    
+	    super.onSaveInstanceState(savedInstanceState);
+	}	
 
 	@Override
 	protected void onResume() {

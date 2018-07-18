@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
-public class SMSActivity extends PluginPopupActivity {
+public class SMSActivity extends PluginDialogActivity {
 
 	private TextView textViewSMSContent;
 	private TextView textViewSMSSender;

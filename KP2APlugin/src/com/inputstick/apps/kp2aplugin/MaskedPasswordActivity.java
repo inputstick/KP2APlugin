@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
-public class MaskedPasswordActivity extends PluginPopupActivity {
+public class MaskedPasswordActivity extends PluginDialogActivity {
 	
 	private static final String OFFSET_KEY = "offset";
 	private static final String CLICKED_KEY = "clicked";
