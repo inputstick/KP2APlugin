@@ -120,7 +120,6 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (InputStickHID.isConnected()) {																	
 				if ((maxIdlePeriod > 0) && (time > autoDisconnectTime)) {
 					Log.d(_TAG, "disconnect (inactivity)");
-					Toast.makeText(InputStickService.this, "auto-DISC", Toast.LENGTH_SHORT).show(); //TODO remove
 					InputStickHID.disconnect();
 				}				
 			}			
@@ -383,10 +382,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		if (key == null || Const.PREF_MAX_IDLE_PERIOD.equals(key)) {
 			maxIdlePeriod = PreferencesHelper.getMaxIdlePeriod(prefs);
 		}
-		
+				
 		if (key == null || Const.PREF_SMS.equals(key)) {
-			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);
-			if (key != null) {
+			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);		
+			//if user changed preferences
+			if (key != null) { 
 				if (smsEnabled) {
 					startSMSMonitoring();
 				} else {
@@ -394,7 +394,6 @@ public class InputStickService extends Service implements InputStickStateListene
 				}
 			}
 		}
-		
 	}
 
 	
@@ -670,7 +669,6 @@ public class InputStickService extends Service implements InputStickStateListene
 	
 	
 	private void stopPlugin(String s) {
-		Toast.makeText(InputStickService.this, "STOP: " + s, Toast.LENGTH_LONG).show(); //TODO remove
 		sendForceFinishBroadcast(true);
 		stopForeground(true);
 		stopSelf();
