@@ -72,7 +72,7 @@
 	<string name="clipboard_auto_enter_summary_off">Nic nie rób po wpisaniu tekstu ze schowka</string>
 	<string name="clipboard_auto_disable_title">Deaktywuj po wpisywaniu</string>
 	<string name="clipboard_auto_disable_summary_on">Deaktywuj pisanie ze schowka po pierwszym wpisaniu tekstu</string>
-	<string name="clipboard_auto_disable_summary_off">Opcja zawsze aktywna przez 30 sekund od uruchomienia</string>
+	<string name="clipboard_auto_disable_summary_off">Pisanie ze schowka będzie aktywne aż do upłynięcia limitu czasu</string>
 	<string name="clipboard_check_length_title">Sprawdzaj długość</string>
 	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
 	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>

@@ -23,7 +23,7 @@
     <string name="text_auto_connect_reenabled">InputStick plugin: Auto-connect re-enabled</string>
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
     <string name="text_clipboard_notification_info">Clipboard typing active</string>
-    <string name="text_clipboard_copy_now">InputStick plugin: Copy text to clipboard (1min remaining)</string>
+    <string name="text_clipboard_copy_now">InputStick plugin: Copy text to clipboard (60s remaining)</string>
     <string name="text_clipboard_too_long">Text is too long. See Check Length option in settings</string>
     <string name="text_capslock_warning">Warning: CapsLock IS ON!</string>
     <string name="text_missing_utility_app">You need to download InputStickUtility app</string>

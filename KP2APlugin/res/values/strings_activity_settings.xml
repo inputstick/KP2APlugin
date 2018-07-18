@@ -72,7 +72,7 @@
 	<string name="clipboard_auto_enter_summary_off">Do nothing after typing</string>
 	<string name="clipboard_auto_disable_title">Disable after typing</string>
 	<string name="clipboard_auto_disable_summary_on">Disable clipboard typing after first item is typed</string>
-	<string name="clipboard_auto_disable_summary_off">Keep active for 30 seconds since activation</string>	
+	<string name="clipboard_auto_disable_summary_off">Clipboard typing will be active until timeout</string>	
 	<string name="clipboard_check_length_title">Check length</string>
 	<string name="clipboard_check_length_summary_on">Do not type if text in clipboard is longer than 64 characters</string>
 	<string name="clipboard_check_length_summary_off">Always type, even long text</string>	
