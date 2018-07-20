@@ -57,6 +57,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	
 	//SMS:
 	private static boolean smsEnabled;
+	private static boolean smsReceiverRegistered;
 	private static String smsText;
 	private static String smsSender;
 	private static int smsRemainingTime;
@@ -249,11 +250,18 @@ public class InputStickService extends Service implements InputStickStateListene
 			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
 			intentFilter.setPriority(100);
 			registerReceiver(smsReceiver, intentFilter);
+			smsReceiverRegistered = true;
 		}
 	}
 	
 	private void stopSMSMonitoring() {
-		unregisterReceiver(smsReceiver); 
+		if (smsReceiverRegistered) {
+			try {
+			unregisterReceiver(smsReceiver);
+			smsReceiverRegistered = false;
+			} catch (Exception e) {				
+			}
+		}
 		clearSMS();
 	}
 	
