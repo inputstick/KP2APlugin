@@ -99,7 +99,7 @@ public class SMSActivity extends PluginDialogActivity {
 		boolean markNext = false;
 		int length;
 		int pos = 0;
-		String[] splitted = message.split(" ");
+		String[] splitted = message.split("[ \n\t]");
 		
 		for (String s : splitted) {
 			length = s.length();
