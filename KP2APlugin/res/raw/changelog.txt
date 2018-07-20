@@ -23,10 +23,10 @@
 $ 1.30
   % Version 1.30                 
   	_ <a href="http://blog.inputstick.com/2018/07/kp2a-plugin-v130.html">(More info)</a>  
-  	* <b>Pop-ups will now auto-close when KP2A database is closed/locked.</b> See Keepass2Android → Settings → Application → Security → Application timeout
-  	* <b>added option to type text from SMS.</b> This must first be enable in Settings, SMS must be received when the plugin is active  	 
-  	* removed timeout from Masked Password pop-up (since it will auto-close now)  	  	  	  	
-  	* plugin notification is now always displayed, removed option that allowed to disable this
+  	* modified plugin behavior (open URL for more info)
+  	* added Type from SMS dialog (must be first enabled in Settings, SMS must be received when the plugin is active)
+  	* plugin notification is now always displayed
+  	* bug fixes, security improvements and minor adjustments
 $ 1.20
   % Version 1.20                 
   	_ <a href="http://blog.inputstick.com/2018/01/kp2a-plugin-v120.html">(More info)</a>  
