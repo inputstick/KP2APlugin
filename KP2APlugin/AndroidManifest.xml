@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.inputstick.apps.kp2aplugin"
-    android:versionCode="17"
-    android:versionName="1.30" >
+    android:versionCode="18"
+    android:versionName="1.31" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
 
+	<uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />    
+    
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 

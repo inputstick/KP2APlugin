@@ -3,7 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 
 public class Const {
 	
-	public static final String SKIP_CHANGELOG_APP_VERSION = "1.11";
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.31";
 	
 	public static final int IC = R.drawable.ic_launcher;
 	
@@ -263,5 +263,8 @@ public class Const {
 	
 	public static final String PREF_SMS = "sms";
 	public static final boolean PREF_SMS_VALUE = false;
+	
+	public static final String PREF_SMS_INFO = "sms_info";
+	
 	
 }

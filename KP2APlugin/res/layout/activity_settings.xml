@@ -101,6 +101,7 @@
     <PreferenceCategory android:title="@string/sms_settings_title" >
         
         <Preference 
+            android:key="sms_info"
             android:summary="@string/section_sms_info"
             android:selectable="false" >  
         </Preference>     

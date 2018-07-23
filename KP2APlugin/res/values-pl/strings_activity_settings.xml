@@ -81,6 +81,7 @@
 	<string name="sms_title">Odczytuj SMSy</string>	
 	<string name="sms_summary_on">Włączone</string>	
 	<string name="sms_summary_off">Wyłączone</string>			              
+	<string name="sms_not_supported">Odbieranie SMS NIE jest obsługiwane poprzez to urządzenie</string>
 	
 	<string name="display_inputstick_text_title">Wyświetlaj \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Pokaż nazwę akcji + (IS), przykład: Wpisz (IS)</string>           

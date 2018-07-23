@@ -81,6 +81,7 @@
 	<string name="sms_title">Listen for incoming SMS</string>	
 	<string name="sms_summary_on">Enabled</string>	
 	<string name="sms_summary_off">Disabled</string>
+	<string name="sms_not_supported">Receiving SMS is NOT supported by this device</string>
 
 	<string name="display_inputstick_text_title">Display \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>           

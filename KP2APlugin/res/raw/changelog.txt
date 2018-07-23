@@ -20,6 +20,9 @@
   </head>
   <body>
   
+$ 1.31
+  % Version 1.31  	  
+  	* restored compatibility with devices that do not support telephony feature (SMS) 
 $ 1.30
   % Version 1.30                 
   	_ <a href="http://blog.inputstick.com/2018/07/kp2a-plugin-v130.html">(More info)</a>  

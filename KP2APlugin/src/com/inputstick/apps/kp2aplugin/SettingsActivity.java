@@ -146,7 +146,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 	
 	private void setupSimplePreferencesScreen() {
-		Preference pref;	
+		Preference pref;			
+		PackageManager mgr = getPackageManager();
 		
 		ListPreference listPref;
 		listPref = (ListPreference)findPreference(Const.PREF_PRIMARY_LAYOUT);
@@ -237,7 +238,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefSecondaryKbdLayout = findPreference(Const.PREF_SECONDARY_LAYOUT);
 		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);	
 		
-		//SMS
+		//SMS		
 		prefSMS = (CheckBoxPreference)findPreference(Const.PREF_SMS);	
 		//set value only if permission is granted
 		prefSMS.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -253,6 +254,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         		return true;
 			}
         });
+		//disable if SMS is not supported
+		if ( !mgr.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+			prefSMS.setEnabled(false);
+			pref = findPreference(Const.PREF_SMS_INFO);
+			pref.setSummary(R.string.sms_not_supported);	
+		}			
+	
 		
 		//clipboard:
 		prefLaunchAuthenticator = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR);
