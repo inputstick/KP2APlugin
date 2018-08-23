@@ -20,6 +20,9 @@
   </head>
   <body>
   
+$ 1.32
+  % Version 1.32  	  
+  	* renamed current Czech keyboard layout to Czech Programmers, added Czech and Czech Linux layouts    
 $ 1.31
   % Version 1.31  	  
   	* restored compatibility with devices that do not support telephony feature (SMS) 
