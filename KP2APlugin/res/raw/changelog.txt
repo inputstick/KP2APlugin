@@ -20,6 +20,11 @@
   </head>
   <body>
   
+$ 1.33
+  % Version 1.33  	 
+    * support for InputStick v1.00 beta firmware update
+    * uses latest InputStick API
+  	* the app is no longer fully compatible with older InputStick firmware versions (before v0.99)    
 $ 1.32
   % Version 1.32  	  
   	* renamed current Czech keyboard layout to Czech Programmers, added Czech and Czech Linux layouts    
