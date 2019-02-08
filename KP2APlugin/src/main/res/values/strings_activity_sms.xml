@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_sms">Type from SMS</string>
+
+    <string name="sms_type_all">Type all</string>
+    <string name="sms_done">Done</string>
+    <string name="sms_sender">From:</string>
+    <string name="sms_content">Message:</string>
+    <string name="sms_info">Click marked text to type it</string>
+
+</resources>

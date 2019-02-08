@@ -1,0 +1,136 @@
+﻿<html>
+  <head>
+    <style type='text/css'>
+      a            { color:#000000 }
+      div.title    { 
+          color:287AA9; 
+          font-size:1.2em; 
+          font-weight:bold; 
+          margin-top:1em; 
+          margin-bottom:0.5em; 
+          text-align:center }
+      div.subtitle { 
+          color:287AA9; 
+          font-size:0.8em; 
+          margin-bottom:1em; 
+          text-align:center }
+      div.freetext { color:#000000 }
+      div.list     { color:#000000 }
+    </style>
+  </head>
+  <body>
+$ 1.35
+  % Version 1.35
+  	_ <a href="http://blog.inputstick.com/2019/01/kp2a-plugin-v135.html">(More info)</a>
+  	* removed Type from SMS option to comply with Google Play requirements. Click "More info" above for details
+$ 1.34
+  % Version 1.34
+  	* optimized for Android O
+    * critical bug fixes
+$ 1.33
+  % Version 1.33  	 
+    * support for InputStick v1.00 beta firmware update
+    * uses latest InputStick API
+  	* the app is no longer fully compatible with older InputStick firmware versions (before v0.99)    
+$ 1.32
+  % Version 1.32  	  
+  	* renamed current Czech keyboard layout to Czech Programmers, added Czech and Czech Linux layouts    
+$ 1.31
+  % Version 1.31  	  
+  	* restored compatibility with devices that do not support telephony feature (SMS) 
+$ 1.30
+  % Version 1.30                 
+  	_ <a href="http://blog.inputstick.com/2018/07/kp2a-plugin-v130.html">(More info)</a>  
+  	* modified plugin behavior (open URL for more info)
+  	* added Type from SMS dialog (must be first enabled in Settings, SMS must be received when the plugin is active)
+  	* plugin notification is now always displayed
+  	* bug fixes, security improvements and minor adjustments
+$ 1.20
+  % Version 1.20                 
+  	_ <a href="http://blog.inputstick.com/2018/01/kp2a-plugin-v120.html">(More info)</a>  
+  	* added remote controller screen (access from Entry menu or plugin Settings)
+  	* fixed macro delay bug
+$ 1.13
+  % Version 1.13  
+  	_ <a href="http://blog.inputstick.com/2017/11/kp2a-plugin-v113.html">(More info)</a>  
+  	* added masked password option for field actions (password field only, enable in Settings)
+  	* added Close button for masked password screen
+  	* it is now possible to add keyboard shortcuts to entry menu
+  	* added missing key (empty key, numlock section keys) definitions (macros/templates)
+  	* moved ChangeLog to About app section
+$ 1.12
+  % Version 1.12
+  	_ <a href="http://blog.inputstick.com/2017/10/kp2a-plugin-v112.html">(More info)</a>
+  	* new field actions: Type+Enter, Type+Tab (enable in Settings → Displayed UI Actions)
+  	* added keys for Masked Password (esc, tab, arrows, enter) 
+  	* only single action will be queued if not connected (avoid executing multiple actions once connected)
+  	* smart auto-connect will be also temporarily disabled when you do not allow to turn on BT or cancel device selection dialog  	 
+  	* bug fixes  
+$ 1.11
+  % Version 1.11  	  
+  	* fixed bug that caused the app to crash when changing UI actions preferences
+$ 1.10
+  % Version 1.10
+  	_ <a href="http://blog.inputstick.com/2017/09/kp2a-plugin-v110.html">(More info)</a>
+  	<b>Important:</b> some of new features requires access to KP2A database locked/closed events. To request necessary KP2A plugin permissions:
+  	<br>
+  	click on Configure as plugin -> Accept    		
+  	* redesigned connection settings (can now disconnect when DB is locked/closed)  	
+  	* plugin will now display notification (can be disabled)  	  	
+  	* fixed issue that sometimes caused actions to be executed after delay 
+  	* fixed bugs and potential security issues, several minor improvements   	 	
+$ 1.09
+  % Version 1.09
+  	_ <a href="http://blog.inputstick.com/2017/05/kp2a-plugin-v109.html">(More info)</a>   
+  	* added option to launch custom app (instead of Google Authenticator) when typing from clipboard action is selected
+$ 1.08
+  % Version 1.08
+  	_ <a href="http://blog.inputstick.com/2017/04/kp2a-plugin-v108.html">(More info)</a>   
+  	* added option for faster text typing
+  	* keyboard layouts are now named in both English and its native language
+$ 1.07
+  % Version 1.07
+  	_ <a href="http://blog.inputstick.com/2017/01/kp2a-plugin-v107.html">(More info)</a>   
+  	* added Greek (el-GR), Belgian (fr-BE), Croatian (hr-HR), Czech (cs-CZ, programmers) keyboard layouts  
+  	* added option to select "Data transfer method" - if you are experiencing connection problems, try: Settings -> Data transfer method and select "Use broadcasts" (works better on some devices)    
+$ 1.06
+  % Version 1.06
+  	* added "key next to right shift" in Mac setup screen
+    * fixed crash when InputStickUtility is not installed  	
+    * fixed bug in hu-HU layout   
+$ 1.05
+  % Version 1.05
+    * added pl-PL (Linux) keyboard layout  
+  	* added fr-FR (Linux) keyboard layout
+$ 1.04
+  % Version 1.04
+  	* fixed ^ character bug in fr-FR layout
+$ 1.03
+  % Version 1.03
+  	* New keyboard layouts: nl-NL, hu-HU and US-International
+  	* Auto-connect option works now as intended when turned off
+  	* Auto-connect is now off by default, default timeout is 0 (disabled)     
+  	* Bug fixes
+$ 1.02
+  % Version 1.02
+  	_ <b>Manual for the plugin (pdf) is now available</b>   	  
+  	_ <a href="http://blog.inputstick.com/2016/03/kp2a-plugin-v102.html">(More info)</a>   
+  	* Warning message will be displayed when CapsLock is on
+  	* Text length is checked before typing from clipboard (Settings -> Check length)
+  	* Fixed potential security issue on "Masked Password" screen
+  	* Save as and Load from buttons are no longer displayed when editing a template
+  	* New keyboard layouts: pt-PT and fr-CA
+$ 1.01
+  % Version 1.01
+  	_ <a href="http://blog.inputstick.com/2016/03/kp2a-plugin-v101.html">(More info)</a>  
+  	* Added notification when typing from clipboard is active. Can be used to disable or extend time
+  	* Added option to run any saved template as a macro for current entry (Settings -> Entry actions -> Execute template)
+  	* Added option to manage templates in a more direct way (Settings -> General actions -> Manage templates)
+$ 1.00
+  % Version 1.00
+    _ <a href="http://blog.inputstick.com/2016/01/kp2a-plugin-migration.html">(Important announcement!)</a>  
+  	* New release of the plugin, published on "InputStick" Google Play developer account. Replaces v1.40 published by "Croco Apps".
+  	* Added Plugin Setup Wizard        
+$ END_OF_CHANGE_LOG
+  </body>
+</html>

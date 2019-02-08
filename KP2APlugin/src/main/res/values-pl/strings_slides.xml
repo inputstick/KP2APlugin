@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="title_activity_setup_wizard">Konfigurator pluginu</string>
+    
+    <string name="setup_skip_title">Pominąć konfigurację?</string>
+    <string name="setup_skip_text">Czy chcesz pominąć konfigurację?\n(Nie zostanie wyświetlona ponownie. Możesz skonfigurować wszystko ręcznie)</string>
+    
+    <string name="slide_image_desc">image</string>
+    <string name="slide_button_done">Zrobione&#160;</string>
+    <string name="slide_button_download">Pobierz&#160;</string>
+    <string name="slide_button_uninstall">Usuń&#160;</string>
+    <string name="slide_button_enable">Włącz&#160;</string>
+    <string name="slide_button_test">Test</string>
+    <string name="slide_text_host_layout">Układ klawiatury hosta (PC):</string>
+    <string name="slide_text_test_layout">Testuj wybrany układ klaw.:</string>
+    <string name="slide_text_wait1">Zaczekaj jeszcze:&#160;</string>
+    <string name="slide_text_wait2">&#160;sekund</string>    
+    
+    <string name="slide_intro_title">Zacznijmy</string>
+    <string name="slide_intro_text">Konfigurator pozwoli upewnić się, że to urządzenie jest poprawnie skonfigurowane aby wpisywać tekst z aplikacji Keepass2Android wykorzystując odbiornik InputStick.</string>
+    <string name="slide_hardware_title">Wymagany sprzęt</string>
+    <string name="slide_hardware_text">Odbiornik InputStick jest potrzebny do korzystania z tej aplikacji. Przejdź dalej, jeżeli już go posiadasz.\nKliknij poniżej aby kupić:\nwww.inputstick.com/buy</string>
+    <string name="slide_download_utility_title">Zainstaluj InputStickUtility</string>
+    <string name="slide_download_utility_text">Aplikacja InputStickUtility musi być zainstalowana.\nMożesz zrobić to ręcznie później.</string>
+    <string name="slide_download_kp2a_title">Zainstaluj Keepass2Android</string>
+    <string name="slide_download_kp2a_text">Aplikacja Keepass2Android musi być zainstalowana.\nMożesz zrobić to ręcznie później.</string>
+    <string name="slide_uninstall_title">Usuń poprzednią wersję</string>
+    <string name="slide_uninstall_text">Usuń poprzednią wersję pluginu aby uniknąć zduplikowanych akcji w Keepass2Android.\nMożesz zrobić to ręcznie później.</string>
+    <string name="slide_layout_title">Wybierz układ klawiatury</string>
+    <string name="slide_layout_text">Wskaż układ klawiatury używany przez PC.\nTest: umieść InputStick w portcie USB, uruchom edytor tekstu, sprawdź czy znaki zostały poprawnie wpisane.</string>
+    <string name="slide_enable_title">Włącz plugin</string>
+    <string name="slide_enable_text">Plugin musi być aktywny w Keepass2Android aby uzyskać dostęp do otwieranych wpisów.</string>
+    <string name="slide_field_title">Akcje pól (field)</string>
+    <string name="slide_field_text">Kliknij na pole (hasło, nazwa użytkownika, itp.) i wybierz \"Wpisz\"</string>
+    <string name="slide_entry_title">Akcje wpisów (entry)</string>
+    <string name="slide_entry_text">Znajdziesz tutaj bardziej zaawansowane akcje (hasło maskowane, makra, wpisywanie ze schowka/aplikacji Authenticator) oraz szybko przejdziesz do ustawień pluginu.</string>
+    <string name="slide_settings_title">Ustawienia</string>
+    <string name="slide_settings_text">Pokaż/ukryj akcje pól i wpisów. Dobierz ustawienia łączenia się z InputStick.\nWłącz dodatkowy układ klawiatury (np: polski w domu, angielski w pracy).</string>
+    <string name="slide_mac_title">Dla użytkowników Mac</string>
+    <string name="slide_mac_text">Wybierz \"OSX konfiguracja\" (akcja wpisu) gdy OS X zechce zidentyfikować klawiaturę.</string>    
+    <string name="slide_done_title">Zrobione!</string>
+    <string name="slide_done_text">Urządzenie jest gotowe aby pisać tekst z Keepass2Android.\nPotrzebujesz pomocy? Kliknij link poniżej:\nhttp://www.inputstick.com/help</string>
+
+</resources>

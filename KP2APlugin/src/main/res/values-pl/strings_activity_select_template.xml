@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_select_template">Wybierz szablon</string>
+    <string name="template_empty_title">Brak szablonu</string>
+    <string name="template_empty_message">Szablon nie został zdefiniowany. Utworzyć teraz?</string>
+
+</resources>
