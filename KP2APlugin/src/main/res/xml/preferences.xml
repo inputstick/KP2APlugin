@@ -98,7 +98,6 @@
         
     </PreferenceCategory>
 
-    <!--
     <PreferenceCategory android:title="@string/sms_settings_title" >
         
         <Preference 
@@ -107,15 +106,13 @@
             android:selectable="false" >  
         </Preference>     
             
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="sms"
-            android:summaryOn="@string/sms_summary_on"
-            android:summaryOff="@string/sms_summary_off"
-            android:title="@string/sms_title" />          
-        
+        <Preference
+            android:title="@string/sms_smsproxy_title"
+            android:key="sms_smsproxy"
+            android:summary="@string/sms_smsproxy_summary_not_installed" >
+        </Preference>
+
     </PreferenceCategory>
-    -->
     
     <PreferenceCategory android:title="@string/clipboard_typing_settings_title" >
         

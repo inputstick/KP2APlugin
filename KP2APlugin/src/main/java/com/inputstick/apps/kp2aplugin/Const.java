@@ -14,13 +14,18 @@ public class Const {
 	public static final int CLIPBOARD_TYPING_NOTIFICATION_ID = 2;
 	public static final int UPDATE_NOTIFICATION_ID = 3;
 	public static final int SMS_NOTIFICATION_ID = 4;
+
+	public static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
+	public static final int REQUEST_CODE_SELECT_APP = 124;
+	public static final int REQUEST_CODE_SMS_PROXY_ACTIVATE = 125;
+
 	
 	public static final String PACKAGE_PLUGIN_OLD = "keepass2android.plugin.inputstick";
 	public static final String PACKAGE_KP2A = "keepass2android.keepass2android";
 	public static final String PACKAGE_KP2A_NO_NET = "keepass2android.keepass2android_nonet";
 	public static final String PACKAGE_UTILITY = "com.inputstick.apps.inputstickutility";	
-	public static final String PACKAGE_AUTHENTICATOR = "com.google.android.apps.authenticator2";	
-	
+	public static final String PACKAGE_AUTHENTICATOR = "com.google.android.apps.authenticator2";
+
 	public static final int LAYOUT_NONE = 0;
 	public static final int LAYOUT_PRIMARY = 1;
 	public static final int LAYOUT_SECONDARY = 2;	
@@ -67,6 +72,25 @@ public class Const {
 	public static final String EXTRA_TEXT = "text";
 	//SMS
 	public static final String EXTRA_SMS_SENDER = "sms_sender";
+
+	//SMSProxy app
+	public static final String SMS_PROXY_PACKAGE = "com.inputstick.apps.smsproxy";
+	public static final String SMS_PROXY_SERVICE = "com.inputstick.apps.smsproxy.SMSService";
+
+	public static final String SMS_PROXY_URL_INFO_AND_DOWNLOAD = "http://inputstick.com/sms-proxy";
+	public static final String SMS_PROXY_URL_SOURCE = "https://github.com/inputstick/SMSProxy";
+
+	public static final String SMS_PROXY_EXTRA_KP2A_KEY = "smsproxy_kp2a_key";
+	public static final String SMS_PROXY_EXTRA_SMS_TEXT = "smsproxy_sms_text";
+	public static final String SMS_PROXY_EXTRA_SMS_SENDER = "smsproxy_sms_sender";
+	public static final String SMS_PROXY_EXTRA_HMAC = "smsproxy_hmac";
+
+	public static final String SMS_PROXY_ACTION_KP2A_SMS_RELAY = "com.inputstick.apps.smsproxy.ACTION_KP2A_SMS_RELAY";
+
+	public static final String SMS_PROXY_ACTION_ACTIVATE = "com.inputstick.apps.smsproxy.ACTION_ACTIVATE";
+	public static final String SMS_PROXY_ACTION_DEACTIVATE = "com.inputstick.apps.smsproxy.ACTION_DEACTIVATE";
+	public static final String SMS_PROXY_ACTION_FORCE_STOP = "com.inputstick.apps.smsproxy.ACTION_FORCE_STOP";
+	public static final String SMS_PROXY_ACTION_KEEP_ALIVE = "com.inputstick.apps.smsproxy.ACTION_KEEP_ALIVE";
 	
 	//Macro/Template
 	public static final String EXTRA_MACRO_DATA = "macro_data";	
@@ -162,8 +186,9 @@ public class Const {
 	//notification actions:
 	public static final String ACTION_SMS = "com.inputstick.apps.kp2aplugin.sms";	
 	public static final String ACTION_CLIPBOARD_EXTEND = "com.inputstick.apps.kp2aplugin.clipboard_extend";	
-	public static final String ACTION_CLIPBOARD_STOP = "com.inputstick.apps.kp2aplugin.clipboard_stop";	
-	
+	public static final String ACTION_CLIPBOARD_STOP = "com.inputstick.apps.kp2aplugin.clipboard_stop";
+
+
 	//PREFERENCES:	
 	
 	public static final String PREF_AUTO_CONNECT = "connection_auto_connect";
@@ -264,10 +289,8 @@ public class Const {
 	public static final String PREF_REMOTE_USE_PRIMARY_LAYOUT = "remote_use_primary_layout";
 	public static final boolean PREF_REMOTE_USE_PRIMARY_LAYOUT_VALUE = true;
 	
-	public static final String PREF_SMS = "sms";
-	public static final boolean PREF_SMS_VALUE = false;
-	
+	public static final String PREF_SMS_SMSPROXY = "sms_smsproxy";
+    public static final String PREF_SMS_SMSPROXY_KEY = "smsproxy_key";
 	public static final String PREF_SMS_INFO = "sms_info";
-	
 	
 }

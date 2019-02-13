@@ -77,9 +77,12 @@
 
     <string name="sms_settings_title">SMS</string>
     <string name="sms_title">Listen for incoming SMS</string>
-    <string name="sms_summary_on">Enabled</string>
-    <string name="sms_summary_off">Disabled</string>
     <string name="sms_not_supported">Receiving SMS is NOT supported by this device</string>
+    <string name="sms_smsproxy_title">SMS Proxy App</string>
+    <string name="sms_smsproxy_summary_enabled">Enabled (click to disable)</string>
+    <string name="sms_smsproxy_summary_disabled">Disabled (click to enable)</string>
+    <string name="sms_smsproxy_summary_not_installed">Not installed (click to download)</string>
+    <string name="sms_smsproxy_text_denied">SMS Proxy denied activation</string>
 
     <string name="display_inputstick_text_title">Display \"(IS)\"</string>
     <string name="display_inputstick_text_summary_on">Display action name + (IS), example: Type (IS)</string>
@@ -208,7 +211,7 @@
     <string name="section_quick_shortcuts_info">Quick Shortcuts are keyboard shortcuts that can be easily accessed from Entry menu.</string>
     <string name="section_ui_settings_info">Adjust what actions will be displayed in Entry and Field menus.</string>
     <string name="section_clipboard_info">Use clipboard typing to type text from other apps (generated OTPs, etc.).</string>
-    <string name="section_sms_info">Allow to type text (authentication codes etc.) from received SMS (only when the plugin is active)</string>
+    <string name="section_sms_info">Allows to type text (authentication codes etc.) from SMS received via SMS Proxy app</string>
 
 
     <string name="remote_settings_title">Remote:</string>

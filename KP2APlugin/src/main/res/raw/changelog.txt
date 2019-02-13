@@ -19,6 +19,10 @@
     </style>
   </head>
   <body>
+$ 1.36
+  % Version 1.36
+  	_ <a href="http://blog.inputstick.com/2019/02/kp2a-plugin-v136.html">(More info)</a>
+  	* added support for SMS Proxy app
 $ 1.35
   % Version 1.35
   	_ <a href="http://blog.inputstick.com/2019/01/kp2a-plugin-v135.html">(More info)</a>

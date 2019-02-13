@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,8 +34,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import keepass2android.pluginsdk.KeepassDefs;
 import keepass2android.pluginsdk.Strings;
@@ -53,13 +58,12 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static int autoConnect;
 	private static int maxIdlePeriod;
 
-	/*
 	//SMS:
 	private static boolean smsEnabled;
 	private static boolean smsReceiverRegistered;
 	private static String smsText;
 	private static String smsSender;
-	private static int smsRemainingTime;*/
+	private static int smsRemainingTime;
 	
 	//Clipboard
 	private static ClipboardManager mClipboardManager;
@@ -93,7 +97,6 @@ public class InputStickService extends Service implements InputStickStateListene
 	private Runnable mTimerTask = new Runnable() {
 		public void run() {
 			final long time = System.currentTimeMillis();
-			/*
 			//update SMS notification & extend keep alive for service and InputStick connection
 			if (smsRemainingTime > 0) {		
 				extendConnectionTime(TIMER_INTERVAL_MS);
@@ -104,7 +107,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				} else {
 					clearSMS();
 				}
-			}*/
+			}
 			//same for clipboard typing
 			if (clipboardRemainingTime > 0) {		
 				extendConnectionTime(TIMER_INTERVAL_MS);
@@ -210,56 +213,95 @@ public class InputStickService extends Service implements InputStickStateListene
 	
 	//************************************************************************************
 	//************************************************************************************
-	//SMS:	
-	/*
-	private final BroadcastReceiver smsReceiver = new BroadcastReceiver() {
+	//SMS:
+
+	private final BroadcastReceiver smsProxyReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Bundle bundle = intent.getExtras();
-	        Object[] pdus = (Object[]) bundle.get("pdus");
-	        for(int i=0; i<pdus.length; i++){
-	            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
-	            smsText = smsMessage.getMessageBody();
-	            smsSender = smsMessage.getDisplayOriginatingAddress();
-	            smsRemainingTime = Const.SMS_TIMEOUT_MS;
-	            //notification:
-	            mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_CHANNEL_ID);
-	            mSMSNotificationBuilder.setContentTitle(getString(R.string.app_name));
-	            mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + (smsRemainingTime/1000) + "s)"); 
-	            mSMSNotificationBuilder.setSmallIcon(R.drawable.ic_sms);
-		
+			boolean error = true;
+			try {
+				smsText = intent.getStringExtra(Const.SMS_PROXY_EXTRA_SMS_TEXT);
+				smsSender = intent.getStringExtra(Const.SMS_PROXY_EXTRA_SMS_SENDER);
+				byte[] hmacCmp = intent.getByteArrayExtra(Const.SMS_PROXY_EXTRA_HMAC);
+				smsRemainingTime = Const.SMS_TIMEOUT_MS;
+				String key = PreferencesHelper.getSMSProxyKey(prefs);
+
+				//vefify if broadcasts comes from SMS Proxy app (previously activated with generated key)
+				Mac sha256_HMAC;
+				sha256_HMAC = Mac.getInstance("HmacSHA256");
+				sha256_HMAC.init(new SecretKeySpec(key.getBytes(), "HmacSHA256"));
+				sha256_HMAC.update(smsText.getBytes());
+				sha256_HMAC.update(smsSender.getBytes());
+				byte[] hmac = sha256_HMAC.doFinal();
+
+				if (Arrays.equals(hmac, hmacCmp)) {
+					error = false;
+				}
+
+			} catch (Exception e) {
+			}
+
+			if (error) {
+				Toast.makeText(InputStickService.this, "SMS Proxy Error", Toast.LENGTH_SHORT).show();
+			} else {
+				//notification:
+				mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_CHANNEL_ID);
+				mSMSNotificationBuilder.setContentTitle(getString(R.string.app_name));
+				mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + (smsRemainingTime/1000) + "s)");
+				mSMSNotificationBuilder.setSmallIcon(R.drawable.ic_sms);
+
 				Intent smsIntent = new Intent(InputStickService.this, InputStickService.class);
 				smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
 				smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
 				smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
 				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
-				
-			    Intent dismissIntent = new Intent(InputStickService.this, InputStickService.class);
-			    dismissIntent.setAction(Const.SERVICE_DISMISS_SMS); 
-			    mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));					
-		
-			    mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
-				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build()); 
-	        }
+
+				Intent dismissIntent = new Intent(InputStickService.this, InputStickService.class);
+				dismissIntent.setAction(Const.SERVICE_DISMISS_SMS);
+				mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+
+				mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
+			}
+
+
 		}
 	};
-	
-	private void startSMSMonitoring() {
-		if (ContextCompat.checkSelfPermission(InputStickService.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-			IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+
+	private void startSMSProxy() {
+		if ( !smsReceiverRegistered) {
+			Intent intent = new Intent();
+			intent.setComponent(new ComponentName(Const.SMS_PROXY_PACKAGE, Const.SMS_PROXY_SERVICE));
+			startService(intent);
+
+			IntentFilter intentFilter = new IntentFilter(Const.SMS_PROXY_ACTION_KP2A_SMS_RELAY);
 			intentFilter.setPriority(100);
-			registerReceiver(smsReceiver, intentFilter);
+			registerReceiver(smsProxyReceiver, intentFilter);
 			smsReceiverRegistered = true;
 		}
 	}
-	
-	private void stopSMSMonitoring() {
+
+	private void keepAliveSMSProxy() {
+        if (smsReceiverRegistered) {
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(Const.SMS_PROXY_PACKAGE,Const.SMS_PROXY_SERVICE));
+            intent.setAction(Const.SMS_PROXY_ACTION_KEEP_ALIVE);
+            startService(intent);
+        }
+    }
+
+	private void stopSMSProxy() {
 		if (smsReceiverRegistered) {
+			Intent intent = new Intent();
+			intent.setComponent(new ComponentName(Const.SMS_PROXY_PACKAGE,Const.SMS_PROXY_SERVICE));
+			stopService(intent);
+
 			try {
-			unregisterReceiver(smsReceiver);
-			smsReceiverRegistered = false;
-			} catch (Exception e) {				
+				unregisterReceiver(smsProxyReceiver);
+				smsReceiverRegistered = false;
+			} catch (Exception e) {
 			}
 		}
 		clearSMS();
@@ -275,7 +317,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		smsSender = null;
 		smsRemainingTime = 0;
 		mNotificationManager.cancel(Const.SMS_NOTIFICATION_ID);
-	}*/
+	}
 	
 	
 	//************************************************************************************
@@ -407,17 +449,17 @@ public class InputStickService extends Service implements InputStickStateListene
 			maxIdlePeriod = PreferencesHelper.getMaxIdlePeriod(prefs);
 		}
 				
-		/*if (key == null || Const.PREF_SMS.equals(key)) {
-			smsEnabled = PreferencesHelper.isSMSEnabled(prefs);		
+		if (key == null || Const.PREF_SMS_SMSPROXY_KEY.equals(key)) {
+			smsEnabled = PreferencesHelper.isSMSProxyEnabled(prefs);
 			//if user changed preferences
 			if (key != null) { 
 				if (smsEnabled) {
-					startSMSMonitoring();
+                    startSMSProxy();
 				} else {
-					stopSMSMonitoring();
+                    stopSMSProxy();
 				}
 			}
-		}*/
+		}
 	}
 
 	
@@ -434,6 +476,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				connectAction();
 			}
 		}
+		keepAliveSMSProxy();
 	}
 
 	private void actionSelectedAction(Intent intent) {
@@ -542,7 +585,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		} else if (Const.ACTION_REMOTE.equals(uiAction)) {
 			ActionHelper.startRemoteActivityAction(this); 
 		} else if (Const.ACTION_SMS.equals(uiAction)) {
-			//ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
+			ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
 		} 
 	}
 	
@@ -630,9 +673,10 @@ public class InputStickService extends Service implements InputStickStateListene
 		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());		
 		
 		loadPreference(null);
-		/*if (smsEnabled) {
-			startSMSMonitoring();
-		}*/
+		smsEnabled = PreferencesHelper.isSMSProxyEnabled(prefs);
+		if (smsEnabled) {
+            startSMSProxy();
+		}
 	}
 
 
@@ -665,7 +709,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
 				stopPlugin("manual");
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
-				//clearSMS();
+				clearSMS();
 			} else if (Const.ACTION_CLIPBOARD_STOP.equals(action)) {				 				
 				stopClipboardMonitoring(false);
 			} else if (Const.ACTION_CLIPBOARD_EXTEND.equals(action)) {				 				
@@ -687,7 +731,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		Log.d(_TAG, "onDestroy");
 		isRunning = false;
 		unregisterReceiver(kp2aReceiver);
-		//stopSMSMonitoring();
+        stopSMSProxy();
 		stopClipboardMonitoring(false);
 		prefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefsListener);
 		mHandler.removeCallbacksAndMessages(null);

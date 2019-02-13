@@ -311,13 +311,21 @@ public abstract class PreferencesHelper {
 	
 	//SMS
 	
-	public static boolean isSMSEnabled(SharedPreferences prefs) {
-		return prefs.getBoolean(Const.PREF_SMS, Const.PREF_SMS_VALUE);
+	public static boolean isSMSProxyEnabled(SharedPreferences prefs) {
+        return prefs.contains(Const.PREF_SMS_SMSPROXY_KEY);
 	}
-	
-	public static void setSMSEnabled(SharedPreferences prefs, boolean value) {
-		Editor editor = prefs.edit();
-		editor.putBoolean(Const.PREF_SMS, value);		
-		editor.apply();		
+
+	public static String getSMSProxyKey(SharedPreferences prefs) {
+		return prefs.getString(Const.PREF_SMS_SMSPROXY_KEY, null);
+	}
+
+	public static void setSMSProxyKey(SharedPreferences prefs, String value) {
+        Editor editor = prefs.edit();
+        if (value == null) {
+        	editor.remove(Const.PREF_SMS_SMSPROXY_KEY);
+		} else {
+			editor.putString(Const.PREF_SMS_SMSPROXY_KEY, value);
+		}
+		editor.apply();
 	}
 }

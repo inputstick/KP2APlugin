@@ -39,7 +39,7 @@ public class SMSActivity extends PluginDialogActivity {
 		Intent intent = getIntent();
 		final TypingParams params = new TypingParams(intent);	
 		final String message = intent.getStringExtra(Const.EXTRA_TEXT);
-		final String sender = intent.getStringExtra(Const.EXTRA_SMS_SENDER);		
+		final String sender = intent.getStringExtra(Const.EXTRA_SMS_SENDER);
 		
 		textViewSMSContent = (TextView)findViewById(R.id.textViewSMSContent);
 		textViewSMSSender = (TextView)findViewById(R.id.textViewSMSSender);

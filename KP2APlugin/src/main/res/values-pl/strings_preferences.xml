@@ -75,11 +75,14 @@
 	<string name="clipboard_check_length_summary_on">Nie pisz jeżeli długość tekst w schowku przekracza 64 znaki</string>
 	<string name="clipboard_check_length_summary_off">Pisz zawsze, nawet długi tekst</string>
 	
-	<string name="sms_settings_title">SMS</string>	
-	<string name="sms_title">Odczytuj SMSy</string>	
-	<string name="sms_summary_on">Włączone</string>	
-	<string name="sms_summary_off">Wyłączone</string>			              
+	<string name="sms_settings_title">SMS</string>
+	<string name="sms_title">Odczytuj SMSy</string>
 	<string name="sms_not_supported">Odbieranie SMS NIE jest obsługiwane poprzez to urządzenie</string>
+    <string name="sms_smsproxy_title">Aplikacja SMS Proxy</string>
+    <string name="sms_smsproxy_summary_enabled">Włączono (kliknij aby wyłączyć)</string>
+    <string name="sms_smsproxy_summary_disabled">Wyłączono (kliknij aby włączyć)</string>
+    <string name="sms_smsproxy_summary_not_installed">Nie zainstalowano (kliknij aby pobrać)</string>
+    <string name="sms_smsproxy_text_denied">SMS Proxy: odmowa aktywacji</string>
 	
 	<string name="display_inputstick_text_title">Wyświetlaj \"(IS)\"</string>       
     <string name="display_inputstick_text_summary_on">Pokaż nazwę akcji + (IS), przykład: Wpisz (IS)</string>           
@@ -208,7 +211,7 @@
     <string name="section_quick_shortcuts_info">Szybkie skróty to kombinacje klawiszy które mogą zostać szybko wybrane z menu wpisu</string>
     <string name="section_ui_settings_info">Wybierz jakie akcje będą wyświetlane w menu wpisu i pola.</string>
     <string name="section_clipboard_info">Użyj pisania ze schowka w celu wpisania tekstu z innych aplikacji (wygenerowane OTP itp.).</string>	
-	<string name="section_sms_info">Pozwalaj na pisanie tekstu (kody jednorazowe itp.) z odebranych SMSów (tylko gdy plugin jest aktywny)</string>
+	<string name="section_sms_info">Pozwalaj na pisanie tekstu (kody jednorazowe itp.) z SMSów odebranych za pośrednictwem aplikacji SMS Proxy</string>
     
     
 	<string name="remote_settings_title">Kontroler:</string>

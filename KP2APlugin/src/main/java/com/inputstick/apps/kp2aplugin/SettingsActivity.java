@@ -33,6 +33,7 @@ import com.inputstick.api.hid.HIDKeycodes;
 import com.inputstick.api.layout.KeyboardLayout;
 import com.inputstick.apps.kp2aplugin.remote.RemoteActivity;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 
 import keepass2android.pluginsdk.AccessManager;
@@ -45,9 +46,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private static final String DISMISSED_KEY = "dismissed";	
 	private static final String DISPLAY_RELOAD_INFO_KEY = "displayReloadInfo";
-	
-	private static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
-	private static final int REQUEST_CODE_SELECT_APP = 124;
 	
 	private static final int TIP_TYPING_SPEED = 1;	
 	
@@ -65,7 +63,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private Preference prefQuickShortcut2;
 	private Preference prefQuickShortcut3;
 	
-	//private CheckBoxPreference prefSMS;
+	private Preference prefSMSProxy;
+	private static String smsProxyTmpKey;
 	
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
@@ -132,15 +131,25 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if ((requestCode == REQUEST_CODE_SELECT_APP) && (resultCode == RESULT_OK)) {	
-			String packageName = data.getStringExtra(SelectAppActivity.RESULT_PACKAGE);
-			String name = getNameForPackage(packageName);
-			Editor edit = prefs.edit();
-			edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE, packageName).apply();
-			edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_NAME, name).apply();
-			edit.apply();									
-			setCustomAppPackageSummary();
-		}		
+		if (requestCode == Const.REQUEST_CODE_SMS_PROXY_ACTIVATE) {
+			if ((resultCode == RESULT_OK)) {
+				PreferencesHelper.setSMSProxyKey(prefs, smsProxyTmpKey);
+				prefSMSProxy.setSummary(R.string.sms_smsproxy_summary_enabled);
+			} else {
+				showSMSProxyErrorDialog();
+			}
+		}
+		if (requestCode == Const.REQUEST_CODE_SELECT_APP) {
+			if ((resultCode == RESULT_OK)) {
+				String packageName = data.getStringExtra(SelectAppActivity.RESULT_PACKAGE);
+				String name = getNameForPackage(packageName);
+				Editor edit = prefs.edit();
+				edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE, packageName).apply();
+				edit.putString(Const.PREF_CLIPBOARD_CUSTOM_APP_NAME, name).apply();
+				edit.apply();
+				setCustomAppPackageSummary();
+			}
+		}
 	}
 
 	
@@ -233,33 +242,41 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				}
         		return true;
 			}
-        });
+   		     });
 		prefSecondaryKbdLayout = findPreference(Const.PREF_SECONDARY_LAYOUT);
 		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);	
 
-		/*
+
 		//SMS		
-		prefSMS = (CheckBoxPreference)findPreference(Const.PREF_SMS);	
-		//set value only if permission is granted
-		prefSMS.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		prefSMSProxy = findPreference(Const.PREF_SMS_SMSPROXY);
+		prefSMSProxy.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Boolean enabled = (Boolean)newValue;
-				if (enabled) {
-					if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-						showRequestPermissionsInfoAlertDialog();
-						return false;
+			public boolean onPreferenceClick(Preference preference) {
+				if (PluginHelper.isPackageInstalled(SettingsActivity.this, Const.SMS_PROXY_PACKAGE)) {
+					if (PreferencesHelper.isSMSProxyEnabled(prefs)) {
+						PreferencesHelper.setSMSProxyKey(prefs, null);
+                        Intent intent = new Intent(Const.SMS_PROXY_ACTION_DEACTIVATE);
+                        startActivity(intent);
+					} else {
+						smsProxyTmpKey = generateSMSProxyTmpKey();
+                        Intent intent = new Intent(Const.SMS_PROXY_ACTION_ACTIVATE);
+                        intent.putExtra(Const.SMS_PROXY_EXTRA_KP2A_KEY, smsProxyTmpKey);
+                        startActivityForResult(intent, Const.REQUEST_CODE_SMS_PROXY_ACTIVATE);
 					}
+				} else {
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Const.SMS_PROXY_URL_INFO_AND_DOWNLOAD));
+					startActivity(browserIntent);
 				}
-        		return true;
+				return true;
 			}
-        });
+		});
+
 		//disable if SMS is not supported
 		if ( !mgr.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-			prefSMS.setEnabled(false);
+			prefSMSProxy.setEnabled(false);
 			pref = findPreference(Const.PREF_SMS_INFO);
 			pref.setSummary(R.string.sms_not_supported);	
-		}*/
+		}
 	
 		
 		//clipboard:
@@ -383,18 +400,23 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());	
 		String[] layoutNames = Util.convertToStringArray(KeyboardLayout.getLayoutNames(true));	
 		int selectedLayout = Arrays.asList(layoutValues).indexOf(layoutCode);
-		Preference pref  = findPreference(Const.PREF_PRIMARY_LAYOUT);
+		Preference pref;
+		pref = findPreference(Const.PREF_PRIMARY_LAYOUT);
 		pref.setSummary(layoutNames[selectedLayout]);		
 
-		/*
-		//handle case when SMS permission gets revoked by used
-		if (PreferencesHelper.isSMSEnabled(prefs)) {
-			if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
-				Toast.makeText(SettingsActivity.this, R.string.sms_missing_permission, Toast.LENGTH_LONG).show();
-				PreferencesHelper.setSMSEnabled(prefs, false);
-				prefSMS.setChecked(false);
+
+		pref  = findPreference(Const.PREF_SMS_INFO);
+		if (pref.isEnabled()) { //device supports SMS
+			if (PluginHelper.isPackageInstalled(this, Const.SMS_PROXY_PACKAGE)) {
+				if (PreferencesHelper.isSMSProxyEnabled(prefs)) {
+					prefSMSProxy.setSummary(R.string.sms_smsproxy_summary_enabled);
+				} else {
+					prefSMSProxy.setSummary(R.string.sms_smsproxy_summary_disabled);
+				}
+			} else {
+				prefSMSProxy.setSummary(R.string.sms_smsproxy_summary_not_installed);
 			}
-		}*/
+		}
 	}
 	
 	@Override
@@ -540,10 +562,29 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		try {
 			Intent i = new Intent(Strings.ACTION_EDIT_PLUGIN_SETTINGS);
 			i.putExtra(Strings.EXTRA_PLUGIN_PACKAGE, SettingsActivity.this.getPackageName());
-			startActivityForResult(i, REQUEST_CODE_ENABLE_PLUGIN);
+			startActivityForResult(i, Const.REQUEST_CODE_ENABLE_PLUGIN);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+	}
+
+
+	private String generateSMSProxyTmpKey() {
+		final String charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		SecureRandom rnd = new SecureRandom();
+		StringBuilder sb = new StringBuilder(16);
+		for( int i = 0; i < 16; i++ ) {
+			sb.append(charset.charAt(rnd.nextInt(charset.length())));
+		}
+		return sb.toString();
+	}
+
+	private void showSMSProxyErrorDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.error);
+		alert.setMessage(R.string.sms_smsproxy_text_denied);
+		alert.setNeutralButton(R.string.ok, null);
+		alert.show();
 	}
 	
 	private void showRequestDbScopeDialog() {
@@ -688,39 +729,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		alert.show();		
 	}
 	
-	
-	
-	
-	/*
-	//SMS permission
-	
-	private static final int PERMISSION_REQUEST_SMS = 1112;
-	
-	public void showRequestPermissionsInfoAlertDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.sms_dialog_title); 
-		builder.setMessage(R.string.sms_dialog_message);
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						ActivityCompat.requestPermissions(SettingsActivity.this,  new String[]{Manifest.permission.READ_SMS}, PERMISSION_REQUEST_SMS);						
-					}
-				});
-		builder.setCancelable(false);
-		builder.show();
-	}
-	
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		if (requestCode == PERMISSION_REQUEST_SMS) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				PreferencesHelper.setSMSEnabled(prefs, true);
-				prefSMS.setChecked(true);
-			}
-		}
-	}*/
-	
 		
 	//selecting app for clipboard action:
 	
@@ -750,7 +758,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			super.onPostExecute(unused);
 			progDailog.dismiss();
 			Intent i = new Intent(SettingsActivity.this, SelectAppActivity.class);
-			startActivityForResult(i, REQUEST_CODE_SELECT_APP);
+			startActivityForResult(i, Const.REQUEST_CODE_SELECT_APP);
 		}
 		
 	}
