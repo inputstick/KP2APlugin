@@ -415,6 +415,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				}
 			} else {
 				prefSMSProxy.setSummary(R.string.sms_smsproxy_summary_not_installed);
+				//SMS Proxy is not installed but key is still saved -> remove key
+				if (PreferencesHelper.isSMSProxyEnabled(prefs)) {
+					PreferencesHelper.setSMSProxyKey(prefs, null);
+				}
 			}
 		}
 	}
