@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.37
+  % Version 1.37
+  	* added missing deadkeys to US International (en-US-int), and Dutch (nl-NL) keyboard layouts
 $ 1.36
   % Version 1.36
   	_ <a href="http://blog.inputstick.com/2019/02/kp2a-plugin-v136.html">(More info)</a>
