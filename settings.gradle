@@ -1,1 +1,1 @@
-include ':KP2APlugin', ':inputstickapi'
+include ':KP2APlugin'

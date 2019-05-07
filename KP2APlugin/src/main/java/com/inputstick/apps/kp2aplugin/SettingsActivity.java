@@ -187,7 +187,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				startActivity(new Intent(SettingsActivity.this, RemoteActivity.class));	
+				startActivity(new Intent(SettingsActivity.this, RemoteActivity.class));
 				return true;
 			}
 		});		
