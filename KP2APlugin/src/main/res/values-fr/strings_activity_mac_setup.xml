@@ -2,7 +2,7 @@
 <resources>
 
     <string name="title_activity_mac_setup">Configuration Mac OSX</string>
-    <string name="not_ready">InputStick n'est PAS prêt !</string>
+    <string name="not_ready">InputStick n\'est PAS prêt !</string>
     <string name="selected_keyboard_layout">Disposition du clavier sélectionnée : </string>
     <string name="osx_setup_note">Remarque : utilisez cet écran lorsque &quot;l\'Assistant de configuration du clavier OSX&quot; vous demande de : &quot;Appuyez sur la touche immédiatement à droite de la touche Shift sur le côté gauche du clavier qui ne peut pas être identifié.&quot;&#8230;</string>
 

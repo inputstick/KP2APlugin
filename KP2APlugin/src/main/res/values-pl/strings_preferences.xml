@@ -222,9 +222,9 @@
         <item>Mysz</item>
         <item>Ekran dotykowy</item>
     </string-array>	
-    <string-array name="mouseModeReturnList">
-        <item>mouse</item>
-        <item>touchscreen</item>
-    </string-array>	     
+
+
+
+
 	
 </resources>

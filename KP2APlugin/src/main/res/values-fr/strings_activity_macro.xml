@@ -54,13 +54,13 @@
     <string name="preview">Aperçu :</string>
     <string name="current_position">Position actuelle (action) :</string>
 
-    <string-array name="delay_values">
-        <item>10</item>
-        <item>25</item>
-        <item>50</item>
-        <item>100</item>
-        <item>200</item>
-        <item>500</item>
-    </string-array>
+
+
+
+
+
+
+
+
 
 </resources>

@@ -8,7 +8,7 @@
     <string name="missing_access_scope_title">Portée d\'accès de KP2A</string>
     <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l\'accès maintenant ?</string>
 
-    <string name="secondary_layout_action_reminder_message">Vous devez activer au moins une action pour la disposition du clavier secondaire (voir \"Actions affichées de l'interface utilisateur\" ci-dessous)</string>
+    <string name="secondary_layout_action_reminder_message">Vous devez activer au moins une action pour la disposition du clavier secondaire (voir \"Actions affichées de l\'interface utilisateur\" ci-dessous)</string>
 
     <string name="show_changelog_title">Afficher le journal des modifications</string>
     <string name="show_help_webpage_title">Ouvrir la page d\'aide</string>
@@ -40,16 +40,16 @@
         <item>Le plus lent (0.1)</item>
     </string-array>
 
-    <string-array name="typing_speed_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>5</item>
-        <item>10</item>
-    </string-array>
 
 
-    <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d'une nouvelle entrée.</string>
+
+
+
+
+
+
+
+    <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d\'une nouvelle entrée.</string>
 
     <string name="uninstall_title">Désinstaller</string>
     <string name="uninstall_message">Désinstaller la version précédente du plugin maintenant ?\n\nN\'oubliez pas de configurer la version actuelle : \"Configurer en tant que plugin\", configurer la disposition du clavier, etc.\n\n\"Ouvrir la page d\'aide\" pour en savoir plus sur les nouvelles fonctionnalités.</string>
@@ -104,15 +104,15 @@
         <item>Gérer les modèles</item>
         <item>Action Tab et Entrée</item>
     </string-array>
-    <string-array name="generalItemsReturnList">
-        <item>settings</item>
-        <item>con_disc</item>
-        <item>telecommand</item>
-        <item>osx</item>
-        <item>macro</item>
-        <item>gerer_modeles</item>
-        <item>tab_entree</item>
-    </string-array>
+
+
+
+
+
+
+
+
+
 
     <string-array name="entryItemsDisplayList">
         <item>Nom d\'utilisateur/Mot de passe</item>
@@ -122,14 +122,14 @@
         <item>Executer le modèle</item>
         <item>Presse-papier/Authenticator</item>
     </string-array>
-    <string-array name="entryItemsReturnList">
-        <item>username_and_password</item>
-        <item>username_password_enter</item>
-        <item>masked_password</item>
-        <item>macro</item>
-        <item>run_template</item>
-        <item>clipboard</item>
-    </string-array>
+
+
+
+
+
+
+
+
 
     <string-array name="fieldItemsDisplayList">
         <item>Saisir</item>
@@ -138,13 +138,13 @@
         <item>Saisir (lent)</item>
         <item>Masqué (mot de passe uniquement)</item>
     </string-array>
-    <string-array name="fieldItemsReturnList">
-        <item>type_normal</item>
-        <item>type_enter</item>
-        <item>type_tab</item>
-        <item>type_slow</item>
-        <item>type_masked</item>
-    </string-array>
+
+
+
+
+
+
+
 
     <string name="tip_title">Astuce :</string>
     <string name="tip_empty">Erreur : message vide</string>
@@ -157,15 +157,15 @@
 
     <string name="connection_auto_connect_title">Connection automatique</string>
     <string-array name="connection_auto_connect_names">
-        <item>Désactivé\n- attendre jusqu'à ce que la saisie soit demandée\n(InputStick est utilisé occasionnellement)\n</item>
+        <item>Désactivé\n- attendre jusqu\'à ce que la saisie soit demandée\n(InputStick est utilisé occasionnellement)\n</item>
         <item>Intelligent\n- lorsque l\'entrée KP2A est ouverte\n- désactivé temporairement après une erreur de connexion (ou l\'annuler)\n- réactivation après une connexion réussie\n(InputStick est utilisé fréquemment)\n</item>
         <item>Toujours\n- lorsque l\'entrée KP2A est ouverte\n(InputStick est tout le temps)\n</item>
     </string-array>
-    <string-array name="connection_auto_connect_values">
-        <item>0</item>
-        <item>2</item>
-        <item>1</item>
-    </string-array>
+
+
+
+
+
 
     <string name="connection_max_idle_period_title">Max inactivity period</string>
     <string-array name="connection_max_idle_period_names">
@@ -176,14 +176,14 @@
         <item>10 min</item>
         <item>Illimité\n- peut vider la batterie !\n- NON recommandé pour la plupart des utilisateurs !</item>
     </string-array>
-    <string-array name="connection_max_idle_period_values">
-        <item>60000</item>
-        <item>120000</item>
-        <item>180000</item>
-        <item>300000</item>
-        <item>600000</item>
-        <item>0</item>
-    </string-array>
+
+
+
+
+
+
+
+
 
 
     <string name="quick_shortcuts_settings_title">Raccourcis rapides (menu d\'entrée)</string>
@@ -194,17 +194,17 @@
     <string name="quickshortcut_disabled">Désactivé</string>
 
     <string-array name="enabled_quick_shortcuts_names">
-        <item>Disabled</item>
-        <item>Quick Shortcut 1</item>
-        <item>Quick Shortcut 1, Quick Shortcut 2</item>
-        <item>Quick Shortcut 1, Quick Shortcut 2, Quick Shortcut 3</item>
+        <item>Désactivé</item>
+        <item>Raccourci rapide 1</item>
+        <item>Raccourci rapide 1, Raccourci rapide 2</item>
+        <item>Raccourci rapide 1, Raccourci rapide 2, Raccourci rapide 3</item>
     </string-array>
-    <string-array name="enabled_quick_shortcuts_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
+
+
+
+
+
+
 
 
     <string name="section_typing_info">Assurez-vous toujours que la disposition du clavier choisie est la même que celle utilisée par votre PC. Utilisez une vitesse de frappe plus faible si l\'hôte USB n\'accepte pas la saisie rapide au clavier.</string>
@@ -222,9 +222,9 @@
         <item>Souris</item>
         <item>Écran tactile</item>
     </string-array>
-    <string-array name="mouseModeReturnList">
-        <item>mouse</item>
-        <item>touchscreen</item>
-    </string-array>
+
+
+
+
 
 </resources>
