@@ -5,13 +5,13 @@
     <string name="enabled">Activé</string>
     <string name="not_configured">NON configuré !</string>
 
-    <string name="missing_access_scope_title">Portée d'accès de KP2A</string>
-    <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l'accès maintenant ?</string>
+    <string name="missing_access_scope_title">Portée d\'accès de KP2A</string>
+    <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l\'accès maintenant ?</string>
 
     <string name="secondary_layout_action_reminder_message">Vous devez activer au moins une action pour la disposition du clavier secondaire (voir \"Actions affichées de l'interface utilisateur\" ci-dessous)</string>
 
     <string name="show_changelog_title">Afficher le journal des modifications</string>
-    <string name="show_help_webpage_title">Ouvrir la page d'aide</string>
+    <string name="show_help_webpage_title">Ouvrir la page d\'aide</string>
     <string name="show_about_app_title">A propos de l\'application</string>
 
     <string name="help_and_info_settings_title">Aide et informations</string>
@@ -52,7 +52,7 @@
     <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d'une nouvelle entrée.</string>
 
     <string name="uninstall_title">Désinstaller</string>
-    <string name="uninstall_message">Désinstaller la version précédente du plugin maintenant ?\n\nN'oubliez pas de configurer la version actuelle : \"Configurer en tant que plugin\", configurer la disposition du clavier, etc.\n\n\"Ouvrir la page d\'aide\" pour en savoir plus sur les nouvelles fonctionnalités.</string>
+    <string name="uninstall_message">Désinstaller la version précédente du plugin maintenant ?\n\nN\'oubliez pas de configurer la version actuelle : \"Configurer en tant que plugin\", configurer la disposition du clavier, etc.\n\n\"Ouvrir la page d\'aide\" pour en savoir plus sur les nouvelles fonctionnalités.</string>
     <string name="uninstall_toast">Désinstaller l\'ancienne version du plugin</string>
 
     <string name="clipboard_typing_settings_title">Saisie du presse-papier</string>
@@ -63,21 +63,21 @@
     <string name="clipboard_launch_custom_app_summary_on">Lancer l\'application sélectionnée ci-dessous lorsque la saisie du presse-papiers est activée</string>
     <string name="clipboard_launch_custom_app_summary_off">Ne pas lancer d\'application personnalisée</string>
     <string name="clipboard_custom_app_title">Application personnalisée</string>
-    <string name="clipboard_custom_app_not_selected">L\'application n'est pas sélectionnée</string>
+    <string name="clipboard_custom_app_not_selected">L\'application n\'est pas sélectionnée</string>
     <string name="clipboard_custom_app_unknown">Application inconnue</string>
     <string name="clipboard_auto_enter_title">Ajouter Entrée</string>
     <string name="clipboard_auto_enter_summary_on">Appuyer sur la touche Entrée après la saisie</string>
     <string name="clipboard_auto_enter_summary_off">Ne rien faire après la saisie</string>
     <string name="clipboard_auto_disable_title">Désactiver après la saisie</string>
     <string name="clipboard_auto_disable_summary_on">Désactiver la saisie du presse-papier après que le premier élément ai été saisi</string>
-    <string name="clipboard_auto_disable_summary_off">La saisie du presse-papiers sera active jusqu'à la fin du délai d\'attente.</string>
+    <string name="clipboard_auto_disable_summary_off">La saisie du presse-papiers sera active jusqu\'à la fin du délai d\'attente.</string>
     <string name="clipboard_check_length_title">Vérifier la longueur</string>
     <string name="clipboard_check_length_summary_on">Ne tapez pas si le texte dans le presse-papiers fait plus de 64 caractères.</string>
     <string name="clipboard_check_length_summary_off">Toujours saisir, même les textes longs</string>
 
     <string name="sms_settings_title">SMS</string>
     <string name="sms_title">Écouter les SMS entrants</string>
-    <string name="sms_not_supported">La réception de SMS n'est PAS prise en charge par cet appareil.</string>
+    <string name="sms_not_supported">La réception de SMS n\'est PAS prise en charge par cet appareil.</string>
     <string name="sms_smsproxy_title">Application de Proxy SMS</string>
     <string name="sms_smsproxy_summary_enabled">Activé (cliquez pour désactiver)</string>
     <string name="sms_smsproxy_summary_disabled">Désactivé (cliquez pour activer)</string>
@@ -151,7 +151,7 @@
     <string name="tip_typing_speed">Veuillez vérifier si cela fonctionne correctement avec votre système ! Peut ne pas fonctionner correctement avant le démarrage du système d\'exploitation (dans le BIOS).</string>
 
     <string name="sms_dialog_title">Permission SMS</string>
-    <string name="sms_dialog_message">L'application a besoin d\'une autorisation pour pouvoir lire les messages SMS entrants. Cette fonctionnalité ne fonctionnera que lorsque le plugin est actif (lorsque vous utilisez Keepass2Android). Le plugin ne stocke aucun SMS reçu. Cliquez sur OK pour continuer.</string>
+    <string name="sms_dialog_message">L\'application a besoin d\'une autorisation pour pouvoir lire les messages SMS entrants. Cette fonctionnalité ne fonctionnera que lorsque le plugin est actif (lorsque vous utilisez Keepass2Android). Le plugin ne stocke aucun SMS reçu. Cliquez sur OK pour continuer.</string>
     <string name="sms_missing_permission">Ecoute des SMS entrants désactivée (en raison d\'une autorisation manquante)</string>
 
 

@@ -17,14 +17,14 @@
     <string name="slide_text_wait1">Veuillez en attendez un autre :&#160;</string>
     <string name="slide_text_wait2">&#160;secondes</string>
 
-    <string name="slide_intro_title">C'est parti</string>
-    <string name="slide_intro_text">Ce guide étape par étape s'assurera que votre appareil est correctement configuré pour utiliser InputStick pour taper le texte de l\'application Keepass2Android.</string>
+    <string name="slide_intro_title">C\'est parti</string>
+    <string name="slide_intro_text">Ce guide étape par étape s\'assurera que votre appareil est correctement configuré pour utiliser InputStick pour taper le texte de l\'application Keepass2Android.</string>
     <string name="slide_hardware_title">Matériel nécessaire</string>
     <string name="slide_hardware_text">Le récepteur InputStick est nécessaire pour que cette application fonctionne. Si vous en avez déjà un, veuillez continuer.\NCliquez sur le lien ci-dessous pour acheter InputStick :\nwww.inputstick.com/buy</string>
     <string name="slide_download_utility_title">Installer InputStickUtility</string>
-    <string name="slide_download_utility_text">L'application InputStickUtility doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
+    <string name="slide_download_utility_text">L\'application InputStickUtility doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
     <string name="slide_download_kp2a_title">Installer Keepass2Android</string>
-    <string name="slide_download_kp2a_text">L'application Keepass2Android doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
+    <string name="slide_download_kp2a_text">L\'application Keepass2Android doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
     <string name="slide_uninstall_title">Désinstaller l\'ancienne version</string>
     <string name="slide_uninstall_text">Désinstaller la version précédente du plugin pour éviter les actions dupliquées dans Keepass2Android.\nVous pouvez le faire manuellement plus tard.</string>
     <string name="slide_layout_title">Définir la disposition du clavier</string>

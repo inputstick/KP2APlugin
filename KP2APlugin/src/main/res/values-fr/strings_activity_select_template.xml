@@ -3,6 +3,6 @@
 
     <string name="title_activity_select_template">Selectionner un modèle</string>
     <string name="template_empty_title">Modèle non défini</string>
-    <string name="template_empty_message">Le modèle n'est pas défini. Le créer maintenant ?</string>
+    <string name="template_empty_message">Le modèle n\'est pas défini. Le créer maintenant ?</string>
 
 </resources>

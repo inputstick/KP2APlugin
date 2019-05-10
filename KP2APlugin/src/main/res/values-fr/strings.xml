@@ -14,10 +14,10 @@
     <string name="title_activity_all_actions">Sélectionner une action :</string>
     <string name="title_activity_select_app">Sélectionner une application :</string>
     <string name="text_please_wait">Merci de patienter</string>
-    <string name="text_authenticator_app_not_found">Plugin InputStick : Google Authenticator n'est PAS installée !</string>
+    <string name="text_authenticator_app_not_found">Plugin InputStick : Google Authenticator n\'est PAS installée !</string>
     <string name="text_custom_app_not_found">Plugin InputStick : application non trouvée !</string>
     <string name="text_custom_app_not_specified">Plugin InputStick : application à exécuter NON spécifiée (à corriger dans les paramètres du plugin) !</string>
-    <string name="text_connection_failed">Plugin InputStick : la connexion a échoué !string>
+    <string name="text_connection_failed">Plugin InputStick : la connexion a échoué !</string>
     <string name="text_auto_connect_msg_failed">Plugin InputStick : la connexion a échoué ! Connexion automatique désactivée</string>
     <string name="text_auto_connect_msg_cancelled">Plugin InputStick : connexion annulée ! Connexion automatique désactivée</string>
     <string name="text_auto_connect_reenabled">Plugin InputStick : Connexion automatique réactivée</string>
