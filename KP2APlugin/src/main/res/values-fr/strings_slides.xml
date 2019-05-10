@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_setup_wizard">Assistant d\'installation de plugin</string>
+
+    <string name="setup_skip_title">Passer l\'installation ?</string>
+    <string name="setup_skip_text">Êtes-vous sûr de vouloir passer l\'installation ?\n(It will not be displayed again. You can set everything up manually)</string>
+
+    <string name="slide_image_desc">image</string>
+    <string name="slide_button_done">Terminé&#160;</string>
+    <string name="slide_button_download">Télécharger&#160;</string>
+    <string name="slide_button_uninstall">Désinstaller&#160;</string>
+    <string name="slide_button_enable">Activer&#160;</string>
+    <string name="slide_button_test">Test</string>
+    <string name="slide_text_host_layout">Disposition du clavier de l\'hôte (PC) :</string>
+    <string name="slide_text_test_layout">Tester la mise en page sélectionnée :</string>
+    <string name="slide_text_wait1">Veuillez en attendez un autre :&#160;</string>
+    <string name="slide_text_wait2">&#160;secondes</string>
+
+    <string name="slide_intro_title">C'est parti</string>
+    <string name="slide_intro_text">Ce guide étape par étape s'assurera que votre appareil est correctement configuré pour utiliser InputStick pour taper le texte de l\'application Keepass2Android.</string>
+    <string name="slide_hardware_title">Matériel nécessaire</string>
+    <string name="slide_hardware_text">Le récepteur InputStick est nécessaire pour que cette application fonctionne. Si vous en avez déjà un, veuillez continuer.\NCliquez sur le lien ci-dessous pour acheter InputStick :\nwww.inputstick.com/buy</string>
+    <string name="slide_download_utility_title">Installer InputStickUtility</string>
+    <string name="slide_download_utility_text">L'application InputStickUtility doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
+    <string name="slide_download_kp2a_title">Installer Keepass2Android</string>
+    <string name="slide_download_kp2a_text">L'application Keepass2Android doit être installée.\nVous pouvez le faire manuellement plus tard.</string>
+    <string name="slide_uninstall_title">Désinstaller l\'ancienne version</string>
+    <string name="slide_uninstall_text">Désinstaller la version précédente du plugin pour éviter les actions dupliquées dans Keepass2Android.\nVous pouvez le faire manuellement plus tard.</string>
+    <string name="slide_layout_title">Définir la disposition du clavier</string>
+    <string name="slide_layout_text">Définissez la disposition du clavier utilisée par votre PC.\nTest : branchez InputStick sur le port USB, ouvrez l\'éditeur de texte, assurez-vous que tous les caractères ont été tapés correctement.</string>
+    <string name="slide_enable_title">Activer le plugin</string>
+    <string name="slide_enable_text">Le plugin doit être activé dans Keepass2Android pour accéder aux données lorsque l\'entrée est ouverte.</string>
+    <string name="slide_field_title">Actions de champ</string>
+    <string name="slide_field_text">Cliquez sur un champ (mot de passe, nom d\'utilisateur, etc.) et sélectionnez \"Saisir\"</string>
+    <string name="slide_entry_title">Actions d\'entrée</string>
+    <string name="slide_entry_text">Ici trouverez plus facilement des actions plus avancées (mot de passe masqué, macros, saisie à partir du presse-papiers/application Authenticator) et accéder facilement aux paramètres.</string>
+    <string name="slide_settings_title">Réglages</string>
+    <string name="slide_settings_text">Afficher/masquer les actions de champ et de saisie. Réglez les options de connexion au InputStick.\nActiver la disposition secondaire du clavier (par ex. Français pour la maison, Anglais pour le travail).</string>
+    <string name="slide_mac_title">Pour les utilisateurs de Mac</string>
+    <string name="slide_mac_text">Utilisez \"Configuration OSX\" à partir des options d\'entrée quand OS X veut identifier le clavier.\nIl se peut que vous ayez besoin d\'utiliser une disposition de clavier différente, par exemple : Français (Mac)</string>
+    <string name="slide_done_title">Terminé !</string>
+    <string name="slide_done_text">Vous êtes maintenant prêt à saisir à partir de Keepass2Android.\nBesoin d\'aide supplémentaire ? Cliquez sur le lien ci-dessous :\nhttp://www.inputstick.com/help</string>
+
+</resources>

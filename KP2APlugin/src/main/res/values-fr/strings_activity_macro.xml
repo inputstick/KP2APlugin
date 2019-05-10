@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_macro">Éditeur de macros</string>
+
+    <string name="macro_current_content">Macro pour cette entrée :</string>
+    <string name="url">Saisie du champ URL</string>
+    <string name="user_name">Saisie du champ nom d\'utilisateur</string>
+    <string name="password">Saisie du champ mot de passe</string>
+    <string name="password_masked">Action Mot de passe masqué</string>
+    <string name="clipboard_authenticator">Action Presse-papier/Authenticator</string>
+    <string name="tab">Tab</string>
+    <string name="enter">Entrée</string>
+    <string name="custom">Personnalisé</string>
+    <string name="add_delay">Ajouter un délai (touches vides) :</string>
+    <string name="add_text">Ajouter du texte personnalisé :</string>
+    <string name="add_key">Appuyer et relâcher la touche :</string>
+    <string name="add_from_field">Ajouter du texte à partir du champ/de l\'action</string>
+    <string name="added">Ajouté :</string>
+    <string name="save_title">Sauvegarder ?</string>
+    <string name="save_message">Sauvegarder les modifications ?</string>
+    <string name="delete_title">Supprimer ?</string>
+    <string name="delete_message">Supprimer ?</string>
+    <string name="custom_key_title">Raccourci clavier</string>
+    <string name="custom_key_message">Touche :</string>
+    <string name="custom_key_layout_message">Important ! Les libellés des touches se réfèrent à la disposition du clavier américain et ne sont pas affectés par la disposition du clavier sélectionnée dans les paramètres de l\'application !</string>
+    <string name="illegal_character_toast">Caractère illégal : %</string>
+    <string name="no_macro_create_new">Aucune macro assignée. Créez-en une nouvelle.</string>
+    <string name="saved_toast">Sauvegardé</string>
+    <string name="deleted_toast">Supprimé</string>
+    <string name="add_macro_title">Ajouter une macro</string>
+    <string name="edit_macro_title">Modifier une macro</string>
+    <string name="add_template_title">Ajouter un modèle</string>
+    <string name="edit_template_title">Modifier le modèle</string>
+    <string name="macro_help">Macro permet de créer une procédure de connexion automatique personnalisée pour chaque compte :\n\nExemple 1 : tapez nom d\'utilisateur, appuyez sur ENTREE, tapez mot de passe, appuyez sur ENTREE\n\nExemple 2 : tapez nom d\'utilisateur, appuyez sur TAB, tapez mot de passe, appuyez sur ENTREE\n\nLa macro peut être exécutée manuellement (vous devez confirmer chaque étape) ou automatiquement en arrière-plan (attention en utilisant cette option !).\n\nUtilisez des modèles pour affecter le même type de macro à plusieurs entrées de KP2A.\n\nLes valeurs des champs sont substituées au moment de l\'exécution et ne sont jamais sauvegardées par le plugin.</string>
+
+    <string name="use_as_template">Utiliser comme modèle :</string>
+    <string name="save_as">Enregistrer sous</string>
+    <string name="load_from">Charger à partir de</string>
+    <string name="empty">Le modèle est vide !</string>
+    <string name="template_name">Nom du modèle :</string>
+    <string name="template_not_saved">Souhaitez-vous sauvegarder les modifications dans le modèle ?</string>
+
+    <string name="execution">Mode d\'exécution :</string>
+    <string name="execution_background">Exécuter en arrière-plan (attention !)</string>
+    <string name="execution_show_controls">Pas à pas, à commande manuelle</string>
+
+    <string name="title_activity_macro_execute">Macro (exécution manuelle)</string>
+    <string name="next">Suivant</string>
+    <string name="prev">Précédent</string>
+    <string name="execute">Exécuter</string>
+    <string name="done">Fermer</string>
+    <string name="end">*Fin*</string>
+    <string name="preview">Aperçu :</string>
+    <string name="current_position">Position actuelle (action) :</string>
+
+    <string-array name="delay_values">
+        <item>10</item>
+        <item>25</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+    </string-array>
+
+</resources>

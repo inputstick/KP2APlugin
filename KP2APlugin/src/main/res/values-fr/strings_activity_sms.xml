@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_sms">Saisir depuis un SMS</string>
+
+    <string name="sms_type_all">Tout saisir</string>
+    <string name="sms_done">Terminé</string>
+    <string name="sms_sender">De :</string>
+    <string name="sms_content">Message :</string>
+    <string name="sms_info">Cliquez sur le texte marqué pour le saisir</string>
+
+</resources>
