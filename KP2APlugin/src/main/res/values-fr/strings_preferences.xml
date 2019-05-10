@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="configure_plugin">Configurer en tant que plugin</string>
+    <string name="enabled">Activé</string>
+    <string name="not_configured">NON configuré !</string>
+
+    <string name="missing_access_scope_title">Portée d'accès de KP2A</string>
+    <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l'accès maintenant ?</string>
+
+    <string name="secondary_layout_action_reminder_message">Vous devez activer au moins une action pour la disposition du clavier secondaire (voir \"Actions affichées de l'interface utilisateur\" ci-dessous)</string>
+
+    <string name="show_changelog_title">Afficher le journal des modifications</string>
+    <string name="show_help_webpage_title">Ouvrir la page d'aide</string>
+    <string name="show_about_app_title">A propos de l\'application</string>
+
+    <string name="help_and_info_settings_title">Aide et informations</string>
+    <string name="general_settings_title">Général</string>
+
+    <string name="typing_settings_title">Paramètres de saisie</string>
+    <string name="connection_settings_title">Paramètres de connexion InputStick</string>
+
+    <string name="layout_title">Disposition du clavier hôte (principal)</string>
+    <string name="secondary_layout_title">Disposition du clavier hôte (secondaire)</string>
+
+    <string name="show_secondary_title">Disposition secondaire</string>
+    <string name="show_secondary_summary_on">La disposition du clavier secondaire est activée. Vous pouvez choisir les actions qui seront disponibles pour ce modèle (voir ci-dessous)</string>
+    <string name="show_secondary_summary_off">La disposition du clavier secondaire est désactivée</string>
+
+    <string name="enter_after_url_title">Entrée après l\'URL</string>
+    <string name="enter_after_url_summary_on">Appuyez sur la touche Entrée après avoir tapé le champ URL</string>
+    <string name="enter_after_url_summary_off">Ne rien faire après avoir tapé le champ URL</string>
+
+    <string name="typing_speed_title">Vitesse de saisie</string>
+    <string-array name="typing_speed_names">
+        <item>Le plus rapide (>2.0)</item>
+        <item>Normal (1.0)</item>
+        <item>Lent (0.5)</item>
+        <item>Plus lent (0.2)</item>
+        <item>Le plus lent (0.1)</item>
+    </string-array>
+
+    <string-array name="typing_speed_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+
+    <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d'une nouvelle entrée.</string>
+
+    <string name="uninstall_title">Désinstaller</string>
+    <string name="uninstall_message">Désinstaller la version précédente du plugin maintenant ?\n\nN'oubliez pas de configurer la version actuelle : \"Configurer en tant que plugin\", configurer la disposition du clavier, etc.\n\n\"Ouvrir la page d\'aide\" pour en savoir plus sur les nouvelles fonctionnalités.</string>
+    <string name="uninstall_toast">Désinstaller l\'ancienne version du plugin</string>
+
+    <string name="clipboard_typing_settings_title">Saisie du presse-papier</string>
+    <string name="clipboard_launch_authenticator_title">Lancer Google Authenticator</string>
+    <string name="clipboard_launch_authenticator_summary_on">Lancer l\'application Google Authenticator lorsque la saisie du presse-papiers est activée</string>
+    <string name="clipboard_launch_authenticator_summary_off">Ne pas lancer l\'application Google Authenticator</string>
+    <string name="clipboard_launch_custom_app_title">Lancer une application personnalisée</string>
+    <string name="clipboard_launch_custom_app_summary_on">Lancer l\'application sélectionnée ci-dessous lorsque la saisie du presse-papiers est activée</string>
+    <string name="clipboard_launch_custom_app_summary_off">Ne pas lancer d\'application personnalisée</string>
+    <string name="clipboard_custom_app_title">Application personnalisée</string>
+    <string name="clipboard_custom_app_not_selected">L\'application n'est pas sélectionnée</string>
+    <string name="clipboard_custom_app_unknown">Application inconnue</string>
+    <string name="clipboard_auto_enter_title">Ajouter Entrée</string>
+    <string name="clipboard_auto_enter_summary_on">Appuyer sur la touche Entrée après la saisie</string>
+    <string name="clipboard_auto_enter_summary_off">Ne rien faire après la saisie</string>
+    <string name="clipboard_auto_disable_title">Désactiver après la saisie</string>
+    <string name="clipboard_auto_disable_summary_on">Désactiver la saisie du presse-papier après que le premier élément ai été saisi</string>
+    <string name="clipboard_auto_disable_summary_off">La saisie du presse-papiers sera active jusqu'à la fin du délai d\'attente.</string>
+    <string name="clipboard_check_length_title">Vérifier la longueur</string>
+    <string name="clipboard_check_length_summary_on">Ne tapez pas si le texte dans le presse-papiers fait plus de 64 caractères.</string>
+    <string name="clipboard_check_length_summary_off">Toujours saisir, même les textes longs</string>
+
+    <string name="sms_settings_title">SMS</string>
+    <string name="sms_title">Écouter les SMS entrants</string>
+    <string name="sms_not_supported">La réception de SMS n'est PAS prise en charge par cet appareil.</string>
+    <string name="sms_smsproxy_title">Application de Proxy SMS</string>
+    <string name="sms_smsproxy_summary_enabled">Activé (cliquez pour désactiver)</string>
+    <string name="sms_smsproxy_summary_disabled">Désactivé (cliquez pour activer)</string>
+    <string name="sms_smsproxy_summary_not_installed">Non installé (cliquez pour télécharger))</string>
+    <string name="sms_smsproxy_text_denied">Activation refusée par le Proxy SMS</string>
+
+    <string name="display_inputstick_text_title">Afficher \"(IS)\"</string>
+    <string name="display_inputstick_text_summary_on">Afficher le nom de l\'action + (IS), exemple: Saisir (IS)</string>
+    <string name="display_inputstick_text_summary_off">Display only action name, example: Type</string>
+
+    <string name="ui_settings_title">Actions affichées de l\'interface utilisateur :</string>
+    <string name="items_general_title">Actions générales</string>
+    <string name="items_entry_primary_title">Actions de l\'entrée (mise en page primaire)</string>
+    <string name="items_entry_secondary_title">Actions de l\'entrée (mise en page secondaire)</string>
+    <string name="items_field_primary_title">Actions de champ (mise en page primaire)</string>
+    <string name="items_field_secondary_title">Actions de champs (mise en page secondaire)</string>
+
+    <string-array name="generalItemsDisplayList">
+        <item>Raccourci Paramètres</item>
+        <item>Connection/Déconnection</item>
+        <item>Télécommande</item>
+        <item>Raccourci d\'installation OSX</item>
+        <item>Ajouter/Modifier une macro</item>
+        <item>Gérer les modèles</item>
+        <item>Action Tab et Entrée</item>
+    </string-array>
+    <string-array name="generalItemsReturnList">
+        <item>settings</item>
+        <item>con_disc</item>
+        <item>telecommand</item>
+        <item>osx</item>
+        <item>macro</item>
+        <item>gerer_modeles</item>
+        <item>tab_entree</item>
+    </string-array>
+
+    <string-array name="entryItemsDisplayList">
+        <item>Nom d\'utilisateur/Mot de passe</item>
+        <item>Nom d\'utilisateur/Mot de passe/Entrée</item>
+        <item>Mot de passe masqué</item>
+        <item>Executer la macro</item>
+        <item>Executer le modèle</item>
+        <item>Presse-papier/Authenticator</item>
+    </string-array>
+    <string-array name="entryItemsReturnList">
+        <item>username_and_password</item>
+        <item>username_password_enter</item>
+        <item>masked_password</item>
+        <item>macro</item>
+        <item>run_template</item>
+        <item>clipboard</item>
+    </string-array>
+
+    <string-array name="fieldItemsDisplayList">
+        <item>Saisir</item>
+        <item>Saisir+Entrée</item>
+        <item>Saisir+Tab</item>
+        <item>Saisir (lent)</item>
+        <item>Masqué (mot de passe uniquement)</item>
+    </string-array>
+    <string-array name="fieldItemsReturnList">
+        <item>type_normal</item>
+        <item>type_enter</item>
+        <item>type_tab</item>
+        <item>type_slow</item>
+        <item>type_masked</item>
+    </string-array>
+
+    <string name="tip_title">Astuce :</string>
+    <string name="tip_empty">Erreur : message vide</string>
+    <string name="tip_typing_speed">Veuillez vérifier si cela fonctionne correctement avec votre système ! Peut ne pas fonctionner correctement avant le démarrage du système d\'exploitation (dans le BIOS).</string>
+
+    <string name="sms_dialog_title">Permission SMS</string>
+    <string name="sms_dialog_message">L'application a besoin d\'une autorisation pour pouvoir lire les messages SMS entrants. Cette fonctionnalité ne fonctionnera que lorsque le plugin est actif (lorsque vous utilisez Keepass2Android). Le plugin ne stocke aucun SMS reçu. Cliquez sur OK pour continuer.</string>
+    <string name="sms_missing_permission">Ecoute des SMS entrants désactivée (en raison d\'une autorisation manquante)</string>
+
+
+    <string name="connection_auto_connect_title">Connection automatique</string>
+    <string-array name="connection_auto_connect_names">
+        <item>Désactivé\n- attendre jusqu'à ce que la saisie soit demandée\n(InputStick est utilisé occasionnellement)\n</item>
+        <item>Intelligent\n- lorsque l\'entrée KP2A est ouverte\n- désactivé temporairement après une erreur de connexion (ou l\'annuler)\n- réactivation après une connexion réussie\n(InputStick est utilisé fréquemment)\n</item>
+        <item>Toujours\n- lorsque l\'entrée KP2A est ouverte\n(InputStick est tout le temps)\n</item>
+    </string-array>
+    <string-array name="connection_auto_connect_values">
+        <item>0</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="connection_max_idle_period_title">Max inactivity period</string>
+    <string-array name="connection_max_idle_period_names">
+        <item>1 min</item>
+        <item>2 min</item>
+        <item>3 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>Illimité\n- peut vider la batterie !\n- NON recommandé pour la plupart des utilisateurs !</item>
+    </string-array>
+    <string-array name="connection_max_idle_period_values">
+        <item>60000</item>
+        <item>120000</item>
+        <item>180000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>0</item>
+    </string-array>
+
+
+    <string name="quick_shortcuts_settings_title">Raccourcis rapides (menu d\'entrée)</string>
+    <string name="enabled_quick_shortcuts_title">Raccourcis rapides activés</string>
+    <string name="quickshortcut_1">Raccourci rapide 1</string>
+    <string name="quickshortcut_2">Raccourci rapide 2</string>
+    <string name="quickshortcut_3">Raccourci rapide 3</string>
+    <string name="quickshortcut_disabled">Désactivé</string>
+
+    <string-array name="enabled_quick_shortcuts_names">
+        <item>Disabled</item>
+        <item>Quick Shortcut 1</item>
+        <item>Quick Shortcut 1, Quick Shortcut 2</item>
+        <item>Quick Shortcut 1, Quick Shortcut 2, Quick Shortcut 3</item>
+    </string-array>
+    <string-array name="enabled_quick_shortcuts_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+
+    <string name="section_typing_info">Assurez-vous toujours que la disposition du clavier choisie est la même que celle utilisée par votre PC. Utilisez une vitesse de frappe plus faible si l\'hôte USB n\'accepte pas la saisie rapide au clavier.</string>
+    <string name="section_quick_shortcuts_info">Les raccourcis rapides sont des raccourcis clavier facilement accessibles à partir du menu Entrée.</string>
+    <string name="section_ui_settings_info">Permet de régler les actions qui seront affichées dans les menus Entrée et Champ.</string>
+    <string name="section_clipboard_info">Utilisez la saisie du presse-papiers pour taper du texte provenant d\'autres applications (OTP générés, etc.).</string>
+    <string name="section_sms_info">Permet de taper du texte (codes d\'authentification, etc.) à partir de SMS reçus via l\'application SMS Proxy</string>
+
+
+    <string name="remote_settings_title">Télécommande :</string>
+    <string name="remote_mouse_mode_title">Mode tapis de souris</string>
+    <string name="remote_mouse_sensitivity_title">Sensibilité de la souris</string>
+    <string name="remote_scroll_sensitivity_title">Sensibilité de la molette de défilement</string>
+    <string-array name="mouseModeDisplayList">
+        <item>Souris</item>
+        <item>Écran tactile</item>
+    </string-array>
+    <string-array name="mouseModeReturnList">
+        <item>mouse</item>
+        <item>touchscreen</item>
+    </string-array>
+
+</resources>

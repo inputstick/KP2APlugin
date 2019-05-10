@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="remote_show_keyboard">Afficher le clavier</string>
+    <string name="remote_fn_keys">Touches Fn</string>
+    <string name="remote_more">Plus</string>
+    <string name="remote_mouse_l">L</string>
+    <string name="remote_mouse_m">M</string>
+    <string name="remote_mouse_r">R</string>
+
+    <string name="remote_mouse_mode">Mode souris</string>
+    <string name="remote_touchscreen_mode">Mode tactile</string>
+
+    <string name="remote_set_layout">Définissez la disposition du clavier en :\u00A0</string>
+
+</resources>

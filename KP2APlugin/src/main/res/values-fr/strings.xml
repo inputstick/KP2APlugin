@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Plugin KP2A InputStick</string>
+    <string name="kp2aplugin_title">Plugin InputStick</string>
+    <string name="kp2aplugin_shortdesc">Permet d\'envoyer du texte de KP2A à votre PC via InputStick.</string>
+    <string name="kp2aplugin_author">Philipp Crocoll et Jakub Zawadzki</string>
+    
+    <string name="changelog_full_title">Journal des modifications</string>
+    <string name="changelog_title">Les nouveautés</string>
+    <string name="changelog_show_full">Plus&#8230;</string>
+    
+    <string name="title_activity_init">Lancement du plugin</string>
+    <string name="title_activity_all_actions">Sélectionner une action :</string>
+    <string name="title_activity_select_app">Sélectionner une application :</string>
+    <string name="text_please_wait">Merci de patienter</string>
+    <string name="text_authenticator_app_not_found">Plugin InputStick : Google Authenticator n'est PAS installée !</string>
+    <string name="text_custom_app_not_found">Plugin InputStick : application non trouvée !</string>
+    <string name="text_custom_app_not_specified">Plugin InputStick : application à exécuter NON spécifiée (à corriger dans les paramètres du plugin) !</string>
+    <string name="text_connection_failed">Plugin InputStick : la connexion a échoué !string>
+    <string name="text_auto_connect_msg_failed">Plugin InputStick : la connexion a échoué ! Connexion automatique désactivée</string>
+    <string name="text_auto_connect_msg_cancelled">Plugin InputStick : connexion annulée ! Connexion automatique désactivée</string>
+    <string name="text_auto_connect_reenabled">Plugin InputStick : Connexion automatique réactivée</string>
+    <string name="text_clipboard_disabled">Plugin InputStick : Saisie du presse-papiers désactivée</string>
+    <string name="text_clipboard_notification_info">Saisie du presse-papiers active</string>
+    <string name="text_clipboard_copy_now">Plugin InputStick : Copier le texte dans le presse-papiers (60 secondes restantes)</string>
+    <string name="text_clipboard_too_long">Le texte est trop long. Voir l\'option Vérifier la longueur dans les paramètres.</string>
+    <string name="text_capslock_warning">Avertissement : Le verrouillage des majuscules est activé !</string>
+    <string name="text_missing_utility_app">Vous devez télécharger l\'application InputStickUtility</string>
+    <string name="text_plugin_restarted">Plugin redémarré, sélectionnez à nouveau l\'action</string>
+    <string name="text_stop_plugin">Arrêter le plugin</string>
+    <string name="text_activity_closed">Popup fermé (Raison : la base de donnée KP2A a été verrouillée/fermée)</string>
+    <string name="text_time_left">Temps restant :</string>
+    <string name="action_field_type">Saisie</string>
+    <string name="action_field_type_enter">Saisie+Entrée</string>
+    <string name="action_field_type_tab">Saisie+Tab</string>
+    <string name="action_field_type_slow">Saisie (lente)</string>
+    <string name="action_field_type_masked">Saisie (masquée)</string>
+    <string name="action_type_tab">Tab</string>
+    <string name="action_type_enter">Entrée</string>
+    <string name="action_type_user_tab_pass">Nom d\'utilisateur/mot de passe</string>
+    <string name="action_type_user_tab_pass_enter">Nom d\'utilisateur/mot de passe/Entrée</string>
+    <string name="action_show_all">Afficher toutes les actions</string>
+    <string name="action_connect">Se connecter maintenant</string>
+    <string name="action_disconnect">Se déconnecter maintenant</string>
+    <string name="action_open_settings">Réglages</string>
+    <string name="action_open_mac_setup">Configuration OSX</string>
+    <string name="action_masked_password">Mot de passe masqué</string>
+    <string name="action_macro_run">Exécuter la macro</string>
+    <string name="action_template_run">Exécuter le modèle</string>
+    <string name="action_macro_add_edit">Ajouter/Modifier une macro</string>
+    <string name="action_template_manage">Gérer les modèles</string>
+    <string name="action_clipboard">Presse-papiers</string>
+    <string name="action_remote">Télécommande (clavier/souris)</string>
+    
+    <string name="ok">OK</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Annuler</string>
+    <string name="do_not_remind">Ne pas rappeler</string>
+    <string name="error">Erreur</string>
+    <string name="info">Information</string>
+    <string name="help">Aide</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Editer</string>
+    <string name="add">Ajouter</string>
+    <string name="save">Sauvegarder</string>
+    <string name="disable">Désactiver</string>
+    <string name="important_title">Important !</string>
+    <string name="configuration_title">Configuration</string>
+    <string name="later">Plus tard</string>
+    <string name="never">Jamais</string>
+    <string name="connect">Connecter</string>
+    <string name="disconnect">Déconnecter</string>
+        
+    <string name="notification_text">Le plugin KP2A InputStick est actif</string>
+    <string name="notification_state_ready">connecté</string>
+    <string name="notification_state_connected">en attente de l\'USB</string>
+    <string name="notification_state_connecting">connexion&#8230;</string>
+    <string name="notification_state_not_connected">non connecté</string>
+    <string name="notification_sms">Saisie depuis un SMS</string>
+
+    <string name="title_activity_settings">Paramètres de KP2A InputStick</string>
+    
+    <string name="title_activity_about">A propos de l\'application</string>
+    <string name="about_text">Auteurs:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (développement initial, API du plugin)\nhttps://keepass2android.codeplex.com\n\nCode source :\nhttps://github.com/inputstick\n\nCette application utilise :\n- Journal des modifications :\nhttps://github.com/koem/android-change-log\n- Intro de l\'application :\nhttps://github.com/PaoloRotolo/AppIntro</string>
+    <string name="test_chars">abc123xyz_;![/?@)</string>
+
+</resources>
