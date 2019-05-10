@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.39
+  % Version 1.39
+  	* addedd French translation
 $ 1.38
   % Version 1.38
   	* bug fixes
