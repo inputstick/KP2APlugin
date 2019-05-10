@@ -83,7 +83,9 @@
     <string name="title_activity_settings">KP2A InputStick Settings</string>
     
     <string name="title_activity_about">About application</string>
-    <string name="about_text">Authors:\nJakub Zawadzki\nwww.inputstick.com\n\nPhilipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick\n\nThis application uses:\n- Changelog:\nhttps://github.com/koem/android-change-log\n- AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
+    <string name="about_text1">Authors:\n• Jakub Zawadzki (plugin development, InputStick API)\nwww.inputstick.com\n• Philipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick</string>
+    <string name="about_text2">Special thanks to:\n• Jean-Marc ALBERT (French translation)\nhttps://github.com/wikijm</string>
+    <string name="about_text3">This application uses:\n• Android Change Log:\nhttps://github.com/koem/android-change-log\n• AppIntro:\nhttps://github.com/PaoloRotolo/AppIntro</string>
     <string name="test_chars">abc123xyz_;![/?@)</string>
 
 </resources>
