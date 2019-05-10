@@ -5,7 +5,7 @@
 
     <string name="macro_current_content">Macro for this entry:</string>
     <string name="url">Type URL field</string>
-    <string name="user_name">Type user name filed</string>
+    <string name="user_name">Type user name field</string>
     <string name="password">Type password field</string>
     <string name="password_masked">Masked Password action</string>
     <string name="clipboard_authenticator">Clipboard/Authenticator action</string>
