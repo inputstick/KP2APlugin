@@ -72,7 +72,7 @@
     <string name="sms_smsproxy_title">Application de Proxy SMS</string>
     <string name="sms_smsproxy_summary_enabled">Activé (cliquez pour désactiver)</string>
     <string name="sms_smsproxy_summary_disabled">Désactivé (cliquez pour activer)</string>
-    <string name="sms_smsproxy_summary_not_installed">Non installé (cliquez pour télécharger))</string>
+    <string name="sms_smsproxy_summary_not_installed">Non installée (cliquez pour télécharger))</string>
     <string name="sms_smsproxy_text_denied">Activation refusée par le Proxy SMS</string>
 
     <string name="display_inputstick_text_title">Afficher \"(IS)\"</string>
