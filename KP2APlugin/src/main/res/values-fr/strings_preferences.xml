@@ -20,14 +20,14 @@
     <string name="typing_settings_title">Paramètres de saisie</string>
     <string name="connection_settings_title">Paramètres de connexion InputStick</string>
 
-    <string name="layout_title">Disposition du clavier hôte (principal)</string>
+    <string name="layout_title">Disposition du clavier hôte (principale)</string>
     <string name="secondary_layout_title">Disposition du clavier hôte (secondaire)</string>
 
     <string name="show_secondary_title">Disposition secondaire</string>
     <string name="show_secondary_summary_on">La disposition du clavier secondaire est activée. Vous pouvez choisir les actions qui seront disponibles pour ce modèle (voir ci-dessous)</string>
     <string name="show_secondary_summary_off">La disposition du clavier secondaire est désactivée</string>
 
-    <string name="enter_after_url_title">Entrée après l\'URL</string>
+    <string name="enter_after_url_title">Touche Entrée après saisie de l\'URL</string>
     <string name="enter_after_url_summary_on">Appuyez sur la touche Entrée après avoir tapé le champ URL</string>
     <string name="enter_after_url_summary_off">Ne rien faire après avoir tapé le champ URL</string>
 
@@ -39,15 +39,6 @@
         <item>Plus lent (0.2)</item>
         <item>Le plus lent (0.1)</item>
     </string-array>
-
-
-
-
-
-
-
-
-
 
     <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d\'une nouvelle entrée.</string>
 
@@ -65,7 +56,7 @@
     <string name="clipboard_custom_app_title">Application personnalisée</string>
     <string name="clipboard_custom_app_not_selected">L\'application n\'est pas sélectionnée</string>
     <string name="clipboard_custom_app_unknown">Application inconnue</string>
-    <string name="clipboard_auto_enter_title">Ajouter Entrée</string>
+    <string name="clipboard_auto_enter_title">Touche Entrée après saisie</string>
     <string name="clipboard_auto_enter_summary_on">Appuyer sur la touche Entrée après la saisie</string>
     <string name="clipboard_auto_enter_summary_off">Ne rien faire après la saisie</string>
     <string name="clipboard_auto_disable_title">Désactiver après la saisie</string>
@@ -81,7 +72,7 @@
     <string name="sms_smsproxy_title">Application de Proxy SMS</string>
     <string name="sms_smsproxy_summary_enabled">Activé (cliquez pour désactiver)</string>
     <string name="sms_smsproxy_summary_disabled">Désactivé (cliquez pour activer)</string>
-    <string name="sms_smsproxy_summary_not_installed">Non installé (cliquez pour télécharger))</string>
+    <string name="sms_smsproxy_summary_not_installed">Non installée (cliquez pour télécharger))</string>
     <string name="sms_smsproxy_text_denied">Activation refusée par le Proxy SMS</string>
 
     <string name="display_inputstick_text_title">Afficher \"(IS)\"</string>
@@ -105,15 +96,6 @@
         <item>Action Tab et Entrée</item>
     </string-array>
 
-
-
-
-
-
-
-
-
-
     <string-array name="entryItemsDisplayList">
         <item>Nom d\'utilisateur/Mot de passe</item>
         <item>Nom d\'utilisateur/Mot de passe/Entrée</item>
@@ -123,14 +105,6 @@
         <item>Presse-papier/Authenticator</item>
     </string-array>
 
-
-
-
-
-
-
-
-
     <string-array name="fieldItemsDisplayList">
         <item>Saisir</item>
         <item>Saisir+Entrée</item>
@@ -138,13 +112,6 @@
         <item>Saisir (lent)</item>
         <item>Masqué (mot de passe uniquement)</item>
     </string-array>
-
-
-
-
-
-
-
 
     <string name="tip_title">Astuce :</string>
     <string name="tip_empty">Erreur : message vide</string>
@@ -154,7 +121,6 @@
     <string name="sms_dialog_message">L\'application a besoin d\'une autorisation pour pouvoir lire les messages SMS entrants. Cette fonctionnalité ne fonctionnera que lorsque le plugin est actif (lorsque vous utilisez Keepass2Android). Le plugin ne stocke aucun SMS reçu. Cliquez sur OK pour continuer.</string>
     <string name="sms_missing_permission">Ecoute des SMS entrants désactivée (en raison d\'une autorisation manquante)</string>
 
-
     <string name="connection_auto_connect_title">Connection automatique</string>
     <string-array name="connection_auto_connect_names">
         <item>Désactivé\n- attendre jusqu\'à ce que la saisie soit demandée\n(InputStick est utilisé occasionnellement)\n</item>
@@ -162,12 +128,7 @@
         <item>Toujours\n- lorsque l\'entrée KP2A est ouverte\n(InputStick est tout le temps)\n</item>
     </string-array>
 
-
-
-
-
-
-    <string name="connection_max_idle_period_title">Max inactivity period</string>
+    <string name="connection_max_idle_period_title">Période maximum d'inactivité</string>
     <string-array name="connection_max_idle_period_names">
         <item>1 min</item>
         <item>2 min</item>
@@ -176,15 +137,6 @@
         <item>10 min</item>
         <item>Illimité\n- peut vider la batterie !\n- NON recommandé pour la plupart des utilisateurs !</item>
     </string-array>
-
-
-
-
-
-
-
-
-
 
     <string name="quick_shortcuts_settings_title">Raccourcis rapides (menu d\'entrée)</string>
     <string name="enabled_quick_shortcuts_title">Raccourcis rapides activés</string>
@@ -200,31 +152,19 @@
         <item>Raccourci rapide 1, Raccourci rapide 2, Raccourci rapide 3</item>
     </string-array>
 
-
-
-
-
-
-
-
     <string name="section_typing_info">Assurez-vous toujours que la disposition du clavier choisie est la même que celle utilisée par votre PC. Utilisez une vitesse de frappe plus faible si l\'hôte USB n\'accepte pas la saisie rapide au clavier.</string>
     <string name="section_quick_shortcuts_info">Les raccourcis rapides sont des raccourcis clavier facilement accessibles à partir du menu Entrée.</string>
     <string name="section_ui_settings_info">Permet de régler les actions qui seront affichées dans les menus Entrée et Champ.</string>
     <string name="section_clipboard_info">Utilisez la saisie du presse-papiers pour taper du texte provenant d\'autres applications (OTP générés, etc.).</string>
     <string name="section_sms_info">Permet de taper du texte (codes d\'authentification, etc.) à partir de SMS reçus via l\'application SMS Proxy</string>
 
-
     <string name="remote_settings_title">Télécommande :</string>
-    <string name="remote_mouse_mode_title">Mode tapis de souris</string>
+    <string name="remote_mouse_mode_title">Séléction du Mode de Souris</string>
     <string name="remote_mouse_sensitivity_title">Sensibilité de la souris</string>
     <string name="remote_scroll_sensitivity_title">Sensibilité de la molette de défilement</string>
     <string-array name="mouseModeDisplayList">
         <item>Souris</item>
         <item>Écran tactile</item>
     </string-array>
-
-
-
-
 
 </resources>
