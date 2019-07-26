@@ -128,7 +128,7 @@
         <item>Toujours\n- lorsque l\'entrée KP2A est ouverte\n(InputStick est tout le temps)\n</item>
     </string-array>
 
-    <string name="connection_max_idle_period_title">Période maximum d'inactivité</string>
+    <string name="connection_max_idle_period_title">Période maximum d\'inactivité</string>
     <string-array name="connection_max_idle_period_names">
         <item>1 min</item>
         <item>2 min</item>
