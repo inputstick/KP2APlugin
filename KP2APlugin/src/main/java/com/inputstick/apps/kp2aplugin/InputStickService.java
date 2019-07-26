@@ -77,7 +77,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static long serviceKeepAliveTime;			//if kp2a database was closed/locked but plugin is being kept alive (received SMS, typing from clipboard)
 	private static long autoDisconnectTime;	//if user enabled auto-disconnect in settings
 
-	private static ArrayList<ItemToExecute> items = new ArrayList<ItemToExecute>();
+	private static final ArrayList<ItemToExecute> items = new ArrayList<>();
 	private static long connectionAttemptLockTime; //prevents multiple connecton attempts (until conection state update is received)
 	
 	private static boolean addDummyKeys;
@@ -132,10 +132,10 @@ public class InputStickService extends Service implements InputStickStateListene
 			//stop plugin?
 			if (time > serviceKeepAliveTime) {
 				if (dbClosedTime > 0) {
-					stopPlugin("auto");
+					stopPlugin();
 				} else if (time > lastActionTime + Const.SERVICE_FAILSAFE_PERIOD) {
 					//fail safe, in case kp2a crashes
-					stopPlugin("failsafe");
+					stopPlugin();
 				}
 			}													
 			mHandler.postDelayed(mTimerTask, TIMER_INTERVAL_MS);
@@ -221,7 +221,6 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Bundle bundle = intent.getExtras();
 			boolean error = true;
 			try {
 				smsText = intent.getStringExtra(Const.SMS_PROXY_EXTRA_SMS_TEXT);
@@ -329,40 +328,42 @@ public class InputStickService extends Service implements InputStickStateListene
 	ClipboardManager.OnPrimaryClipChangedListener mPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
 	    public void onPrimaryClipChanged() {
 	        final ClipData clipData = mClipboardManager.getPrimaryClip();
-			final ClipDescription desc = clipData.getDescription();
-			boolean hasText = false;
-			if (Build.VERSION.SDK_INT >= 16) {
-				hasText = (desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) || (desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML));
-			} else {
-				hasText = desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
-			}
+	        if (clipData != null) {
+                final ClipDescription desc = clipData.getDescription();
+                boolean hasText;
+                if (Build.VERSION.SDK_INT >= 16) {
+                    hasText = (desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) || (desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML));
+                } else {
+                    hasText = desc.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
+                }
 
-	        if (hasText) {
-				String text = null;
-				ClipData.Item item = clipData.getItemAt(0);
-				if (item != null) {
-					CharSequence cs = item.getText();
-					if (cs != null) {
-						text = cs.toString();
-					}
-				}
+                if (hasText) {
+                    String text = null;
+                    ClipData.Item item = clipData.getItemAt(0);
+                    if (item != null) {
+                        CharSequence cs = item.getText();
+                        if (cs != null) {
+                            text = cs.toString();
+                        }
+                    }
 
-	           if (text != null) {
-	        	   if ((text.length() > Const.CLIPBOARD_MAX_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
-	        		   Toast.makeText(InputStickService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
-	        	   } else {	  
-						queueText(text, mClipboardTypingParams, true);
-						queueDelay(15, false);
-						if (PreferencesHelper.isClipboardAutoEnter(prefs)) {
-							// do not clear queue - this would remove previous item (typing text form clipboard)!
-							queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, mClipboardTypingParams, false);
-						}
-						if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
-							stopClipboardMonitoring(true);
-						}
-	        	   }
-	           }
-	    	}
+                    if (text != null) {
+                        if ((text.length() > Const.CLIPBOARD_MAX_LENGTH) && (PreferencesHelper.isClipboardCheckLength(prefs))) {
+                            Toast.makeText(InputStickService.this, R.string.text_clipboard_too_long, Toast.LENGTH_LONG).show();
+                        } else {
+                            queueText(text, mClipboardTypingParams, true);
+                            queueDelay(15);
+                            if (PreferencesHelper.isClipboardAutoEnter(prefs)) {
+                                // do not clear queue - this would remove previous item (typing text form clipboard)!
+                                queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, mClipboardTypingParams, false);
+                            }
+                            if (PreferencesHelper.isClipboardAutoDisable(prefs)) {
+                                stopClipboardMonitoring(true);
+                            }
+                        }
+                    }
+                }
+            }
 	    }
 	};
 	
@@ -502,7 +503,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			String fieldKey = fieldId.substring(Strings.PREFIX_STRING.length());
 			byte keyAfterTyping = actionDataBundle.getByte(Const.EXTRA_ADD_KEY, (byte)0);
 			
-			HashMap<String, String> res = new HashMap<String, String>();
+			HashMap<String, String> res = new HashMap<>();
 			try {
 				JSONObject json = new JSONObject(intent.getStringExtra(Strings.EXTRA_ENTRY_OUTPUT_DATA));
 				for (Iterator<String> iter = json.keys(); iter.hasNext();) {
@@ -525,11 +526,11 @@ public class InputStickService extends Service implements InputStickStateListene
 			} else {						
 				queueText(text, params, true);				
 				if (keyAfterTyping != 0) {
-					queueDelay(5, false);
+					queueDelay(5);
 					queueKey(HIDKeycodes.NONE, keyAfterTyping, params, false);
 				} else {
 					if ((KeepassDefs.UrlField.equals(fieldKey) && addEnterAfterURL)) {
-						queueDelay(5, false);
+						queueDelay(5);
 						queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
 					}
 				}
@@ -600,12 +601,12 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private void typeUserNameAndPasswordFields(EntryData entryData, TypingParams params, boolean addEnter) {
 		queueText(entryData.getUserName(), params, true);
-		queueDelay(15, false);
+		queueDelay(15);
 		queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, false);
-		queueDelay(15, false);
+		queueDelay(15);
 		queueText(entryData.getPassword(), params, false);
 		if (addEnter) {
-			queueDelay(15, false);
+			queueDelay(15);
 			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, false);
 		}
 	}
@@ -709,7 +710,7 @@ public class InputStickService extends Service implements InputStickStateListene
 					Toast.makeText(this, R.string.text_plugin_restarted, Toast.LENGTH_LONG).show();
 				}
 			} else if (Const.SERVICE_FORCE_STOP.equals(action)) {
-				stopPlugin("manual");
+				stopPlugin();
 			} else if (Const.SERVICE_DISMISS_SMS.equals(action)) {				 				
 				clearSMS();
 			} else if (Const.ACTION_CLIPBOARD_STOP.equals(action)) {				 				
@@ -744,14 +745,10 @@ public class InputStickService extends Service implements InputStickStateListene
 	}
 	
 	
-	private void stopPlugin(String s) {
+	private void stopPlugin() {
 		sendForceFinishBroadcast(true);
 		stopForeground(true);
 		stopSelf();
-	}
-
-	public static boolean isRunning() {
-		return isRunning;
 	}
 
 	private void updatePluginNotification() {
@@ -870,9 +867,9 @@ public class InputStickService extends Service implements InputStickStateListene
 		queueItem(item);
 	}
 
-	private void queueDelay(int value, boolean canClearQueue) {
+	private void queueDelay(int value) {
 		ItemToExecute item = new ItemToExecute(value);
-		item.setCanClearQueue(canClearQueue);
+		item.setCanClearQueue(false);
 		queueItem(item);		
 	}
 
