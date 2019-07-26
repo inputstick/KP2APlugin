@@ -48,6 +48,7 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private static final String _TAG = "KP2AINPUTSTICK SERVICE";
 	private static final int TIMER_INTERVAL_MS = 1000;
+    private static final int CONNECTION_LOCK_DURATION_MS = 5000;
 	
 	private static final int ACTION_HID = 0;
 	private static final int ACTION_OTHER = 1;
@@ -77,6 +78,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static long autoDisconnectTime;	//if user enabled auto-disconnect in settings
 
 	private static ArrayList<ItemToExecute> items = new ArrayList<ItemToExecute>();
+	private static long connectionAttemptLockTime; //prevents multiple connecton attempts (until conection state update is received)
 	
 	private static boolean addDummyKeys;
 	private static int cnt;
@@ -783,57 +785,58 @@ public class InputStickService extends Service implements InputStickStateListene
 	@Override
 	public void onStateChanged(int state) {
 		Log.d(_TAG, "InputStick connection state changed: " + state);
+        connectionAttemptLockTime = 0;
 		int messageResId = 0;
 		switch (state) {
-		case ConnectionManager.STATE_CONNECTED:
-			onAction(ACTION_HID);
-			break;
-		case ConnectionManager.STATE_READY:
-			addDummyKeys = true;
-			executeQueue();
-			// re-enable smart auto-connect?
-			if (autoConnect == Const.AUTO_CONNECT_SMART) {
-				if (!PreferencesHelper.canSmartAutoConnect(prefs)) {
-					PreferencesHelper.setSmartAutoConnect(prefs, true);
-					messageResId = R.string.text_auto_connect_reenabled;
-				}
-			}
+            case ConnectionManager.STATE_CONNECTED:
+                onAction(ACTION_HID);
+                break;
+            case ConnectionManager.STATE_READY:
+                addDummyKeys = true;
+                executeQueue();
+                // re-enable smart auto-connect?
+                if (autoConnect == Const.AUTO_CONNECT_SMART) {
+                    if (!PreferencesHelper.canSmartAutoConnect(prefs)) {
+                        PreferencesHelper.setSmartAutoConnect(prefs, true);
+                        messageResId = R.string.text_auto_connect_reenabled;
+                    }
+                }
 
-			break;
-		case ConnectionManager.STATE_DISCONNECTED:
-			if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
-				int reasonCode = InputStickHID.getDisconnectReason();
-				// disable smart auto-connect? yes, if user was asked to select device, but dismissed/cancelled dialog or cancelled connection attempt
-				if (reasonCode == ConnectionManager.DISC_REASON_UTILITY_CANCELLED) {
-					PreferencesHelper.setSmartAutoConnect(prefs, false);
-					messageResId = R.string.text_auto_connect_msg_cancelled;
-				}		
-			}
-			break;
-		case ConnectionManager.STATE_FAILURE:
-			int errorCode = InputStickHID.getErrorCode();
-			Log.d(_TAG, "InputStick connection error: " + errorCode);
-			if (errorCode == InputStickError.ERROR_ANDROID_NO_UTILITY_APP) {
-				messageResId = R.string.text_missing_utility_app;
-			} else {
-				messageResId = R.string.text_connection_failed;
-				
-				// disable smart auto-connect? yes, if connection failed or user did not allow to turn on BT
-				if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
-					if (errorCode == InputStickError.ERROR_BLUETOOTH_CONNECTION_FAILED) {
-						PreferencesHelper.setSmartAutoConnect(prefs, false);
-						messageResId = R.string.text_auto_connect_msg_failed;
-					}
-					if (errorCode == InputStickError.ERROR_BLUETOOTH_NOT_ENABLED) {
-						PreferencesHelper.setSmartAutoConnect(prefs, false);
-						messageResId = R.string.text_auto_connect_msg_cancelled;
-					}
-				}
-			}
-			items.clear();
-			break;
-		default:
-			break;
+                break;
+            case ConnectionManager.STATE_DISCONNECTED:
+                if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
+                    int reasonCode = InputStickHID.getDisconnectReason();
+                    // disable smart auto-connect? yes, if user was asked to select device, but dismissed/cancelled dialog or cancelled connection attempt
+                    if (reasonCode == ConnectionManager.DISC_REASON_UTILITY_CANCELLED) {
+                        PreferencesHelper.setSmartAutoConnect(prefs, false);
+                        messageResId = R.string.text_auto_connect_msg_cancelled;
+                    }
+                }
+                break;
+            case ConnectionManager.STATE_FAILURE:
+                int errorCode = InputStickHID.getErrorCode();
+                Log.d(_TAG, "InputStick connection error: " + errorCode);
+                if (errorCode == InputStickError.ERROR_ANDROID_NO_UTILITY_APP) {
+                    messageResId = R.string.text_missing_utility_app;
+                } else {
+                    messageResId = R.string.text_connection_failed;
+
+                    // disable smart auto-connect? yes, if connection failed or user did not allow to turn on BT
+                    if (autoConnect == Const.AUTO_CONNECT_SMART && PreferencesHelper.canSmartAutoConnect(prefs)) {
+                        if (errorCode == InputStickError.ERROR_BLUETOOTH_CONNECTION_FAILED) {
+                            PreferencesHelper.setSmartAutoConnect(prefs, false);
+                            messageResId = R.string.text_auto_connect_msg_failed;
+                        }
+                        if (errorCode == InputStickError.ERROR_BLUETOOTH_NOT_ENABLED) {
+                            PreferencesHelper.setSmartAutoConnect(prefs, false);
+                            messageResId = R.string.text_auto_connect_msg_cancelled;
+                        }
+                    }
+                }
+                items.clear();
+                break;
+            default:
+                break;
 		}
 		
 		if (messageResId != 0) {
@@ -885,10 +888,14 @@ public class InputStickService extends Service implements InputStickStateListene
 				}
 				items.add(item);
 			}
-			
+
 			if (state == ConnectionManager.STATE_DISCONNECTED || state == ConnectionManager.STATE_FAILURE) {
-				Log.d(_TAG, "trigger connect");
-				InputStickHID.connect(getApplication());
+                long time = System.currentTimeMillis();
+                if ((connectionAttemptLockTime == 0) || (time > connectionAttemptLockTime + CONNECTION_LOCK_DURATION_MS)) {
+                    Log.d(_TAG, "trigger connect");
+                    connectionAttemptLockTime = time;
+                    InputStickHID.connect(getApplication());
+                }
 			}
 		} else {
 			//connected & ready
