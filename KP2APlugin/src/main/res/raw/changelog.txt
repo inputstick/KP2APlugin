@@ -19,6 +19,11 @@
     </style>
   </head>
   <body>
+$ 1.40
+  % Version 1.40
+  	* optimized for Android Pie
+  	* new app icon
+  	* bug fixes
 $ 1.39
   % Version 1.39
   	* added French translation
