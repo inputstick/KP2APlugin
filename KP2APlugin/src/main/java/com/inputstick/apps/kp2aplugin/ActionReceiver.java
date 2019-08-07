@@ -240,7 +240,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		} else {
 			displayText = getActionString(actionText, Const.LAYOUT_NONE, true);
 		}
-		oe.addEntryAction(displayText, Const.IC, b, accessToken);
+		oe.addEntryAction(displayText, R.drawable.ic_plugin_action, b, accessToken);
 	}
 	
 	private void addEntryAction(OpenEntryAction oe, int nameResId, String action, int layoutType, String accessToken) throws PluginAccessException {
@@ -278,7 +278,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			b.putString(Const.EXTRA_LAYOUT, secondaryLayoutCode);
 			displayText = getActionString(actionText, Const.LAYOUT_SECONDARY, true);
 		}
-		oe.addEntryFieldAction(actionId, fieldId, displayText, Const.IC, b, accessToken);
+		oe.addEntryFieldAction(actionId, fieldId, displayText, R.drawable.ic_plugin_action, b, accessToken); //Const.IC
 	}
 	
 	

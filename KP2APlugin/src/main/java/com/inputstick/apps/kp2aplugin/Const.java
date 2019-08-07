@@ -3,9 +3,9 @@ package com.inputstick.apps.kp2aplugin;
 
 public class Const {
 	
-	public static final String SKIP_CHANGELOG_APP_VERSION = "1.39";
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.40";
 	
-	public static final int IC = R.drawable.ic_launcher;
+	//public static final int IC = R.drawable.ic_launcher;
 
 	public static final String NOTIFICATION_CHANNEL_ID = "KP2AInputStickPluginChannelID";
 	public static final CharSequence NOTIFICATION_CHANNEL_NAME = "Status notifications";
