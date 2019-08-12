@@ -21,8 +21,10 @@
   <body>
 $ 1.40
   % Version 1.40
-  	* optimized for Android Pie
+  	_ <a href="http://blog.inputstick.com/2019/08/kp2a-plugin-v140.html">(More info)</a>
   	* new app icon
+  	* improved masked password UI
+  	* optimized for Android Pie
   	* bug fixes
 $ 1.39
   % Version 1.39
