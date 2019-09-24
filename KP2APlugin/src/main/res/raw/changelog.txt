@@ -19,6 +19,11 @@
     </style>
   </head>
   <body>
+$ 1.41
+  % Version 1.41
+  	_ <a href="http://blog.inputstick.com/2019/09/kp2a-plugin-v141.html">(More info)</a>
+  	* added option to keep plugin constantly running in the background
+  	* minor bug fixes and improvements
 $ 1.40
   % Version 1.40
   	_ <a href="http://blog.inputstick.com/2019/08/kp2a-plugin-v140.html">(More info)</a>
