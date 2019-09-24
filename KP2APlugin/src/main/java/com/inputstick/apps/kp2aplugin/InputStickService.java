@@ -254,7 +254,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				Toast.makeText(InputStickService.this, "SMS Proxy Error", Toast.LENGTH_SHORT).show();
 			} else {
 				//notification:
-				mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_CHANNEL_ID);
+				mSMSNotificationBuilder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
 				mSMSNotificationBuilder.setContentTitle(getString(R.string.app_name));
 				mSMSNotificationBuilder.setContentText(getString(R.string.notification_sms) + " (" + smsSender + ")" + " (" + (smsRemainingTime/1000) + "s)");
 				mSMSNotificationBuilder.setSmallIcon(R.drawable.ic_sms);
@@ -383,7 +383,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		}		
 		Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
 		
-		mClipboardNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_CHANNEL_ID);
+		mClipboardNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
 		
 		mClipboardNotificationBuilder.setContentTitle(getString(R.string.app_name));		
 		mClipboardNotificationBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + (clipboardRemainingTime/1000) + "s)");
@@ -667,11 +667,14 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		//notification channel
 		if (Build.VERSION.SDK_INT >= 26) {
-			NotificationChannel notificationChannel = new NotificationChannel(Const.NOTIFICATION_CHANNEL_ID, Const.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+			NotificationChannel notificationChannel;
+            notificationChannel = new NotificationChannel(Const.NOTIFICATION_STATUS_CHANNEL_ID, Const.NOTIFICATION_STATUS_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
 			mNotificationManager.createNotificationChannel(notificationChannel);
+            notificationChannel = new NotificationChannel(Const.NOTIFICATION_ACTION_CHANNEL_ID, Const.NOTIFICATION_ACTION_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            mNotificationManager.createNotificationChannel(notificationChannel);
 		}
 				
-		mPluginNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_CHANNEL_ID);
+		mPluginNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_STATUS_CHANNEL_ID);
 		mPluginNotificationBuilder.setContentTitle(getString(R.string.app_name));
 		mPluginNotificationBuilder.setContentText(getString(R.string.notification_text)); 
 		mPluginNotificationBuilder.setSmallIcon(R.drawable.ic_notification);

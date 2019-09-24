@@ -7,8 +7,10 @@ public class Const {
 	
 	//public static final int IC = R.drawable.ic_launcher;
 
-	public static final String NOTIFICATION_CHANNEL_ID = "KP2AInputStickPluginChannelID";
-	public static final CharSequence NOTIFICATION_CHANNEL_NAME = "Status notifications";
+	public static final String NOTIFICATION_STATUS_CHANNEL_ID = "KP2AInputStickPluginChannelID";
+	public static final CharSequence NOTIFICATION_STATUS_CHANNEL_NAME = "Status notifications";
+	public static final String NOTIFICATION_ACTION_CHANNEL_ID = "KP2AInputStickPluginActionChannelID";
+	public static final CharSequence NOTIFICATION_ACTION_CHANNEL_NAME = "Type from SMS/clipboard";
 	
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;
 	public static final int CLIPBOARD_TYPING_NOTIFICATION_ID = 2;
