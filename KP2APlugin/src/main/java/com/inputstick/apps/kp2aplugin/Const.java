@@ -3,7 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 
 public class Const {
 	
-	public static final String SKIP_CHANGELOG_APP_VERSION = "1.40";
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.41";
 	
 	//public static final int IC = R.drawable.ic_launcher;
 
@@ -59,6 +59,7 @@ public class Const {
 	//service
 	public static final String SERVICE_FORCE_STOP = "service_force_stop";	
 	public static final String SERVICE_START = "service_open_entry"; //entry opened, but service is not running
+	public static final String SERVICE_START_BACKGROUND = "service_start_background"; //start service in background (not launched from KP2A)
 	public static final String SERVICE_RESTART = "service_action_selected";  //action was selected, but service is not running	
 	
 	public static final String SERVICE_QUEUE_ITEM = "queue_item"; 
@@ -292,5 +293,9 @@ public class Const {
 	public static final String PREF_SMS_SMSPROXY = "sms_smsproxy";
     public static final String PREF_SMS_SMSPROXY_KEY = "smsproxy_key";
 	public static final String PREF_SMS_INFO = "sms_info";
+
+	public static final String PREF_TWEAKS_NEVER_STOP_PLUGIN = "never_stop_plugin";
+	public static final boolean PREF_TWEAKS_NEVER_STOP_PLUGIN_VALUE = false;
+
 	
 }

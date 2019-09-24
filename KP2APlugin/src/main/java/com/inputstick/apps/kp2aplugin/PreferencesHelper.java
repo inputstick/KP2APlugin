@@ -328,4 +328,12 @@ public abstract class PreferencesHelper {
 		}
 		editor.apply();
 	}
+
+
+	//Tweaks
+
+	public static boolean isNeverStopPlugin(SharedPreferences prefs) {
+		return prefs.getBoolean(Const.PREF_TWEAKS_NEVER_STOP_PLUGIN, Const.PREF_TWEAKS_NEVER_STOP_PLUGIN_VALUE);
+	}
+
 }

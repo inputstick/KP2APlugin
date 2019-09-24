@@ -276,6 +276,22 @@
             android:key="remote_scroll_sensitivity"
             android:max="100"
             android:title="@string/remote_scroll_sensitivity_title" />
-</PreferenceCategory>
-    
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/tweaks_settings_title" >
+
+    <Preference
+        android:summary="@string/section_tweaks_settings_info"
+        android:selectable="false" >
+    </Preference>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="never_stop_plugin"
+        android:summaryOn="@string/never_stop_plugin_summary_on"
+        android:summaryOff="@string/never_stop_plugin_summary_off"
+        android:title="@string/never_stop_plugin_title" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

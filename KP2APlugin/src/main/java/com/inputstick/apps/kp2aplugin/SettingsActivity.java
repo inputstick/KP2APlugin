@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -244,8 +245,28 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
    		     });
 		prefSecondaryKbdLayout = findPreference(Const.PREF_SECONDARY_LAYOUT);
-		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);	
+		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);
 
+		//tweaks:
+		pref = (Preference)findPreference(Const.PREF_TWEAKS_NEVER_STOP_PLUGIN);
+		pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				boolean enabled = (Boolean)newValue;
+				Intent intent = new Intent(SettingsActivity.this, InputStickService.class);
+				if (enabled) {
+					intent.setAction(Const.SERVICE_START_BACKGROUND);
+				} else {
+					intent.setAction(Const.SERVICE_FORCE_STOP);
+				}
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+					startForegroundService(intent);
+				} else {
+					startService(intent);
+				}
+				return true;
+			}
+		});
 
 		//SMS		
 		prefSMSProxy = findPreference(Const.PREF_SMS_SMSPROXY);
@@ -292,7 +313,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				}
         		return true;
 			}
-        });
+   		     });
 		
 		prefLaunchCustomApp = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_CUSTOM_APP);
 		prefLaunchCustomApp.setOnPreferenceClickListener(reloadInfoListener);
@@ -306,7 +327,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				}
         		return true;
 			}
-        });
+   		     });
 		
 		
 		prefCustomAppPackage = (Preference)findPreference(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE);
@@ -358,7 +379,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				manageQuickShortcuts((String)newValue);
         		return true;
 			}
-        });
+   		     });
 		
 		
 		//UI:

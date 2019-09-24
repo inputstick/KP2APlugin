@@ -58,6 +58,8 @@ public class InputStickService extends Service implements InputStickStateListene
 	private static int defaultTypingSpeed;
 	private static int autoConnect;
 	private static int maxIdlePeriod;
+	private static boolean neverStopPlugin;
+
 
 	//SMS:
 	private static boolean smsEnabled;
@@ -128,14 +130,17 @@ public class InputStickService extends Service implements InputStickStateListene
 					Log.d(_TAG, "disconnect (inactivity)");
 					InputStickHID.disconnect();
 				}				
-			}			
+			}
+
 			//stop plugin?
 			if (time > serviceKeepAliveTime) {
-				if (dbClosedTime > 0) {
-					stopPlugin();
-				} else if (time > lastActionTime + Const.SERVICE_FAILSAFE_PERIOD) {
-					//fail safe, in case kp2a crashes
-					stopPlugin();
+				if ( !neverStopPlugin) {
+					if (dbClosedTime > 0) {
+						stopPlugin();
+					} else if (time > lastActionTime + Const.SERVICE_FAILSAFE_PERIOD) {
+						//fail safe, in case kp2a crashes
+						stopPlugin();
+					}
 				}
 			}													
 			mHandler.postDelayed(mTimerTask, TIMER_INTERVAL_MS);
@@ -463,6 +468,10 @@ public class InputStickService extends Service implements InputStickStateListene
 				}
 			}
 		}
+
+		if (key == null || Const.PREF_TWEAKS_NEVER_STOP_PLUGIN.equals(key)) {
+			neverStopPlugin = PreferencesHelper.isNeverStopPlugin(prefs);
+		}
 	}
 
 	
@@ -652,7 +661,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		prefs.registerOnSharedPreferenceChangeListener(mSharedPrefsListener);
 
 		//notification:
-		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
 		//notification channel
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -698,6 +707,8 @@ public class InputStickService extends Service implements InputStickStateListene
 				if (cnt == 0) {
 					onEntryOpened(); // only if just created, otherwise it will be handled by already registered broadcast receiver
 				}
+			} else if (Const.SERVICE_START_BACKGROUND.equals(action)) {
+				//nothing to do here
 			} else if (Const.SERVICE_ENTRY_ACTION.equals(action)) {
 				String uiAction = intent.getStringExtra(Const.EXTRA_ACTION);
 				String layoutCode = intent.getStringExtra(Const.EXTRA_LAYOUT);
@@ -721,6 +732,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			
 			cnt++;
 		}
+
 		return Service.START_NOT_STICKY;
 	}
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
 
     <string name="configure_plugin">Configure as plugin</string>
     <string name="enabled">Enabled</string>
@@ -226,5 +228,12 @@
         <item>mouse</item>
         <item>touchscreen</item>
     </string-array>
+
+
+    <string name="tweaks_settings_title">Tweaks</string>
+    <string name="section_tweaks_settings_info">Experimantal settings that may help with issues occurring on some devices</string>
+    <string name="never_stop_plugin_title">Never stop plugin</string>
+    <string name="never_stop_plugin_summary_on">Plugin will always stay active</string>
+    <string name="never_stop_plugin_summary_off">Plugin will stop after few minutes of inactivity</string>
 
 </resources>
