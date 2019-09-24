@@ -330,7 +330,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
    		     });
 		
 		
-		prefCustomAppPackage = (Preference)findPreference(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE);
+		prefCustomAppPackage = findPreference(Const.PREF_CLIPBOARD_CUSTOM_APP_PACKAGE);
 		prefCustomAppPackage.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {

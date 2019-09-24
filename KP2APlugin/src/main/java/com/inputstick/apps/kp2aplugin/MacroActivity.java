@@ -258,7 +258,7 @@ public class MacroActivity extends Activity {
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				String s = editTextString.getText().toString();
-				if ((s != null) && (s.length() > 0)) {
+				if (s.length() > 0) {
 					if (s.contains("%")) {
 						Toast.makeText(MacroActivity.this, R.string.illegal_character_toast, Toast.LENGTH_LONG).show();
 					} else {
@@ -400,11 +400,12 @@ public class MacroActivity extends Activity {
 	private void setExecutionMode(boolean isBackground) {
 		String tmp = editTextMacro.getText().toString();		
 		if (isBackground) {
-			if ((tmp != null) && ( !tmp.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING))) {				
-				editTextMacro.setText(MacroHelper.MACRO_BACKGROUND_EXEC_STRING + tmp);
+			if ( !tmp.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING)) {
+			    String s = MacroHelper.MACRO_BACKGROUND_EXEC_STRING + tmp;
+				editTextMacro.setText(s);
 			}					
 		} else {
-			if ((tmp != null) && (tmp.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING))) {				
+			if (tmp.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING)) {
 				editTextMacro.setText(tmp.substring(MacroHelper.MACRO_BACKGROUND_EXEC_STRING.length()));
 			}	
 		}
