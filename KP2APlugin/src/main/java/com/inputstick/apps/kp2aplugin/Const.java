@@ -64,7 +64,10 @@ public class Const {
 	
 	public static final String SERVICE_QUEUE_ITEM = "queue_item"; 
 	public static final String SERVICE_ENTRY_ACTION = "entry_action";	
-	public static final String SERVICE_DISMISS_SMS = "dismiss_sms";	
+	public static final String SERVICE_DISMISS_SMS = "dismiss_sms";
+
+	//Help
+    public static final String HELP_URL = "http://www.inputstick.com/help";
 	
 	//AllActions 
 	public static final String EXTRA_ACTION = "selected_action";	
