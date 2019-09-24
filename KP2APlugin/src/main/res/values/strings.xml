@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
 
     <string name="app_name">KP2A InputStick Plugin</string>
     <string name="kp2aplugin_title">InputStick Plugin</string>
@@ -9,6 +11,12 @@
     <string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_show_full">more&#8230;</string>
+
+    <string name="key_ctrl">Ctrl</string>
+    <string name="key_shift">Shift</string>
+    <string name="key_gui">GUI (Win key)</string>
+    <string name="key_alt">Alt</string>
+    <string name="key_altgr">AltGr (right)</string>
     
     <string name="title_activity_init">Plugin Init</string>
     <string name="title_activity_all_actions">Select action:</string>

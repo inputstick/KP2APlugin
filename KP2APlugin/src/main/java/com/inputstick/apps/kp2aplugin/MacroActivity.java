@@ -209,15 +209,15 @@ public class MacroActivity extends Activity {
 				spinner.setAdapter(adapter);
 				
 				final CheckBox cbCtrlLeft = new CheckBox(ctx);
-				cbCtrlLeft.setText("Ctrl");
+				cbCtrlLeft.setText(R.string.key_ctrl);
 				final CheckBox cbShiftLeft = new CheckBox(ctx);
-				cbShiftLeft.setText("Shift");
+				cbShiftLeft.setText(R.string.key_shift);
 				final CheckBox cbAltLeft = new CheckBox(ctx);
-				cbAltLeft.setText("Alt");
+				cbAltLeft.setText(R.string.key_alt);
 				final CheckBox cbGuiLeft = new CheckBox(ctx);
-				cbGuiLeft.setText("GUI (Win key)");
+				cbGuiLeft.setText(R.string.key_gui);
 				final CheckBox cbAltRight = new CheckBox(ctx);
-				cbAltRight.setText("AltGr (right)");
+				cbAltRight.setText(R.string.key_altgr);
 				
 				lin.addView(tvInfo);
 				lin.addView(spinner);
