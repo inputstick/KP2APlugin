@@ -2,6 +2,7 @@ package com.inputstick.apps.kp2aplugin;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -197,7 +198,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.inputstick.com/help")));			
+				openURL(Const.HELP_URL);
 				return true;
 			}
 		});		
@@ -285,8 +286,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
                         startActivityForResult(intent, Const.REQUEST_CODE_SMS_PROXY_ACTIVATE);
 					}
 				} else {
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Const.SMS_PROXY_URL_INFO_AND_DOWNLOAD));
-					startActivity(browserIntent);
+					openURL(Const.SMS_PROXY_URL_INFO_AND_DOWNLOAD);
 				}
 				return true;
 			}
@@ -753,7 +753,17 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		alert.setNegativeButton(R.string.cancel, null);
 		alert.show();		
 	}
-	
+
+
+	//URL helper:
+	private void openURL(String url) {
+		try {
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			startActivity(browserIntent);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(SettingsActivity.this, url, Toast.LENGTH_LONG).show();
+		}
+	}
 		
 	//selecting app for clipboard action:
 	
