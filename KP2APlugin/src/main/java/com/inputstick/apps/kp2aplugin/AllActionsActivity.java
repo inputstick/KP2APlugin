@@ -69,7 +69,7 @@ public class AllActionsActivity extends PluginDialogActivity {
 		Intent intent = getIntent();
 		final EntryData entryData = new EntryData(intent);
 
-		ListView listViewActions = (ListView) findViewById(R.id.listViewActions);
+		ListView listViewActions = findViewById(R.id.listViewActions);
 		list = new ArrayList<String>();
 		listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
 		actionsLUT = new ArrayList<ActionId>();

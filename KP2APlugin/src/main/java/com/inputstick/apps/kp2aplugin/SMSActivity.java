@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -16,70 +17,54 @@ import android.widget.TextView;
 import com.inputstick.api.hid.HIDKeycodes;
 
 public class SMSActivity extends PluginDialogActivity {
-
-	private TextView textViewSMSContent;
-	private TextView textViewSMSSender;
-	
-	private Button buttonSMSEsc;
-	private Button buttonSMSTab;
-	private Button buttonSMSLeft;
-	private Button buttonSMSRight;
-	private Button buttonSMSEnter;	
-	
-	private Button buttonSMSDone;
-	private Button buttonSMSTypeAll;	
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.activity_sms);
 		
 		Intent intent = getIntent();
 		final TypingParams params = new TypingParams(intent);	
 		final String message = intent.getStringExtra(Const.EXTRA_TEXT);
 		final String sender = intent.getStringExtra(Const.EXTRA_SMS_SENDER);
-		
-		textViewSMSContent = (TextView)findViewById(R.id.textViewSMSContent);
-		textViewSMSSender = (TextView)findViewById(R.id.textViewSMSSender);
-		
-		buttonSMSEsc = (Button)findViewById(R.id.buttonSMSEsc);
-		buttonSMSTab = (Button)findViewById(R.id.buttonSMSTab);
-		buttonSMSLeft = (Button)findViewById(R.id.buttonSMSLeft);
-		buttonSMSRight = (Button)findViewById(R.id.buttonSMSRight);
-		buttonSMSEnter = (Button)findViewById(R.id.buttonSMSEnter);		
-		
-		buttonSMSDone = (Button)findViewById(R.id.buttonSMSDone);
-		buttonSMSTypeAll = (Button)findViewById(R.id.buttonSMSTypeAll);
-		
+
+		Button buttonSMSEsc = findViewById(R.id.buttonSMSEsc);
 		buttonSMSEsc.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ESCAPE, params).sendToService(SMSActivity.this, true);			
 			}
-		});	
+		});
+
+		Button buttonSMSTab = findViewById(R.id.buttonSMSTab);
 		buttonSMSTab.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_TAB, params).sendToService(SMSActivity.this, true);			
 			}
-		});	
+		});
+
+		Button buttonSMSLeft = findViewById(R.id.buttonSMSLeft);
 		buttonSMSLeft.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_LEFT, params).sendToService(SMSActivity.this, true);			
 			}
-		});	
+		});
+
+		Button buttonSMSRight = findViewById(R.id.buttonSMSRight);
 		buttonSMSRight.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ARROW_RIGHT, params).sendToService(SMSActivity.this, true);			
 			}
-		});	
+		});
+
+		Button buttonSMSEnter = findViewById(R.id.buttonSMSEnter);
 		buttonSMSEnter.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(SMSActivity.this, true);			
 			}
-		});	
-		
-		
+		});
+
+		Button buttonSMSDone = findViewById(R.id.buttonSMSDone);
 		buttonSMSDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent serviceIntent = new Intent(SMSActivity.this, InputStickService.class);
@@ -91,8 +76,9 @@ public class SMSActivity extends PluginDialogActivity {
 				}
 				finish();		
 			}
-		});						
-		
+		});
+
+		Button buttonSMSTypeAll = findViewById(R.id.buttonSMSTypeAll);
 		buttonSMSTypeAll.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {			
 				new ItemToExecute(message, params).sendToService(SMSActivity.this, true);	
@@ -114,7 +100,7 @@ public class SMSActivity extends PluginDialogActivity {
 				final String txt = s.substring(0, length);
 				ClickableSpan clickableSpan = new ClickableSpan() {  
 			        @Override  
-			        public void onClick(View view) {  
+			        public void onClick(@NonNull View view) {
 			        	new ItemToExecute(txt, params).sendToService(SMSActivity.this, true);			
 			        }  
 			    };  
@@ -123,14 +109,13 @@ public class SMSActivity extends PluginDialogActivity {
 					spannableText.setSpan(new ForegroundColorSpan(Color.GREEN), pos, pos + length, 0);				
 				}
 			}
-			markNext = false;
-			
-			if (s.endsWith(":")) {
-				markNext = true;
-			}
+
+			markNext = s.endsWith(":");
 			pos += s.length() + 1;
-		}   				
-		
+		}
+
+		TextView textViewSMSContent = findViewById(R.id.textViewSMSContent);
+		TextView textViewSMSSender = findViewById(R.id.textViewSMSSender);
 		textViewSMSContent.setMovementMethod(LinkMovementMethod.getInstance()); 
 		textViewSMSContent.setText(spannableText);		
 		textViewSMSSender.setText(sender);

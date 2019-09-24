@@ -247,6 +247,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				}
 
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 			if (error) {
@@ -308,6 +309,7 @@ public class InputStickService extends Service implements InputStickStateListene
 				unregisterReceiver(smsProxyReceiver);
 				smsReceiverRegistered = false;
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		clearSMS();

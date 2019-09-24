@@ -1,11 +1,12 @@
 package com.inputstick.apps.kp2aplugin;
 
-import sheetrock.panda.changelog.ChangeLog;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import sheetrock.panda.changelog.ChangeLog;
 
 public class AboutActivity extends Activity {
 
@@ -14,7 +15,7 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		
-		Button button = (Button)findViewById(R.id.buttonShowChangeLog);
+		Button button = findViewById(R.id.buttonShowChangeLog);
 		button.setOnClickListener(new OnClickListener() {
 			
 			@Override

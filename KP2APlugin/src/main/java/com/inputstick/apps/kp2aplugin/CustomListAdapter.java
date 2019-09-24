@@ -1,14 +1,15 @@
 package com.inputstick.apps.kp2aplugin;
 
-import java.util.List;
-
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 public class CustomListAdapter extends ArrayAdapter<SelectAppActivity.AppInfo> {
 
@@ -20,22 +21,22 @@ public class CustomListAdapter extends ArrayAdapter<SelectAppActivity.AppInfo> {
         protected ImageView icon;
     }
 
-    public CustomListAdapter(Activity context, List<SelectAppActivity.AppInfo> list) {
+    CustomListAdapter(Activity context, List<SelectAppActivity.AppInfo> list) {
         super(context, R.layout.row_apps, list);
         this.context = context;
         this.list = list;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View view;
         if (convertView == null) {
             LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(R.layout.row_apps, (ViewGroup)null);
+            view = inflator.inflate(R.layout.row_apps, null);
             final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.name = (TextView)view.findViewById(R.id.name);
-            viewHolder.icon = (ImageView)view.findViewById(R.id.icon);
+            viewHolder.name = view.findViewById(R.id.name);
+            viewHolder.icon = view.findViewById(R.id.icon);
             view.setTag(viewHolder);
         } else {
             view = convertView;

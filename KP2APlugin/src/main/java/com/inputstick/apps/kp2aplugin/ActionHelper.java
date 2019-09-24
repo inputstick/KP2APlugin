@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import com.inputstick.apps.kp2aplugin.remote.RemoteActivity;
 
-public abstract class ActionHelper {
+abstract class ActionHelper {
 
-	public static void forceStopService(Context ctx) {
+	static void forceStopService(Context ctx) {
 		Intent serviceIntent = new Intent(ctx, InputStickService.class);
 		serviceIntent.setAction(Const.SERVICE_FORCE_STOP);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -21,34 +21,34 @@ public abstract class ActionHelper {
 		}
 	}
 	
-	public static void startSettingsActivityAction(Context ctx) {
+	static void startSettingsActivityAction(Context ctx) {
 		Intent i = new Intent(ctx, SettingsActivity.class);
 		i.putExtra(Const.EXTRA_LAUNCHED_FROM_KP2A, true);				
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);			
 	}
 	
-	public static void startShowAllActivityAction(Context ctx, EntryData entryData) {
+	static void startShowAllActivityAction(Context ctx, EntryData entryData) {
 		Intent i = new Intent(ctx, AllActionsActivity.class);		
 		i.putExtras(entryData.getBundle());
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);		
 	}
 	
-	public static void startMacSetupActivityAction(Context ctx) {		
+	static void startMacSetupActivityAction(Context ctx) {
 		Intent i = new Intent(ctx, MacSetupActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);				
 	}
 	
-	public static void startRemoteActivityAction(Context ctx) {		
+	static void startRemoteActivityAction(Context ctx) {
 		Intent i = new Intent(ctx, RemoteActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		ctx.startActivity(i);				
 	}	
 	
 	
-	public static void startSMSActivityAction(Context ctx, String smsText, String smsSender, TypingParams params) {
+	static void startSMSActivityAction(Context ctx, String smsText, String smsSender, TypingParams params) {
 		Intent i = new Intent(ctx, SMSActivity.class);
 		i.putExtras(params.getBundle());
 		i.putExtra(Const.EXTRA_TEXT, smsText);
@@ -60,7 +60,7 @@ public abstract class ActionHelper {
 	
 	
 	
-	public static void startSelectTemplateActivityAction(Context ctx, EntryData entryData, TypingParams params, boolean manage) {
+	static void startSelectTemplateActivityAction(Context ctx, EntryData entryData, TypingParams params, boolean manage) {
 		Intent i = new Intent(ctx, SelectTemplateActivity.class);	
 		i.putExtras(params.getBundle());
 		i.putExtras(entryData.getBundle());
@@ -69,7 +69,7 @@ public abstract class ActionHelper {
 		ctx.startActivity(i);				
 	}		
 	
-	public static void startMaskedPasswordActivity(Context ctx, String password, TypingParams params, boolean addClearFlags) {		
+	static void startMaskedPasswordActivity(Context ctx, String password, TypingParams params, boolean addClearFlags) {
 		Intent i = new Intent(ctx, MaskedPasswordActivity.class);
 		i.putExtras(params.getBundle());
 		i.putExtra(Const.EXTRA_TEXT, password);
@@ -81,7 +81,7 @@ public abstract class ActionHelper {
 	}
 	
 	
-	public static void startClipboardTyping(Context ctx, TypingParams params) {
+	static void startClipboardTyping(Context ctx, TypingParams params) {
 		Intent i = new Intent(ctx, InputStickService.class);
 		i.setAction(Const.SERVICE_ENTRY_ACTION);
 		i.putExtra(Const.EXTRA_ACTION, Const.ACTION_CLIPBOARD);
@@ -93,7 +93,7 @@ public abstract class ActionHelper {
 		}
 	}
 	
-	public static void startClipboardApp(Context ctx) {
+	static void startClipboardApp(Context ctx) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		if (PreferencesHelper.isClipboardLaunchAuthenticator(prefs)) {
 			Intent launchIntent = ctx.getPackageManager().getLaunchIntentForPackage(Const.PACKAGE_AUTHENTICATOR);
@@ -119,7 +119,7 @@ public abstract class ActionHelper {
 	}		
 
 	
-	public static boolean runMacroAction(Context ctx, EntryData entryData, TypingParams params) {
+	static boolean runMacroAction(Context ctx, EntryData entryData, TypingParams params) {
 		boolean executed = false;
 		String macro = MacroHelper.loadMacro(PreferenceManager.getDefaultSharedPreferences(ctx), entryData.getEntryId());		
 		if ((macro != null) && (macro.length() > 0)) {
@@ -131,7 +131,7 @@ public abstract class ActionHelper {
 		return executed;
 	}
 	
-	public static void executeMacro(Context ctx, EntryData entryData, TypingParams params, String macroData) {		
+	static void executeMacro(Context ctx, EntryData entryData, TypingParams params, String macroData) {
 		if ((macroData != null) && (macroData.length() > 0)) {
 			boolean runInBackground = macroData.startsWith(MacroHelper.MACRO_BACKGROUND_EXEC_STRING);			
 			if (runInBackground) {
@@ -148,7 +148,7 @@ public abstract class ActionHelper {
 		}
 	}
 	
-	public static void addEditMacroAction(Context ctx, EntryData entryData, boolean showEmptyMacroError) {
+	static void addEditMacroAction(Context ctx, EntryData entryData, boolean showEmptyMacroError) {
 		Intent i = new Intent(ctx, MacroActivity.class);
 		i.putExtra(Const.EXTRA_ENTRY_ID, entryData.getEntryId());		
 		if (showEmptyMacroError) {
@@ -158,7 +158,7 @@ public abstract class ActionHelper {
 		ctx.getApplicationContext().startActivity(i);			
 	}	
 	
-	public static void addEditTemplateAction(Context ctx, int templateId) {
+	static void addEditTemplateAction(Context ctx, int templateId) {
 		Intent i = new Intent(ctx, MacroActivity.class);
 		i.putExtra(Const.EXTRA_MACRO_TEMPLATE_MODE, true);		
 		i.putExtra(Const.EXTRA_TEMPLATE_ID, templateId);	

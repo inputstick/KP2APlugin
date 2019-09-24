@@ -15,6 +15,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             ...
             }*/
         } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
 	}
 

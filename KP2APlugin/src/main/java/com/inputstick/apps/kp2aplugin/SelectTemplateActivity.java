@@ -1,7 +1,5 @@
 package com.inputstick.apps.kp2aplugin;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class SelectTemplateActivity extends PluginDialogActivity {
 
@@ -29,7 +29,7 @@ public class SelectTemplateActivity extends PluginDialogActivity {
 		final EntryData entryData = new EntryData(intent);		
 		final boolean manageMode = intent.getBooleanExtra(Const.EXTRA_TEMPLATE_MANAGE, false);
 
-		ListView listViewActions = (ListView) findViewById(R.id.listViewTemplates);
+		ListView listViewActions = findViewById(R.id.listViewTemplates);
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
 

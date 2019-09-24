@@ -2,6 +2,7 @@ package com.inputstick.apps.kp2aplugin;
 
 import android.content.SharedPreferences;
 
+@SuppressWarnings("WeakerAccess")
 public class TemplateHelper {
 	
 	public static CharSequence[] getTemplateNames(SharedPreferences prefs) {

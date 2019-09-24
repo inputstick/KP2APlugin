@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
+@SuppressWarnings("WeakerAccess")
 public class MacroHelper {
 	
 	public static final String MACRO_ACTION_URL = "url";
@@ -200,7 +201,7 @@ public class MacroHelper {
 	}
 	
 	public static int getDelay(String s) {
-		int delay = 0;
+		int delay;
 		try {
 			delay = Integer.parseInt(s);
 		} catch (Exception e) {	

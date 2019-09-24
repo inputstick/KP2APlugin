@@ -28,12 +28,12 @@ public class MacSetupActivity extends PluginDialogActivity {
 		KeyboardLayout primaryLayout = KeyboardLayout.getLayout(primaryLayoutCode);
 		final TypingParams params = new TypingParams(primaryLayoutCode, Const.TYPING_SPEED_DEFAULT);		
 		
-		TextView textViewLayoutInfo = (TextView)findViewById(R.id.textViewLayoutInfo);
+		TextView textViewLayoutInfo = findViewById(R.id.textViewLayoutInfo);
 		textViewLayoutInfo.append(" " + primaryLayoutCode);
 		
 		Button buttonNextToShiftLeft;
 		Button buttonNextToShiftRight;
-		buttonNextToShiftLeft = (Button)findViewById(R.id.buttonNextToShiftLeft);		
+		buttonNextToShiftLeft = findViewById(R.id.buttonNextToShiftLeft);
 		buttonNextToShiftLeft.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {
@@ -47,7 +47,7 @@ public class MacSetupActivity extends PluginDialogActivity {
 				}
 			}
 		});
-		buttonNextToShiftRight = (Button)findViewById(R.id.buttonNextToShiftRight);		
+		buttonNextToShiftRight = findViewById(R.id.buttonNextToShiftRight);
 		buttonNextToShiftRight.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				if (InputStickHID.getState() == ConnectionManager.STATE_READY) {

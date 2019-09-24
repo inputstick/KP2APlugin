@@ -38,9 +38,9 @@ public class MacroExecuteActivity extends PluginDialogActivity {
 			macro = new EntryMacro(macroData, entryData, params, false);
 		}
 		
-		textViewActionPreview = (TextView)findViewById(R.id.textViewActionPreview);
+		textViewActionPreview = findViewById(R.id.textViewActionPreview);
 		
-		buttonActionExecute = (Button) findViewById(R.id.buttonActionExecute);
+		buttonActionExecute =  findViewById(R.id.buttonActionExecute);
 		buttonActionExecute.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (index >= macro.getActionsCount()) {
@@ -52,14 +52,14 @@ public class MacroExecuteActivity extends PluginDialogActivity {
 			}
 		});
 		
-		buttonActionPrev = (Button)findViewById(R.id.buttonActionPrev);
+		buttonActionPrev = findViewById(R.id.buttonActionPrev);
 		buttonActionPrev.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				goToPrev();
 			}
 		});	
 		
-		buttonActionNext = (Button)findViewById(R.id.buttonActionNext);
+		buttonActionNext = findViewById(R.id.buttonActionNext);
 		buttonActionNext.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				goToNext();

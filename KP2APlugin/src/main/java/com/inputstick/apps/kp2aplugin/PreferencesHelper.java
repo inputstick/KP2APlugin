@@ -3,6 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class PreferencesHelper {
 	
 	//plugin setup:
@@ -20,19 +21,21 @@ public abstract class PreferencesHelper {
 	
 	//connection
 	public static int getAutoConnect(SharedPreferences prefs) {
-		int tmp = Const.PREF_AUTO_CONNECT_VALUE;
+		int tmp;
 		try {
 			tmp = Integer.parseInt(prefs.getString(Const.PREF_AUTO_CONNECT, String.valueOf(Const.PREF_AUTO_CONNECT_VALUE)));
-		} catch (Exception e) {				
+		} catch (Exception e) {
+			tmp = Const.PREF_AUTO_CONNECT_VALUE;
 		}
 		return tmp;		
 	}	
 	
 	public static int getMaxIdlePeriod(SharedPreferences prefs) {
-		int tmp = Const.PREF_MAX_IDLE_PERIOD_VALUE;
+		int tmp;
 		try {
 			tmp = Integer.parseInt(prefs.getString(Const.PREF_MAX_IDLE_PERIOD, String.valueOf(Const.PREF_MAX_IDLE_PERIOD_VALUE)));
-		} catch (Exception e) {				
+		} catch (Exception e) {
+			tmp = Const.PREF_MAX_IDLE_PERIOD_VALUE;
 		}
 		return tmp;	
 	}
@@ -71,10 +74,11 @@ public abstract class PreferencesHelper {
 	}
 
 	public static int getTypingSpeed(SharedPreferences prefs) {
-		int tmp = Const.PREF_TYPING_SPEED_VALUE;
+		int tmp;
 		try {
 			tmp = Integer.parseInt(prefs.getString(Const.PREF_TYPING_SPEED, String.valueOf(Const.PREF_TYPING_SPEED_VALUE)));
-		} catch (Exception e) {				
+		} catch (Exception e) {
+			tmp = Const.PREF_TYPING_SPEED_VALUE;
 		}
 		if (tmp > 10) {
 			tmp = 10;

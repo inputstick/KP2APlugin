@@ -55,9 +55,7 @@ public class SelectAppActivity extends ListActivity {
 			if (pm.getLaunchIntentForPackage(appInfo.packageName) != null) {				
 				Drawable icon = pm.getApplicationIcon(appInfo); //never null				
 				String name = pm.getApplicationLabel(appInfo).toString();
-				if (name != null) {
-					appList.add(new AppInfo(name, appInfo.packageName, icon));
-				}
+                appList.add(new AppInfo(name, appInfo.packageName, icon));
 			}
 		}	
 		Collections.sort(appList, new Comparator<AppInfo>() {
@@ -68,6 +66,7 @@ public class SelectAppActivity extends ListActivity {
 	    });
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class AppInfo {
         private String mName;
         private String mAppPackage;

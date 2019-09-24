@@ -185,7 +185,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});		
 		
-		pref = (Preference)findPreference(Const.PREF_RUN_REMOTE);
+		pref = findPreference(Const.PREF_RUN_REMOTE);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -194,7 +194,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});		
 		
-		pref = (Preference)findPreference(Const.PREF_SHOW_HELP_WEBPAGE_KEY);
+		pref = findPreference(Const.PREF_SHOW_HELP_WEBPAGE_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -203,7 +203,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});		
 		
-		pref = (Preference)findPreference(Const.PREF_SHOW_ABOUT_KEY);
+		pref = findPreference(Const.PREF_SHOW_ABOUT_KEY);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {				
@@ -214,7 +214,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 		//typing:		
 		findPreference(Const.PREF_PRIMARY_LAYOUT).setOnPreferenceClickListener(reloadInfoListener);
-		prefShowSecondary = (Preference) findPreference(Const.PREF_SHOW_SECONDARY_LAYOUT);
+		prefShowSecondary = findPreference(Const.PREF_SHOW_SECONDARY_LAYOUT);
 		prefShowSecondary.setOnPreferenceClickListener(reloadInfoListener);
 		prefShowSecondary.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
@@ -249,7 +249,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		prefSecondaryKbdLayout.setOnPreferenceClickListener(reloadInfoListener);
 
 		//tweaks:
-		pref = (Preference)findPreference(Const.PREF_TWEAKS_NEVER_STOP_PLUGIN);
+		pref = findPreference(Const.PREF_TWEAKS_NEVER_STOP_PLUGIN);
 		pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -494,7 +494,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		} else {
 			try {
 				cnt = Integer.parseInt(value);
-			} catch (Exception e) {				
+			} catch (Exception e) {
+			    e.printStackTrace();
 			}
 		}
 		String summary;

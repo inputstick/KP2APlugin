@@ -11,6 +11,7 @@ import com.inputstick.api.basic.InputStickKeyboard;
 import com.inputstick.api.hid.HIDTransaction;
 import com.inputstick.api.hid.KeyboardReport;
 
+@SuppressWarnings("WeakerAccess")
 public class ItemToExecute {
 	
 	public static final int ITEM_TYPE_NOT_DEFINED = 				0;

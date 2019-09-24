@@ -3,7 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 import android.content.Intent;
 import android.os.Bundle;
 
-
+@SuppressWarnings("WeakerAccess")
 public class TypingParams {
 	
 	private static final String KEY_LAYOUT_CODE = "_PARAM_LAYOUT_CODE";

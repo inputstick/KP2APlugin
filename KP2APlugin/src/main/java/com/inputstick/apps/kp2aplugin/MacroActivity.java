@@ -59,13 +59,13 @@ public class MacroActivity extends Activity {
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		editTextMacro = (EditText)findViewById(R.id.editTextMacro);
-		editTextString = (EditText)findViewById(R.id.editTextString);
-		spinnerDelay = (Spinner)findViewById(R.id.spinnerDelay);		
+		editTextMacro = findViewById(R.id.editTextMacro);
+		editTextString = findViewById(R.id.editTextString);
+		spinnerDelay = findViewById(R.id.spinnerDelay);
 		
-		textViewTemplate = (TextView)findViewById(R.id.textViewTemplate);		
+		textViewTemplate = findViewById(R.id.textViewTemplate);
 		
-		radioButtonBackground = (RadioButton)findViewById(R.id.radioButtonBackground);
+		radioButtonBackground = findViewById(R.id.radioButtonBackground);
 		radioButtonBackground.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
@@ -74,7 +74,7 @@ public class MacroActivity extends Activity {
 				}				
 			}			
 		});
-		radioButtonShowControls = (RadioButton)findViewById(R.id.radioButtonShowControls);
+		radioButtonShowControls = findViewById(R.id.radioButtonShowControls);
 		radioButtonShowControls.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
@@ -103,7 +103,7 @@ public class MacroActivity extends Activity {
 		});
 		
 		
-		buttonDelete = (Button)findViewById(R.id.buttonDelete);		
+		buttonDelete = findViewById(R.id.buttonDelete);
 		buttonDelete.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
@@ -120,7 +120,7 @@ public class MacroActivity extends Activity {
 		});
 		
 
-		buttonSave = (Button)findViewById(R.id.buttonSave);		
+		buttonSave = findViewById(R.id.buttonSave);
 		buttonSave.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				saveMacro();
@@ -128,7 +128,7 @@ public class MacroActivity extends Activity {
 		});
 		
 		Button button;
-		button = (Button)findViewById(R.id.buttonHelp);		
+		button = findViewById(R.id.buttonHelp);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(MacroActivity.this);
@@ -139,7 +139,7 @@ public class MacroActivity extends Activity {
 			}
 		});
 		
-		buttonAddFromField = (Button)findViewById(R.id.buttonAddFromField);		
+		buttonAddFromField = findViewById(R.id.buttonAddFromField);
 		buttonAddFromField.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {							
 				CharSequence options[] = new CharSequence[] {MacroActivity.this.getString(R.string.user_name), 
@@ -177,19 +177,19 @@ public class MacroActivity extends Activity {
 			}
 		});
 		
-		button = (Button)findViewById(R.id.buttonAddEnter);		
+		button = findViewById(R.id.buttonAddEnter);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				addAction(MacroHelper.MACRO_ACTION_KEY, "enter");
 			}
 		});
-		button = (Button)findViewById(R.id.buttonAddTab);		
+		button = findViewById(R.id.buttonAddTab);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				addAction(MacroHelper.MACRO_ACTION_KEY, "tab");
 			}
 		});
-		button = (Button)findViewById(R.id.buttonAddCustom);		
+		button = findViewById(R.id.buttonAddCustom);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				final Context ctx = MacroActivity.this;
@@ -205,7 +205,7 @@ public class MacroActivity extends Activity {
 				tvLayoutInfo.setText(R.string.custom_key_layout_message);
 				
 				final Spinner spinner = new Spinner(ctx);				
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_spinner_item, MacroHelper.getKeyList());
+				ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx, android.R.layout.simple_spinner_item, MacroHelper.getKeyList());
 				spinner.setAdapter(adapter);
 				
 				final CheckBox cbCtrlLeft = new CheckBox(ctx);
@@ -254,7 +254,7 @@ public class MacroActivity extends Activity {
 				alert.show();
 			}
 		});
-		button = (Button)findViewById(R.id.buttonAddString);		
+		button = findViewById(R.id.buttonAddString);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				String s = editTextString.getText().toString();
@@ -268,20 +268,20 @@ public class MacroActivity extends Activity {
 				}								
 			}
 		});
-		button = (Button)findViewById(R.id.buttonAddDelay);		
+		button = findViewById(R.id.buttonAddDelay);
 		button.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				addAction(MacroHelper.MACRO_ACTION_DELAY, String.valueOf(spinnerDelay.getSelectedItem()));
 			}
 		});		
 		
-		buttonTemplateSave = (Button) findViewById(R.id.buttonTemplateSave);
+		buttonTemplateSave = findViewById(R.id.buttonTemplateSave);
 		buttonTemplateSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				showSaveTemplateDialog();
 			}
 		});
-		buttonTemplateLoad = (Button)findViewById(R.id.buttonTemplateLoad);		
+		buttonTemplateLoad = findViewById(R.id.buttonTemplateLoad);
 		buttonTemplateLoad.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {
 				showLoadTemplateDialog();

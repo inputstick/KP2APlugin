@@ -1,6 +1,6 @@
 package com.inputstick.apps.kp2aplugin;
 
-
+@SuppressWarnings("WeakerAccess")
 public class Const {
 	
 	public static final String SKIP_CHANGELOG_APP_VERSION = "1.41";
@@ -41,8 +41,8 @@ public class Const {
 	public static final int SERVICE_CAPSLOCK_WARNING_TIMEOUT = 10 * 1000;	
 	public static final int SERVICE_FAILSAFE_PERIOD = 10 * 60 * 1000;	//10min; stop plugin after FAILSAFE_PERIOD inactivity in case KP2A crashes
 	
-	public static final int SMS_TIMEOUT_MS = 1 * 60 * 1000;  //1min 
-	public static final int CLIPBOARD_INITIAL_TIMEOUT_MS = 1 * 60 * 1000; //1min, change strings if modified!
+	public static final int SMS_TIMEOUT_MS = 60 * 1000;  //1min
+	public static final int CLIPBOARD_INITIAL_TIMEOUT_MS = 60 * 1000; //1min, change strings if modified!
 	public static final int CLIPBOARD_MAX_TIMEOUT_MS = 999 * 1000; //999s
 	public static final int CLIPBOARD_TIMEOUT_EXTEND_MS = 3 * 60 * 1000; //3min, change notification text if modified
 	public static final int CLIPBOARD_MAX_LENGTH = 64; 
@@ -144,7 +144,7 @@ public class Const {
 	public static final String ITEM_CLIPBOARD = "clipboard";
 	
 	//field
-	public static final String ITEM_TYPE = "type_normal";	
+	public static final String ITEM_TYPE = "type_normal";
 	public static final String ITEM_TYPE_ENTER = "type_enter";
 	public static final String ITEM_TYPE_TAB = "type_tab";
 	public static final String ITEM_TYPE_SLOW = "type_slow";
