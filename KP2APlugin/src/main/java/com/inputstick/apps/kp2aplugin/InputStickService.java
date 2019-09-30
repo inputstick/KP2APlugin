@@ -207,6 +207,9 @@ public class InputStickService extends Service implements InputStickStateListene
 					dbClosedTime = 0;
 					onEntryOpened();
 				} else if (action.equals(Strings.ACTION_ENTRY_ACTION_SELECTED)) {
+					if (PreferencesHelper.showDebugMessages(prefs)) {
+						Toast.makeText(context, "KP2A-IS: Entry action", Toast.LENGTH_SHORT).show();
+					}
 					dbClosedTime = 0;
 					actionSelectedAction(intent);
 				} else if (action.equals(Strings.ACTION_LOCK_DATABASE) || action.equals(Strings.ACTION_CLOSE_DATABASE)) {

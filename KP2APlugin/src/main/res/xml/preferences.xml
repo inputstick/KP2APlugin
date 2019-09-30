@@ -292,6 +292,13 @@
         android:summaryOff="@string/never_stop_plugin_summary_off"
         android:title="@string/never_stop_plugin_title" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_debug_messages"
+            android:summaryOn="@string/show_debug_messages_summary_on"
+            android:summaryOff="@string/show_debug_messages_summary_off"
+            android:title="@string/show_debug_messages_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

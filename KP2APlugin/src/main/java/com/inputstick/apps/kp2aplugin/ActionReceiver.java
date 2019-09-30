@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
@@ -43,6 +44,11 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			
 			loadPreferences(prefs);
 			String token = oe.getAccessTokenForCurrentEntryScope();
+
+			//show debug toast?
+			if (PreferencesHelper.showDebugMessages(prefs)) {
+				Toast.makeText(ctx, "KP2A-IS: Open entry", Toast.LENGTH_SHORT).show();
+			}
 			
 			//primary layout:			
 			tmp = PreferencesHelper.getFieldItemsForPrimaryLayout(prefs);

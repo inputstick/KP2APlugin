@@ -3,7 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 @SuppressWarnings("WeakerAccess")
 public class Const {
 	
-	public static final String SKIP_CHANGELOG_APP_VERSION = "1.41";
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.42";
 	
 	//public static final int IC = R.drawable.ic_launcher;
 
@@ -301,6 +301,9 @@ public class Const {
 
 	public static final String PREF_TWEAKS_NEVER_STOP_PLUGIN = "never_stop_plugin";
 	public static final boolean PREF_TWEAKS_NEVER_STOP_PLUGIN_VALUE = false;
+
+	public static final String PREF_TWEAKS_SHOW_DEBUG_MESSAGES = "show_debug_messages";
+	public static final boolean PREF_TWEAKS_SHOW_DEBUG_MESSAGES_VALUE = false;
 
 	
 }

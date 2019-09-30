@@ -340,4 +340,8 @@ public abstract class PreferencesHelper {
 		return prefs.getBoolean(Const.PREF_TWEAKS_NEVER_STOP_PLUGIN, Const.PREF_TWEAKS_NEVER_STOP_PLUGIN_VALUE);
 	}
 
+	public static boolean showDebugMessages(SharedPreferences prefs) {
+		return prefs.getBoolean(Const.PREF_TWEAKS_SHOW_DEBUG_MESSAGES, Const.PREF_TWEAKS_SHOW_DEBUG_MESSAGES_VALUE);
+	}
+
 }
