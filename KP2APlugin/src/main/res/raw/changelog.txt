@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.42
+  % Version 1.42
+  	* added option to show debug messages
 $ 1.41
   % Version 1.41
   	_ <a href="http://blog.inputstick.com/2019/09/kp2a-plugin-v141.html">(More info)</a>
