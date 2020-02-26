@@ -675,6 +675,8 @@ public class InputStickService extends Service implements InputStickStateListene
 			mNotificationManager.createNotificationChannel(notificationChannel);
             notificationChannel = new NotificationChannel(Const.NOTIFICATION_ACTION_CHANNEL_ID, Const.NOTIFICATION_ACTION_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
             mNotificationManager.createNotificationChannel(notificationChannel);
+			notificationChannel = new NotificationChannel(Const.NOTIFICATION_IMPORTANT_CHANNEL_ID, Const.NOTIFICATION_IMPORTANT_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+			mNotificationManager.createNotificationChannel(notificationChannel);
 		}
 				
 		mPluginNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_STATUS_CHANNEL_ID);

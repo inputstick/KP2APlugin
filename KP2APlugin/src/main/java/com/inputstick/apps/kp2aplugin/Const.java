@@ -11,6 +11,8 @@ public class Const {
 	public static final CharSequence NOTIFICATION_STATUS_CHANNEL_NAME = "Status notifications";
 	public static final String NOTIFICATION_ACTION_CHANNEL_ID = "KP2AInputStickPluginActionChannelID";
 	public static final CharSequence NOTIFICATION_ACTION_CHANNEL_NAME = "Type from SMS/clipboard";
+	public static final String NOTIFICATION_IMPORTANT_CHANNEL_ID = "KP2AInputStickPluginImportantChannelID";
+	public static final CharSequence NOTIFICATION_IMPORTANT_CHANNEL_NAME = "Important notifications";
 	
 	public static final int INPUTSTICK_SERVICE_NOTIFICATION_ID = 1;
 	public static final int CLIPBOARD_TYPING_NOTIFICATION_ID = 2;
