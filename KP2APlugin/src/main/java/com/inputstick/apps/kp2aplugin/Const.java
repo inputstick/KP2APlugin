@@ -273,6 +273,17 @@ public class Const {
 	public static final String PREF_SHOW_HELP_WEBPAGE_KEY = "show_help_webpage_key";
 	public static final String PREF_SHOW_CHANGELOG_PREFERENCE_KEY = "show_changelog_preference_key";
 	public static final String PREF_RUN_REMOTE = "run_remote_key";
+
+	public static final String CATEGORY_HELP_AND_INFO = "category_help_and_info";
+    public static final String CATEGORY_GENERAL = "category_general";
+    public static final String CATEGORY_TYPING = "category_typing";
+    public static final String CATEGORY_CONNECTION = "category_connection";
+    public static final String CATEGORY_SMS = "category_sms";
+    public static final String CATEGORY_CLIPBOARD = "category_clipboard";
+    public static final String CATEGORY_QUICK_SHORTCUTS = "category_quick_shortcuts";
+    public static final String CATEGORY_UI = "category_ui";
+    public static final String CATEGORY_REMOTE = "category_remote";
+    public static final String CATEGORY_TWEAKS = "category_tweaks";
 	
 	
 	public static final String PREF_DO_NOT_REQUEST_DB_SCOPE = "db_scope_disabled";

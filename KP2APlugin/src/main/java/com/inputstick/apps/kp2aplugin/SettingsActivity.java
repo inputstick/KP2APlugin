@@ -198,7 +198,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				}
 			});
 		} else {
-			PreferenceCategory prefCategory = (PreferenceCategory) findPreference("category_general");
+		    //do not show on Android 9 and earlier
+			PreferenceCategory prefCategory = (PreferenceCategory) findPreference(Const.CATEGORY_GENERAL);
 			prefCategory.removePreference(pref);
 		}
 
