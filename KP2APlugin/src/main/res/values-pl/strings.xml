@@ -79,6 +79,9 @@
     <string name="notification_state_connecting">łączenie&#8230;</string>
     <string name="notification_state_not_connected">nie połączono</string>		
 	<string name="notification_sms">Pisz z SMS</string>
+    <string name="notification_permission">Aplikacja potrzebuje dodatkowych uprawnień aby wykonać akcję</string>
+
+    <string name="toast_permission">InputStick KP2A plugin potrzebuje dodatkowych uprawnień aby wykonać akcję. Zobacz powiadomienie / ustawienia aplikacji</string>
 
     <string name="title_activity_settings">KP2A InputStick Ustawienia</string>
 	

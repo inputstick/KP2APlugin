@@ -4,6 +4,9 @@
     <string name="configure_plugin">Configurer en tant que plugin</string>
     <string name="enabled">Activé</string>
     <string name="not_configured">NON configuré !</string>
+    <string name="alert_window_permission">Superposition sur d\'autres applis</string>
+    <string name="has_permission">Autorisé</string>
+    <string name="no_permission">Non autorisé. Certaines actions ne fonctionneront pas!</string>
 
     <string name="missing_access_scope_title">Portée d\'accès de KP2A</string>
     <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l\'accès maintenant ?</string>
