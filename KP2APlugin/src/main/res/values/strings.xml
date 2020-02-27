@@ -87,6 +87,9 @@
     <string name="notification_state_connecting">connecting&#8230;</string>
     <string name="notification_state_not_connected">not connected</string>
     <string name="notification_sms">Type from SMS</string>
+    <string name="notification_permission">App needs additional permission to execute this action</string>
+
+    <string name="toast_permission">InputStick KP2A plugin needs additional permission to execute this action. See notification / plugin settings</string>
 
     <string name="title_activity_settings">KP2A InputStick Settings</string>
     

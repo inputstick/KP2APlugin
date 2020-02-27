@@ -6,6 +6,9 @@
     <string name="configure_plugin">Configure as plugin</string>
     <string name="enabled">Enabled</string>
     <string name="not_configured">NOT configured!</string>
+    <string name="alert_window_permission">Display over other apps</string>
+    <string name="has_permission">Allowed</string>
+    <string name="no_permission">Not allowed. Some plugin actions will NOT work!</string>
 
     <string name="missing_access_scope_title">KP2A access scope</string>
     <string name="missing_access_scope_message">The plugin can automatically disconnect when Keepass2Android database is locked or closed. This requires access to KP2A database events. Request access now?</string>

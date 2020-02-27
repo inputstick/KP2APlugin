@@ -14,11 +14,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -534,9 +536,13 @@ public class InputStickService extends Service implements InputStickStateListene
 			if (typeSlow) {
 				params = new TypingParams(layoutCode, Const.TYPING_SPEED_SLOW);
 			}
-			if (typeMasked) {				
-				connectAction();
-				ActionHelper.startMaskedPasswordActivity(this, text, params, true);
+			if (typeMasked) {
+				if (hasPermissionToExecuteAction(Const.ACTION_MASKED_PASSWORD)) {
+					connectAction();
+					ActionHelper.startMaskedPasswordActivity(this, text, params, true);
+				} else {
+					showMissingPermissionNotification();
+				}
 			} else {						
 				queueText(text, params, true);				
 				if (keyAfterTyping != 0) {
@@ -555,55 +561,59 @@ public class InputStickService extends Service implements InputStickStateListene
 	private void entryAction(String uiAction, EntryData entryData, TypingParams params) {
 		Log.d(_TAG, "entryAction: " + uiAction);
 
-		if (Const.ACTION_MASKED_PASSWORD.equals(uiAction)) {
-			connectAction();
-			ActionHelper.startMaskedPasswordActivity(this, entryData.getPassword(), params, true);
-		} else if (Const.ACTION_SETTINGS.equals(uiAction)) {
-			ActionHelper.startSettingsActivityAction(this);
-		} else if (Const.ACTION_SHOW_ALL.equals(uiAction)) {
-			ActionHelper.startShowAllActivityAction(this, entryData);
-		} else if (Const.ACTION_USER_PASS.equals(uiAction)) {
-			typeUserNameAndPasswordFields(entryData, params, false);
-		} else if (Const.ACTION_USER_PASS_ENTER.equals(uiAction)) {
-			typeUserNameAndPasswordFields(entryData, params, true);
-		} else if (Const.ACTION_MAC_SETUP.equals(uiAction)) {
-			connectAction();
-			ActionHelper.startMacSetupActivityAction(this);
-		} else if (Const.ACTION_MACRO_ADDEDIT.equals(uiAction)) {
-			ActionHelper.addEditMacroAction(this, entryData, false);
-		} else if (Const.ACTION_CLIPBOARD.equals(uiAction)) {
-			connectAction();
-			startClipboardMonitoring(params);
-			ActionHelper.startClipboardApp(this);
-		} else if (Const.ACTION_MACRO_RUN.equals(uiAction)) {
-			connectAction();
-			if (ActionHelper.runMacroAction(this, entryData, params)) {
-				onAction(ACTION_HID); // macro was  executed
+		if (hasPermissionToExecuteAction(uiAction)) {
+			if (Const.ACTION_MASKED_PASSWORD.equals(uiAction)) {
+				connectAction();
+				ActionHelper.startMaskedPasswordActivity(this, entryData.getPassword(), params, true);
+			} else if (Const.ACTION_SETTINGS.equals(uiAction)) {
+				ActionHelper.startSettingsActivityAction(this);
+			} else if (Const.ACTION_SHOW_ALL.equals(uiAction)) {
+				ActionHelper.startShowAllActivityAction(this, entryData);
+			} else if (Const.ACTION_USER_PASS.equals(uiAction)) {
+				typeUserNameAndPasswordFields(entryData, params, false);
+			} else if (Const.ACTION_USER_PASS_ENTER.equals(uiAction)) {
+				typeUserNameAndPasswordFields(entryData, params, true);
+			} else if (Const.ACTION_MAC_SETUP.equals(uiAction)) {
+				connectAction();
+				ActionHelper.startMacSetupActivityAction(this);
+			} else if (Const.ACTION_MACRO_ADDEDIT.equals(uiAction)) {
+				ActionHelper.addEditMacroAction(this, entryData, false);
+			} else if (Const.ACTION_CLIPBOARD.equals(uiAction)) {
+				connectAction();
+				startClipboardMonitoring(params);
+				ActionHelper.startClipboardApp(this);
+			} else if (Const.ACTION_MACRO_RUN.equals(uiAction)) {
+				connectAction();
+				if (ActionHelper.runMacroAction(this, entryData, params)) {
+					onAction(ACTION_HID); // macro was  executed
+				}
+			} else if (Const.ACTION_TAB.equals(uiAction)) {
+				queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, true);
+			} else if (Const.ACTION_ENTER.equals(uiAction)) {
+				queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, true);
+			} else if (Const.ACTION_CONNECT.equals(uiAction)) {
+				connectAction();
+			} else if (Const.ACTION_DISCONNECT.equals(uiAction)) {
+				InputStickHID.disconnect();
+			} else if (Const.ACTION_TEMPLATE_RUN.equals(uiAction)) {
+				connectAction();
+				ActionHelper.startSelectTemplateActivityAction(this, entryData, params, false);
+			} else if (Const.ACTION_TEMPLATE_MANAGE.equals(uiAction)) {
+				ActionHelper.startSelectTemplateActivityAction(this, entryData, params, true);
+			} else if (Const.ACTION_QUICK_SHORTCUT_1.equals(uiAction)) {
+				executeQuickAction(1, params);
+			} else if (Const.ACTION_QUICK_SHORTCUT_2.equals(uiAction)) {
+				executeQuickAction(2, params);
+			} else if (Const.ACTION_QUICK_SHORTCUT_3.equals(uiAction)) {
+				executeQuickAction(3, params);
+			} else if (Const.ACTION_REMOTE.equals(uiAction)) {
+				ActionHelper.startRemoteActivityAction(this);
+			} else if (Const.ACTION_SMS.equals(uiAction)) {
+				ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
 			}
-		} else if (Const.ACTION_TAB.equals(uiAction)) {
-			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_TAB, params, true);
-		} else if (Const.ACTION_ENTER.equals(uiAction)) {
-			queueKey(HIDKeycodes.NONE, HIDKeycodes.KEY_ENTER, params, true);
-		} else if (Const.ACTION_CONNECT.equals(uiAction)) {
-			connectAction();
-		} else if (Const.ACTION_DISCONNECT.equals(uiAction)) {
-			InputStickHID.disconnect();
-		} else if (Const.ACTION_TEMPLATE_RUN.equals(uiAction)) {
-			connectAction();
-			ActionHelper.startSelectTemplateActivityAction(this, entryData, params, false);
-		} else if (Const.ACTION_TEMPLATE_MANAGE.equals(uiAction)) {
-			ActionHelper.startSelectTemplateActivityAction(this, entryData, params, true);
-		} else if (Const.ACTION_QUICK_SHORTCUT_1.equals(uiAction)) {
-			executeQuickAction(1, params);			
-		} else if (Const.ACTION_QUICK_SHORTCUT_2.equals(uiAction)) {
-			executeQuickAction(2, params);
-		} else if (Const.ACTION_QUICK_SHORTCUT_3.equals(uiAction)) {
-			executeQuickAction(3, params);
-		} else if (Const.ACTION_REMOTE.equals(uiAction)) {
-			ActionHelper.startRemoteActivityAction(this); 
-		} else if (Const.ACTION_SMS.equals(uiAction)) {
-			ActionHelper.startSMSActivityAction(this, smsText, smsSender, params);
-		} 
+		} else {
+			showMissingPermissionNotification();
+		}
 	}
 	
 	private void executeQuickAction(int id, TypingParams params) {
@@ -943,6 +953,49 @@ public class InputStickService extends Service implements InputStickStateListene
 		if (executedHIDAction) {
 			onAction(ACTION_HID);	
 		}
+	}
+
+
+	//************************************************************************************
+	//************************************************************************************
+	//SYSTEM_ALERT_WINDOW permission (required by Android 10 and later to start activity when app has no visible activity):
+
+	private boolean hasPermissionToExecuteAction(String uiAction) {
+		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+			//check if uiAction may need to start activity
+			if (Const.ACTION_MASKED_PASSWORD.equals(uiAction)
+					|| Const.ACTION_SETTINGS.equals(uiAction)
+					|| Const.ACTION_SHOW_ALL.equals(uiAction)
+					|| Const.ACTION_MAC_SETUP.equals(uiAction)
+					|| Const.ACTION_MACRO_ADDEDIT.equals(uiAction)
+					|| Const.ACTION_MACRO_RUN.equals(uiAction)
+					|| Const.ACTION_TEMPLATE_RUN.equals(uiAction)
+					|| Const.ACTION_TEMPLATE_MANAGE.equals(uiAction)
+					|| Const.ACTION_CLIPBOARD.equals(uiAction)
+					|| Const.ACTION_REMOTE.equals(uiAction)) {
+				return Settings.canDrawOverlays(this);
+			}
+		}
+		return true;
+	}
+
+	private void showMissingPermissionNotification() {
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
+            builder.setContentTitle(getString(R.string.app_name));
+            builder.setContentText(getString(R.string.notification_permission));
+            builder.setSmallIcon(R.drawable.ic_notification); //TODO
+            builder.setAutoCancel(true);
+            builder.setTimeoutAfter(3 * 60 * 1000);
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+            Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            builder.setContentIntent(PendingIntent.getActivity(this, 0, permissionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+            mNotificationManager.notify(Const.PERMISSION_NOTIFICATION_ID, builder.build());
+
+            Toast.makeText(this, R.string.toast_permission, Toast.LENGTH_LONG).show();
+        }
 	}
 
 }

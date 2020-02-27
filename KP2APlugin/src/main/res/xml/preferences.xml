@@ -22,12 +22,18 @@
     
     </PreferenceCategory>   
     
-    <PreferenceCategory android:title="@string/general_settings_title" >
+    <PreferenceCategory
+        android:key="category_general"
+        android:title="@string/general_settings_title" >
         
 	    <Preference
 	        android:key="enable_plugin_pref"
-	        android:title="@string/configure_plugin" />            
-	              
+	        android:title="@string/configure_plugin" />
+
+        <Preference
+            android:key="alert_window_permission_pref"
+            android:title="@string/alert_window_permission" />
+
     </PreferenceCategory>     
 
     <PreferenceCategory android:title="@string/typing_settings_title" >        

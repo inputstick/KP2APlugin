@@ -22,7 +22,9 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -176,15 +178,30 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
 		setListSummary(Const.PREF_ENABLED_QUICK_SHORTCUTS);
         		
-		pref = findPreference(Const.PREF_ENABLE_PLUGIN_PREF);
+		pref = findPreference(Const.PREF_ENABLE_PLUGIN);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				enableAsPlugin();
 				return true;
 			}
-		});		
-		
+		});
+
+		pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
+		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+			pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+					startActivity(permissionIntent);
+					return true;
+				}
+			});
+		} else {
+			PreferenceCategory prefCategory = (PreferenceCategory) findPreference("category_general");
+			prefCategory.removePreference(pref);
+		}
+
 		pref = findPreference(Const.PREF_RUN_REMOTE);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
@@ -403,28 +420,44 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Preference pref;
+
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);		
 		displayReloadInfo = false;
-		Preference enablePref = findPreference(Const.PREF_ENABLE_PLUGIN_PREF);
+		pref = findPreference(Const.PREF_ENABLE_PLUGIN);
 		if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
-			enablePref.setSummary(R.string.not_configured);
+			pref.setSummary(R.string.not_configured);
 		} else {
-			enablePref.setSummary(R.string.enabled);
+			pref.setSummary(R.string.enabled);
 			if ( !setupCompleted) {
 				setupCompleted = true;				
 				PreferencesHelper.setSetupCompleted(prefs);
 			}
 		}
+
+		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+			pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
+			//pref will be null on devices running on Android 9 or earlier!
+			if (pref != null) {
+				if (Settings.canDrawOverlays(this)) {
+					pref.setSummary(R.string.has_permission);
+				} else {
+					pref.setSummary(R.string.no_permission);
+				}
+			}
+		}
+
+
+
 		
 		//handle layout change made in setup wizard
 		String layoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);
 		String[] layoutValues = Util.convertToStringArray(KeyboardLayout.getLayoutCodes());	
 		String[] layoutNames = Util.convertToStringArray(KeyboardLayout.getLayoutNames(true));	
 		int selectedLayout = Arrays.asList(layoutValues).indexOf(layoutCode);
-		Preference pref;
-		pref = findPreference(Const.PREF_PRIMARY_LAYOUT);
-		pref.setSummary(layoutNames[selectedLayout]);		
 
+		pref = findPreference(Const.PREF_PRIMARY_LAYOUT);
+		pref.setSummary(layoutNames[selectedLayout]);
 
 		pref  = findPreference(Const.PREF_SMS_INFO);
 		if (pref.isEnabled()) { //device supports SMS

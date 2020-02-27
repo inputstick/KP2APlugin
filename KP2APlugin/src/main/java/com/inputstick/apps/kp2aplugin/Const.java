@@ -18,6 +18,7 @@ public class Const {
 	public static final int CLIPBOARD_TYPING_NOTIFICATION_ID = 2;
 	public static final int UPDATE_NOTIFICATION_ID = 3;
 	public static final int SMS_NOTIFICATION_ID = 4;
+	public static final int PERMISSION_NOTIFICATION_ID = 5;
 
 	public static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
 	public static final int REQUEST_CODE_SELECT_APP = 124;
@@ -266,7 +267,8 @@ public class Const {
 	public static final boolean PREF_SHOW_RELOAD_WARNING_VALUE = true;		
 	
 	public static final String PREF_SETUP_COMPLETED = "setup_completed";
-	public static final String PREF_ENABLE_PLUGIN_PREF = "enable_plugin_pref";
+	public static final String PREF_ENABLE_PLUGIN = "enable_plugin_pref";
+	public static final String PREF_ALERT_WINDOW_PERMISSION = "alert_window_permission_pref";
 	public static final String PREF_SHOW_ABOUT_KEY = "show_about_key";
 	public static final String PREF_SHOW_HELP_WEBPAGE_KEY = "show_help_webpage_key";
 	public static final String PREF_SHOW_CHANGELOG_PREFERENCE_KEY = "show_changelog_preference_key";
