@@ -19,6 +19,10 @@
     </style>
   </head>
   <body>
+$ 1.43
+  % Version 1.43
+  	_ <a href="http://blog.inputstick.com/2020/02/kp2a-plugin-v143.html">(More info)</a>
+  	* added Display Over Other Apps permission (affects devices running Android 10 and later)
 $ 1.42
   % Version 1.42
   	* added option to show debug messages
