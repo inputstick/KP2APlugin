@@ -984,7 +984,7 @@ public class InputStickService extends Service implements InputStickStateListene
             NotificationCompat.Builder builder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
             builder.setContentTitle(getString(R.string.app_name));
             builder.setContentText(getString(R.string.notification_permission));
-            builder.setSmallIcon(R.drawable.ic_notification); //TODO
+            builder.setSmallIcon(R.drawable.ic_permission); 
             builder.setAutoCancel(true);
             builder.setTimeoutAfter(3 * 60 * 1000);
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
