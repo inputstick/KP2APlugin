@@ -38,7 +38,7 @@
     <string name="slide_settings_title">Settings</string>
     <string name="slide_settings_text">Show/hide field and entry actions. Adjust InputStick connection options.\nEnable secondary keyboard layout (e.g. German for home, English for work).</string>
     <string name="slide_mac_title">For Mac users</string>
-    <string name="slide_mac_text">Use \"OSX Setup\" from Entry options when OS X wants to identify keyboard.\nYou may need to use different keyboard layout, example: German (Mac)</string>
+    <string name="slide_mac_text">Use \"macOS setup\" from Entry options when macOS wants to identify keyboard.\nFor macOS may need to use macOS-specific keyboard layout, example: German (Mac)</string>
     <string name="slide_done_title">Done!</string>
     <string name="slide_done_text">You are now ready to type from Keepass2Android.\nNeed more help? Click link below:\nhttp://www.inputstick.com/help</string>
 

@@ -38,7 +38,7 @@
     <string name="slide_settings_title">Ustawienia</string>
     <string name="slide_settings_text">Pokaż/ukryj akcje pól i wpisów. Dobierz ustawienia łączenia się z InputStick.\nWłącz dodatkowy układ klawiatury (np: polski w domu, angielski w pracy).</string>
     <string name="slide_mac_title">Dla użytkowników Mac</string>
-    <string name="slide_mac_text">Wybierz \"OSX konfiguracja\" (akcja wpisu) gdy OS X zechce zidentyfikować klawiaturę.</string>    
+    <string name="slide_mac_text">Wybierz \"macOS konfiguracja\" (akcja wpisu) gdy macOS zechce zidentyfikować klawiaturę.</string>
     <string name="slide_done_title">Zrobione!</string>
     <string name="slide_done_text">Urządzenie jest gotowe aby pisać tekst z Keepass2Android.\nPotrzebujesz pomocy? Kliknij link poniżej:\nhttp://www.inputstick.com/help</string>
 

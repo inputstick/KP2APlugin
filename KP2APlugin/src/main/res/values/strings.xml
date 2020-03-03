@@ -51,7 +51,7 @@
     <string name="action_connect">Connect now</string>
     <string name="action_disconnect">Disconnect now</string>
     <string name="action_open_settings">Settings</string>
-    <string name="action_open_mac_setup">OSX setup</string>
+    <string name="action_open_mac_setup">macOS setup</string>
     <string name="action_masked_password">Masked Password</string>
     <string name="action_macro_run">Execute Macro</string>
     <string name="action_template_run">Execute Template</string>

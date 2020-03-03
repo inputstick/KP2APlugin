@@ -45,7 +45,7 @@
     <string name="action_connect">Połącz teraz</string>
     <string name="action_disconnect">Rozłącz teraz</string>      
     <string name="action_open_settings">Ustawienia</string>
-    <string name="action_open_mac_setup">OSX konfiguracja</string>
+    <string name="action_open_mac_setup">macOS konfiguracja</string>
     <string name="action_masked_password">Maskowane hasło</string>
 	<string name="action_macro_run">Uruchom makro</string>   
 	<string name="action_template_run">Uruchom szablon</string>    

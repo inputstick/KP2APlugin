@@ -38,7 +38,7 @@
     <string name="slide_settings_title">Réglages</string>
     <string name="slide_settings_text">Afficher/masquer les actions de champ et de saisie. Réglez les options de connexion au InputStick.\nActiver la disposition secondaire du clavier (par ex. Français pour la maison, Anglais pour le travail).</string>
     <string name="slide_mac_title">Pour les utilisateurs de Mac</string>
-    <string name="slide_mac_text">Utilisez \"Configuration OSX\" à partir des options d\'entrée quand OS X veut identifier le clavier.\nIl se peut que vous ayez besoin d\'utiliser une disposition de clavier différente, par exemple : Français (Mac)</string>
+    <string name="slide_mac_text">Utilisez \"Configuration macOS\" à partir des options d\'entrée quand OS X veut identifier le clavier.\nIl se peut que vous ayez besoin d\'utiliser une disposition de clavier différente, par exemple : Français (Mac)</string>
     <string name="slide_done_title">Terminé !</string>
     <string name="slide_done_text">Vous êtes maintenant prêt à saisir à partir de Keepass2Android.\nBesoin d\'aide supplémentaire ? Cliquez sur le lien ci-dessous :\nhttp://www.inputstick.com/help</string>
 
