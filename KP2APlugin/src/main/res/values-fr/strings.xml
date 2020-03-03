@@ -24,6 +24,7 @@
     <string name="text_clipboard_disabled">Plugin InputStick : Saisie du presse-papiers désactivée</string>
     <string name="text_clipboard_notification_info">Saisie du presse-papiers active</string>
     <string name="text_clipboard_copy_now">Plugin InputStick : Copier le texte dans le presse-papiers (60 secondes restantes)</string>
+    <string name="text_clipboard_copy_now_android10">Plugin InputStick : Copier le texte dans le presse-papiers (60 secondes restantes). Cliquez sur notification pour taper</string>
     <string name="text_clipboard_too_long">Le texte est trop long. Voir l\'option Vérifier la longueur dans les paramètres.</string>
     <string name="text_capslock_warning">Avertissement : Le verrouillage des majuscules est activé !</string>
     <string name="text_missing_utility_app">Vous devez télécharger l\'application InputStickUtility</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.inputstick.apps.kp2aplugin">
+    package="com.inputstick.apps.kp2aplugin">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -8,14 +8,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
         <receiver
             android:name=".AccessReceiver"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="keepass2android.ACTION_TRIGGER_REQUEST_ACCESS" />
                 <action android:name="keepass2android.ACTION_RECEIVE_ACCESS" />
@@ -24,7 +24,7 @@
         </receiver>
         <receiver
             android:name=".ActionReceiver"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="keepass2android.ACTION_OPEN_ENTRY" />
                 <action android:name="keepass2android.ACTION_ENTRY_OUTPUT_MODIFIED" />
@@ -33,7 +33,7 @@
         </receiver>
         <receiver
             android:name=".UpdateReceiver"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
@@ -42,13 +42,11 @@
         <service
             android:name=".InputStickService"
             android:enabled="true"
-            android:exported="false" >
-        </service>
-
+            android:exported="false"></service>
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,66 +54,59 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ClipboardActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/title_activity_clipboard"
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity
             android:name=".MaskedPasswordActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_masked_password"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".MacSetupActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_mac_setup"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".MacroActivity"
             android:label="@string/title_activity_macro"
-            android:windowSoftInputMode="stateUnchanged" >
-        </activity>
+            android:windowSoftInputMode="stateUnchanged"></activity>
         <activity
             android:name=".AllActionsActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_all_actions"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".MacroExecuteActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_macro_execute"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".SetupWizardActivity"
             android:label="@string/title_activity_setup_wizard"
-            android:theme="@style/Theme.AppCompat" >
-        </activity>
+            android:theme="@style/Theme.AppCompat"></activity>
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_about" >
-        </activity>
+            android:label="@string/title_activity_about"></activity>
         <activity
             android:name=".SelectTemplateActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_select_template"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".SelectAppActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_select_app"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
         <activity
             android:name=".remote.RemoteActivity"
-            android:imeOptions="flagNoExtractUi" >
-        </activity>
+            android:imeOptions="flagNoExtractUi"></activity>
         <activity
             android:name=".SMSActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_sms"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-
+            android:theme="@android:style/Theme.Dialog"></activity>
     </application>
 
 </manifest>

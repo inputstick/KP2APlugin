@@ -60,6 +60,8 @@ public class Const {
 	//activities
 	public static final String BROADCAST_FORCE_FINISH_ALL = "BROADCAST_FORCE_FINISH_ALL";
 	public static final String BROADCAST_FORCE_FINISH_SECURE = "BROADCAST_FORCE_FINISH_SECURE";
+	//clibpaord
+	public static final String BROADCAST_CLIPBOARD_REMAINING_TIME = "BROADCAST_CLIPBOARD_REMAINING_TIME";
 	
 	//service
 	public static final String SERVICE_FORCE_STOP = "service_force_stop";	
@@ -126,7 +128,9 @@ public class Const {
 	public static final String TEMPLATE_NAME_PREF_PREFIX = "tn_";
 	
 	public static final String TEMPLATE_DEFAULT_NAME_PREF_PREFIX = "TEMPLATE: ";
-	
+
+	//Clibpaord
+	public static final String EXTRA_CLIPBOARD_REMAINING_TIME = "remaining_time";
 	
 	
 	//ITEMS:
@@ -239,9 +243,11 @@ public class Const {
 	
 	public static final String PREF_ITEMS_FIELD_SECONDARY = "items_field_secondary";
 	public static final String PREF_ITEMS_FIELD_SECONDARY_VALUE = "type_normal";
-	
-	
-	
+
+
+
+	public static final String PREF_CLIPBOARD_SUMMARY = "summary_clipboard";
+
 	public static final String PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR = "clipboard_launch_authenticator";
 	public static final boolean PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR_VALUE = true;
 	

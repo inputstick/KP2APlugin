@@ -216,6 +216,7 @@
     <string name="section_quick_shortcuts_info">Quick Shortcuts are keyboard shortcuts that can be easily accessed from Entry menu.</string>
     <string name="section_ui_settings_info">Adjust what actions will be displayed in Entry and Field menus.</string>
     <string name="section_clipboard_info">Use clipboard typing to type text from other apps (generated OTPs, etc.).</string>
+    <string name="section_clipboard_info_android10">Use clipboard typing to type text from other apps (generated OTPs, etc.). Important: you must click on notification to type from clipboard (Android 10 and later)!</string>
     <string name="section_sms_info">Allows to type text (authentication codes etc.) from SMS received via SMS Proxy app</string>
 
 

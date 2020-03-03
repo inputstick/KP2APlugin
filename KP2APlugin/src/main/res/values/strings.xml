@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation" >
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="app_name">KP2A InputStick Plugin</string>
     <string name="kp2aplugin_title">InputStick Plugin</string>
     <string name="kp2aplugin_shortdesc">Allows to send text from KP2A via InputStick to your PC.</string>
     <string name="kp2aplugin_author">Philipp Crocoll and Jakub Zawadzki</string>
-    
+
     <string name="changelog_full_title">Change Log</string>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_show_full">more&#8230;</string>
@@ -17,7 +15,7 @@
     <string name="key_gui">GUI (Win key)</string>
     <string name="key_alt">Alt</string>
     <string name="key_altgr">AltGr (right)</string>
-    
+
     <string name="title_activity_init">Plugin Init</string>
     <string name="title_activity_all_actions">Select action:</string>
     <string name="title_activity_select_app">Select app:</string>
@@ -32,6 +30,7 @@
     <string name="text_clipboard_disabled">InputStick plugin: Clipboard typing disabled</string>
     <string name="text_clipboard_notification_info">Clipboard typing active</string>
     <string name="text_clipboard_copy_now">InputStick plugin: Copy text to clipboard (60s remaining)</string>
+    <string name="text_clipboard_copy_now_android10">InputStick plugin: Copy text to clipboard (60s remaining). Click on notification to type</string>
     <string name="text_clipboard_too_long">Text is too long. See Check Length option in settings</string>
     <string name="text_capslock_warning">Warning: CapsLock IS ON!</string>
     <string name="text_missing_utility_app">You need to download InputStickUtility app</string>
@@ -60,7 +59,7 @@
     <string name="action_template_manage">Manage templates</string>
     <string name="action_clipboard">Clipboard</string>
     <string name="action_remote">Remote (keyb/mouse)</string>
-    
+
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -80,7 +79,7 @@
     <string name="never">Never</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
-        
+
     <string name="notification_text">InputStick KP2A plugin is active</string>
     <string name="notification_state_ready">connected</string>
     <string name="notification_state_connected">waiting for USB</string>
@@ -92,7 +91,7 @@
     <string name="toast_permission">InputStick KP2A plugin needs additional permission to execute this action. See notification / plugin settings</string>
 
     <string name="title_activity_settings">KP2A InputStick Settings</string>
-    
+
     <string name="title_activity_about">About application</string>
     <string name="about_text1">Authors:\n• Jakub Zawadzki (plugin development, InputStick API)\nwww.inputstick.com\n• Philipp Crocoll (initial development, plugin API)\nhttps://keepass2android.codeplex.com\n\nSource code:\nhttps://github.com/inputstick</string>
     <string name="about_text2">Special thanks to:\n• Jean-Marc ALBERT (French translation)\nhttps://github.com/wikijm</string>

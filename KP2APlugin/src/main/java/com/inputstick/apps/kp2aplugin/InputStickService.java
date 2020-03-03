@@ -385,8 +385,13 @@ public class InputStickService extends Service implements InputStickStateListene
 		if (mClipboardManager == null) {
 			mClipboardManager = (ClipboardManager)getSystemService(android.content.Context.CLIPBOARD_SERVICE);
 			mClipboardManager.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
-		}		
-		Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
+		}
+
+		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+			Toast.makeText(this, R.string.text_clipboard_copy_now_android10, Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
+		}
 		
 		mClipboardNotificationBuilder = new NotificationCompat.Builder(this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
 		
@@ -400,8 +405,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		
 		Intent extendActionIntent = new Intent(this, InputStickService.class);
 		extendActionIntent.setAction(Const.ACTION_CLIPBOARD_EXTEND);
-		PendingIntent extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);		
-		
+		PendingIntent extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		Intent clipboardIntent = new Intent(InputStickService.this, ClipboardActivity.class);
+		clipboardIntent.putExtras(mClipboardTypingParams.getBundle());
+		mClipboardNotificationBuilder.setContentIntent(PendingIntent.getActivity(InputStickService.this, 0, clipboardIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 		
 		mClipboardNotificationBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
 		mClipboardNotificationBuilder.addAction(0, "+3min", extendActionPendingIntent);
@@ -414,6 +422,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	private void updateClipboardNotification() {
 		mClipboardNotificationBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + (clipboardRemainingTime/1000) + "s)");
 		mNotificationManager.notify(Const.CLIPBOARD_TYPING_NOTIFICATION_ID, mClipboardNotificationBuilder.build());
+		sendClipboardRemainingTimeBroacdast();
 	}
 	
 	private void stopClipboardMonitoring(boolean showToast) {
@@ -426,6 +435,7 @@ public class InputStickService extends Service implements InputStickStateListene
 		}		
 		clipboardRemainingTime = 0;
 		mNotificationManager.cancel(Const.CLIPBOARD_TYPING_NOTIFICATION_ID);
+		sendClipboardRemainingTimeBroacdast();
 	}
 	
 	private void extendClipboardTime() {
@@ -436,6 +446,14 @@ public class InputStickService extends Service implements InputStickStateListene
 			}
 			updateClipboardNotification();
 		}		
+	}
+
+	//send broadcast to CliboardActivity
+	private void sendClipboardRemainingTimeBroacdast() {
+		Intent intent = new Intent();
+		intent.setAction(Const.BROADCAST_CLIPBOARD_REMAINING_TIME);
+		intent.putExtra(Const.EXTRA_CLIPBOARD_REMAINING_TIME, clipboardRemainingTime);
+		sendBroadcast(intent);
 	}
 	
 	

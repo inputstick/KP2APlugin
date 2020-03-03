@@ -319,6 +319,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 		
 		//clipboard:
+		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+			pref = findPreference(Const.PREF_CLIPBOARD_SUMMARY);
+			pref.setSummary(R.string.section_clipboard_info_android10);
+		}
+
 		prefLaunchAuthenticator = (CheckBoxPreference)findPreference(Const.PREF_CLIPBOARD_LAUNCH_AUTHENTICATOR);
 		prefLaunchAuthenticator.setOnPreferenceClickListener(reloadInfoListener);
 		prefLaunchAuthenticator.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

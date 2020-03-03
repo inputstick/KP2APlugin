@@ -159,6 +159,7 @@
     <string name="section_quick_shortcuts_info">Les raccourcis rapides sont des raccourcis clavier facilement accessibles à partir du menu Entrée.</string>
     <string name="section_ui_settings_info">Permet de régler les actions qui seront affichées dans les menus Entrée et Champ.</string>
     <string name="section_clipboard_info">Utilisez la saisie du presse-papiers pour taper du texte provenant d\'autres applications (OTP générés, etc.).</string>
+    <string name="section_clipboard_info_android10">Utilisez la saisie du presse-papiers pour taper du texte provenant d\'autres applications (OTP générés, etc.). Important: vous devez cliquer sur notification pour taper dans le presse-papiers (Android 10 and later)!</string>
     <string name="section_sms_info">Permet de taper du texte (codes d\'authentification, etc.) à partir de SMS reçus via l\'application SMS Proxy</string>
 
     <string name="remote_settings_title">Télécommande :</string>

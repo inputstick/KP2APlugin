@@ -133,7 +133,8 @@
         android:key="category_clipboard"
         android:title="@string/clipboard_typing_settings_title" >
         
-        <Preference 
+        <Preference
+            android:key="summary_clipboard"
             android:summary="@string/section_clipboard_info"
             android:selectable="false" >
 		</Preference>          
