@@ -3,7 +3,7 @@ package com.inputstick.apps.kp2aplugin;
 @SuppressWarnings("WeakerAccess")
 public class Const {
 	
-	public static final String SKIP_CHANGELOG_APP_VERSION = "1.43";
+	public static final String SKIP_CHANGELOG_APP_VERSION = "1.44";
 	
 	//public static final int IC = R.drawable.ic_launcher;
 
