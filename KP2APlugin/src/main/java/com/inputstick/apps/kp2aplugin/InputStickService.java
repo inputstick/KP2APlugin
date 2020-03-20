@@ -387,7 +387,7 @@ public class InputStickService extends Service implements InputStickStateListene
 			mClipboardManager.addPrimaryClipChangedListener(mPrimaryClipChangedListener);
 		}
 
-		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			Toast.makeText(this, R.string.text_clipboard_copy_now_android10, Toast.LENGTH_LONG).show();
 		} else {
 			Toast.makeText(this, R.string.text_clipboard_copy_now, Toast.LENGTH_LONG).show();
@@ -979,7 +979,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	//SYSTEM_ALERT_WINDOW permission (required by Android 10 and later to start activity when app has no visible activity):
 
 	private boolean hasPermissionToExecuteAction(String uiAction) {
-		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			//check if uiAction may need to start activity
 			if (Const.ACTION_MASKED_PASSWORD.equals(uiAction)
 					|| Const.ACTION_SETTINGS.equals(uiAction)
@@ -998,7 +998,7 @@ public class InputStickService extends Service implements InputStickStateListene
 	}
 
 	private void showMissingPermissionNotification() {
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(InputStickService.this, Const.NOTIFICATION_ACTION_CHANNEL_ID);
             builder.setContentTitle(getString(R.string.app_name));
             builder.setContentText(getString(R.string.notification_permission));

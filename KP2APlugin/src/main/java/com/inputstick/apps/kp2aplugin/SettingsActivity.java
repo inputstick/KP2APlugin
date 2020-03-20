@@ -188,7 +188,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		});
 
 		pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
-		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
@@ -319,7 +319,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 		
 		//clipboard:
-		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			pref = findPreference(Const.PREF_CLIPBOARD_SUMMARY);
 			pref.setSummary(R.string.section_clipboard_info_android10);
 		}
@@ -441,7 +441,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		}
 
-		if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
 			//pref will be null on devices running on Android 9 or earlier!
 			if (pref != null) {
