@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp" >
@@ -10,59 +9,41 @@
         android:layout_height="100dp"
         android:text="@string/clipboard_please_wait" />
 
+    <Button
+        android:id="@+id/buttonClipboardRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textViewCipboardContent"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
+        android:text="@string/clipboard_button_refresh" />
+
     <LinearLayout
         android:id="@+id/linearLayoutClipboardActions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textViewCipboardContent"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/buttonClipboardRefresh"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/buttonClipboardRefresh"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/clipboard_refresh" />
-
-        <Button
-            android:id="@+id/buttonClipboardPressEnter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="\u21B5" />
 
         <Button
             android:id="@+id/buttonClipboardType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/clipboard_type_text" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayoutClipboardActions"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal" >
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4" />
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="@string/clipboard_button_type" />
 
         <Button
-            android:id="@+id/buttonClipboardClose"
+            android:id="@+id/buttonClipboardTypeEnter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/clipboard_close" />
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="@string/clipboard_button_type_enter" />
 
     </LinearLayout>
 

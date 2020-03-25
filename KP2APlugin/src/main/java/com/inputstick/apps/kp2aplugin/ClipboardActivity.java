@@ -22,6 +22,7 @@ public class ClipboardActivity extends Activity {
 
     private TextView textViewCipboardContent;
     private Button buttonClipboardType;
+    private Button buttonClipboardTypeEnter;
 
     private Handler handler = new Handler();
 
@@ -54,24 +55,6 @@ public class ClipboardActivity extends Activity {
 
         textViewCipboardContent = findViewById(R.id.textViewCipboardContent);
 
-        buttonClipboardType = findViewById(R.id.buttonClipboardType);
-        buttonClipboardType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String toType = textViewCipboardContent.getText().toString();
-                new ItemToExecute(toType, params).sendToService(ClipboardActivity.this, true);
-
-                if (InputStickHID.isReady()) {
-                    //stop clipboard monitoring in service:
-                    Intent stopIntent = new Intent(ClipboardActivity.this, InputStickService.class);
-                    stopIntent.setAction(Const.ACTION_CLIPBOARD_STOP);
-                    startService(stopIntent);
-
-                    finish();
-                }
-            }
-        });
-
         Button buttonClipboardRefresh = findViewById(R.id.buttonClipboardRefresh);
         buttonClipboardRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,19 +63,20 @@ public class ClipboardActivity extends Activity {
             }
         });
 
-        Button buttonClipboardPressEnter = findViewById(R.id.buttonClipboardPressEnter);
-        buttonClipboardPressEnter.setOnClickListener(new View.OnClickListener() {
+        buttonClipboardType = findViewById(R.id.buttonClipboardType);
+        buttonClipboardType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardActivity.this, true);
+                type(params, false);
+
             }
         });
 
-        Button buttonClipboardClose = findViewById(R.id.buttonClipboardClose);
-        buttonClipboardClose.setOnClickListener(new View.OnClickListener() {
+        buttonClipboardTypeEnter = findViewById(R.id.buttonClipboardTypeEnter);
+        buttonClipboardTypeEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                type(params, true);
             }
         });
 
@@ -103,7 +87,7 @@ public class ClipboardActivity extends Activity {
 
         textViewCipboardContent.setText(R.string.clipboard_please_wait);
         buttonClipboardType.setEnabled(false);
-
+        buttonClipboardTypeEnter.setEnabled(false);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -123,6 +107,23 @@ public class ClipboardActivity extends Activity {
         handler.removeCallbacksAndMessages(null);
         unregisterReceiver(clipboardRemainingTimeReceiver);
         super.onDestroy();
+    }
+
+    private void type(TypingParams params, boolean enter) {
+        String toType = textViewCipboardContent.getText().toString();
+        new ItemToExecute(toType, params).sendToService(ClipboardActivity.this, true);
+        if (enter) {
+            new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardActivity.this, false);
+        }
+
+        if (InputStickHID.isReady()) {
+            //stop clipboard monitoring in service:
+            Intent stopIntent = new Intent(ClipboardActivity.this, InputStickService.class);
+            stopIntent.setAction(Const.ACTION_CLIPBOARD_STOP);
+            startService(stopIntent);
+
+            finish();
+        }
     }
 
     private void refresh() {
@@ -155,9 +156,11 @@ public class ClipboardActivity extends Activity {
         if (text != null) {
             textViewCipboardContent.setText(text);
             buttonClipboardType.setEnabled(true);
+            buttonClipboardTypeEnter.setEnabled(true);
         } else {
             textViewCipboardContent.setText(R.string.clipboard_empty);
             buttonClipboardType.setEnabled(false);
+            buttonClipboardTypeEnter.setEnabled(false);
         }
     }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="title_activity_clipboard">Type from clipboard</string>
-    <string name="clipboard_type_text">Type text</string>
-    <string name="clipboard_refresh">Refresh</string>
-    <string name="clipboard_close">Close</string>
+    <string name="title_activity_clipboard">Saisie du presse-papier</string>
+    <string name="clipboard_button_refresh">Actualiser</string>
+    <string name="clipboard_button_type">Saisie</string>
+    <string name="clipboard_button_type_enter">Saisie+Entrée</string>
 
-    <string name="clipboard_please_wait">Please wait&#8230;</string>
+    <string name="clipboard_please_wait">S\'il vous plaît, attendez&#8230;</string>
     <string name="clipboard_empty">System clipboard is empty or could not be accessed. Refresh?</string>
 </resources>

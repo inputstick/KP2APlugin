@@ -2,9 +2,9 @@
 <resources>
 
     <string name="title_activity_clipboard">Type from clipboard</string>
-    <string name="clipboard_type_text">Type text</string>
-    <string name="clipboard_refresh">Refresh</string>
-    <string name="clipboard_close">Close</string>
+    <string name="clipboard_button_refresh">Refresh</string>
+    <string name="clipboard_button_type">Type</string>
+    <string name="clipboard_button_type_enter">Type+Enter</string>
 
     <string name="clipboard_please_wait">Please wait&#8230;</string>
     <string name="clipboard_empty">System clipboard is empty or could not be accessed. Refresh?</string>
