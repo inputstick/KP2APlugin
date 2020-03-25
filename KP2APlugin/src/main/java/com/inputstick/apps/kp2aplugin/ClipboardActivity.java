@@ -113,6 +113,7 @@ public class ClipboardActivity extends Activity {
         String toType = textViewCipboardContent.getText().toString();
         new ItemToExecute(toType, params).sendToService(ClipboardActivity.this, true);
         if (enter) {
+            new ItemToExecute(ItemToExecute.ITEM_TYPE_DELAY, params, null, (byte)0, (byte)0, 15).sendToService(ClipboardActivity.this, false);
             new ItemToExecute((byte)0, HIDKeycodes.KEY_ENTER, params).sendToService(ClipboardActivity.this, false);
         }
 
