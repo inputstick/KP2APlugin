@@ -207,8 +207,8 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 					ctx.getApplicationContext().startActivity(i);			
 				}*/
-				//show changelog only for Android 10
-				if (android.os.Build.VERSION.SDK_INT >= 29) {
+				//show changelog only for Android 9 &  10
+				if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 					Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
 					i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
