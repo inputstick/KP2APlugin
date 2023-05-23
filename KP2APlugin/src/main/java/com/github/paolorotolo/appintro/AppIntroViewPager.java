@@ -1,10 +1,12 @@
 package com.github.paolorotolo.appintro;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 import java.lang.reflect.Field;
 
@@ -25,7 +27,7 @@ public class AppIntroViewPager extends ViewPager {
     }
 
     @Override
-    public void addOnPageChangeListener(OnPageChangeListener listener) {
+    public void addOnPageChangeListener(@NonNull OnPageChangeListener listener) {
         super.addOnPageChangeListener(listener);
         this.listener = listener;
     }

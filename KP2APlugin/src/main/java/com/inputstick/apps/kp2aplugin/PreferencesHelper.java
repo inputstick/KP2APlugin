@@ -325,7 +325,7 @@ public abstract class PreferencesHelper {
 
 	public static void setSMSProxyKey(SharedPreferences prefs, String value) {
         Editor editor = prefs.edit();
-        if (value == null) {
+		if (value == null) {
         	editor.remove(Const.PREF_SMS_SMSPROXY_KEY);
 		} else {
 			editor.putString(Const.PREF_SMS_SMSPROXY_KEY, value);

@@ -68,9 +68,9 @@ public class SelectAppActivity extends ListActivity {
 
     @SuppressWarnings("WeakerAccess")
     public static class AppInfo {
-        private String mName;
-        private String mAppPackage;
-        private Drawable mIcon;
+        private final String mName;
+        private final String mAppPackage;
+        private final Drawable mIcon;
         
         public AppInfo(String name, String appPackage, Drawable icon){
             mName = name;

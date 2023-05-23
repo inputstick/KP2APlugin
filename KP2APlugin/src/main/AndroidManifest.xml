@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.inputstick.apps.kp2aplugin">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <queries>
+        <package android:name="com.inputstick.apps.inputstickutility"/>
+        <package android:name="com.inputstick.apps.smsproxy"/>
+        <package android:name="keepass2android.plugin.inputstick"/>
+        <package android:name="keepass2android.keepass2android"/>
+        <package android:name="keepass2android.keepass2android_nonet"/>
+        <package android:name="com.google.android.apps.authenticator2"/>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -42,11 +50,12 @@
         <service
             android:name=".InputStickService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,56 +66,56 @@
             android:name=".ClipboardActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_clipboard"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".MaskedPasswordActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_masked_password"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".MacSetupActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_mac_setup"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".MacroActivity"
             android:label="@string/title_activity_macro"
-            android:windowSoftInputMode="stateUnchanged"></activity>
+            android:windowSoftInputMode="stateUnchanged" />
         <activity
             android:name=".AllActionsActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_all_actions"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".MacroExecuteActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_macro_execute"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".SetupWizardActivity"
             android:label="@string/title_activity_setup_wizard"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_about"></activity>
+            android:label="@string/title_activity_about" />
         <activity
             android:name=".SelectTemplateActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_select_template"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".SelectAppActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_select_app"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".remote.RemoteActivity"
-            android:imeOptions="flagNoExtractUi"></activity>
+            android:imeOptions="flagNoExtractUi" />
         <activity
             android:name=".SMSActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_sms"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

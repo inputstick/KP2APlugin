@@ -21,9 +21,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import com.inputstick.api.ConnectionManager;
 import com.inputstick.api.InputStickError;
@@ -89,6 +90,7 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private static long lastCapsLockWarningTime;	
 
+	private static int pendingIntentFlags;
 	private static NotificationManager mNotificationManager;
 	private static NotificationCompat.Builder mPluginNotificationBuilder;
 	private static NotificationCompat.Builder mSMSNotificationBuilder;
@@ -99,8 +101,8 @@ public class InputStickService extends Service implements InputStickStateListene
 	//************************************************************************************
 	//stopping plugin / terminating InputStick connection:
 
-	private static Handler mHandler = new Handler();
-	private Runnable mTimerTask = new Runnable() {
+	private static final Handler mHandler = new Handler();
+	private final Runnable mTimerTask = new Runnable() {
 		public void run() {
 			final long time = System.currentTimeMillis();
 			//update SMS notification & extend keep alive for service and InputStick connection
@@ -268,11 +270,11 @@ public class InputStickService extends Service implements InputStickStateListene
 				smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
 				smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
 				smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
-				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, pendingIntentFlags));
 
 				Intent dismissIntent = new Intent(InputStickService.this, InputStickService.class);
 				dismissIntent.setAction(Const.SERVICE_DISMISS_SMS);
-				mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+				mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, pendingIntentFlags));
 
 				mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
 				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
@@ -398,18 +400,21 @@ public class InputStickService extends Service implements InputStickStateListene
 		mClipboardNotificationBuilder.setContentTitle(getString(R.string.app_name));		
 		mClipboardNotificationBuilder.setContentText(getString(R.string.text_clipboard_notification_info) + " (" + (clipboardRemainingTime/1000) + "s)");
 		mClipboardNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
-			
+
+		PendingIntent disableActionPendingIntent;
 		Intent disableActionIntent = new Intent(this, InputStickService.class);
 		disableActionIntent.setAction(Const.ACTION_CLIPBOARD_STOP);
-		PendingIntent disableActionPendingIntent = PendingIntent.getService(this, 0, disableActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		
+		disableActionPendingIntent = PendingIntent.getService(this, 0, disableActionIntent, pendingIntentFlags);
+
+		PendingIntent extendActionPendingIntent;
 		Intent extendActionIntent = new Intent(this, InputStickService.class);
 		extendActionIntent.setAction(Const.ACTION_CLIPBOARD_EXTEND);
-		PendingIntent extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, pendingIntentFlags);
+
 
 		Intent clipboardIntent = new Intent(InputStickService.this, ClipboardActivity.class);
 		clipboardIntent.putExtras(mClipboardTypingParams.getBundle());
-		mClipboardNotificationBuilder.setContentIntent(PendingIntent.getActivity(InputStickService.this, 0, clipboardIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+		mClipboardNotificationBuilder.setContentIntent(PendingIntent.getActivity(InputStickService.this, 0, clipboardIntent, pendingIntentFlags));
 		
 		mClipboardNotificationBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
 		mClipboardNotificationBuilder.addAction(0, "+3min", extendActionPendingIntent);
@@ -695,6 +700,11 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		//notification:
 		mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+		if (Build.VERSION.SDK_INT >= 23) {
+			pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+		} else {
+			pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+		}
 
 		//notification channel
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -714,11 +724,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		mPluginNotificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
 
 		Intent openServiceIntent = new Intent(this, SettingsActivity.class);
-		mPluginNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+		mPluginNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, pendingIntentFlags));
 
 		Intent forceStopIntent = new Intent(this, InputStickService.class);
 		forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);
-		mPluginNotificationBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+		mPluginNotificationBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, pendingIntentFlags));
 					
 		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());		
 		
@@ -1008,7 +1018,7 @@ public class InputStickService extends Service implements InputStickStateListene
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
             Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-            builder.setContentIntent(PendingIntent.getActivity(this, 0, permissionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+			builder.setContentIntent(PendingIntent.getActivity(this, 0, permissionIntent, pendingIntentFlags));
 
             mNotificationManager.notify(Const.PERMISSION_NOTIFICATION_ID, builder.build());
 

@@ -47,7 +47,7 @@ public class SelectTemplateActivity extends PluginDialogActivity {
 					finish();
 				} else {					
 					String macroData = TemplateHelper.loadTemplate(prefs, pos); 										
-					if ((macroData != null) && (macroData.length() > 0)) {
+					if (macroData.length() > 0) {
 						ActionHelper.executeMacro(SelectTemplateActivity.this, entryData, params, macroData);
 						finish();
 					} else {

@@ -9,12 +9,6 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +16,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.inputstick.apps.kp2aplugin.R;
 
@@ -37,8 +38,6 @@ public abstract class AppIntro2 extends AppCompatActivity {
     protected int slidesNumber;
     protected Vibrator mVibrator;
     protected IndicatorController mController;
-    protected boolean isVibrateOn = false;
-    protected int vibrateIntensity = 20;
     protected boolean baseProgressButtonEnabled = true;
     protected boolean progressButtonEnabled = true;
     protected int selectedIndicatorColor = DEFAULT_COLOR;
@@ -82,10 +81,6 @@ public abstract class AppIntro2 extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View v) {
-                if (isVibrateOn) {
-                    mVibrator.vibrate(vibrateIntensity);
-                }
-
                 boolean requestPermission = false;
                 int position = 0;
 
@@ -113,9 +108,6 @@ public abstract class AppIntro2 extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View v) {
-                if (isVibrateOn) {
-                    mVibrator.vibrate(vibrateIntensity);
-                }
                 onDonePressed();
             }
         });
@@ -181,7 +173,7 @@ public abstract class AppIntro2 extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("baseProgressButtonEnabled", baseProgressButtonEnabled);
         outState.putBoolean("progressButtonEnabled", progressButtonEnabled);
@@ -296,14 +288,6 @@ public abstract class AppIntro2 extends AppCompatActivity {
         if (customBackgroundView!=null){
             backgroundFrame.addView(customBackgroundView);
         }
-    }
-
-    public void setVibrate(boolean vibrate) {
-        this.isVibrateOn = vibrate;
-    }
-
-    public void setVibrateIntensity(int intensity) {
-        this.vibrateIntensity = intensity;
     }
 
     public void setFadeAnimation() {

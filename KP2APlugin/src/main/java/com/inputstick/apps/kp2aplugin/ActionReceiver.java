@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
+import java.util.HashMap;
+import java.util.Set;
+
 import keepass2android.pluginsdk.KeepassDefs;
 import keepass2android.pluginsdk.PluginAccessException;
 import keepass2android.pluginsdk.Strings;

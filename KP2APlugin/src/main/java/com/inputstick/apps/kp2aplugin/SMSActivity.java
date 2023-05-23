@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -13,6 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.inputstick.api.hid.HIDKeycodes;
 
@@ -103,8 +104,8 @@ public class SMSActivity extends PluginDialogActivity {
 			        public void onClick(@NonNull View view) {
 			        	new ItemToExecute(txt, params).sendToService(SMSActivity.this, true);			
 			        }  
-			    };  
-			    spannableText.setSpan(clickableSpan, pos, pos + length, 0);			    				
+			    };
+				spannableText.setSpan(clickableSpan, pos, pos + length, 0);
 				if (markNext) {
 					spannableText.setSpan(new ForegroundColorSpan(Color.GREEN), pos, pos + length, 0);				
 				}

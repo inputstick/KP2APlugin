@@ -3,8 +3,6 @@ package com.inputstick.apps.kp2aplugin.slides;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.inputstick.api.Util;
 import com.inputstick.api.layout.KeyboardLayout;
@@ -71,7 +72,6 @@ public class LayoutSlide extends Fragment {
 			@Override
 			public void onClick(View v) {
 				TypingParams params = new TypingParams(layoutValues[spinnerLayout.getSelectedItemPosition()], Const.TYPING_SPEED_DEFAULT);
-				//ItemToExecute.sendTextToService(getActivity(), editTextTest.getText().toString(), params); //TODO
 				new ItemToExecute(editTextTest.getText().toString(), params).sendToService(getActivity(), true);
 			}			
 		});		

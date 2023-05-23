@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class EntryMacro {
 
-	private ArrayList<ItemToExecute> listItems;
-	private ArrayList<String> listPreviewData;
+	private final ArrayList<ItemToExecute> listItems;
+	private final ArrayList<String> listPreviewData;
 	
 	@SuppressLint("DefaultLocale")
 	//runInBackground: true - add clear flags for masked password; false - skip delays
@@ -18,7 +18,7 @@ public class EntryMacro {
 		String actionParam, tmp;
 		ItemToExecute ite;
 		if ((macroData != null) && (macroData.length() > 0)) {
-			String actionData[] = macroData.split("%");
+			String[] actionData = macroData.split("%");
 			for (String action : actionData) {
 				ite = null;
 				tmp = action.toLowerCase();

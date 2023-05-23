@@ -73,7 +73,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
 	
-	private OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
+	private final OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
 			displayReloadInfo = true;

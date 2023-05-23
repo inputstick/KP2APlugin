@@ -148,35 +148,35 @@ public class RemoteActivity extends Activity implements InputStickStateListener 
 			}        	
         });
 		
-		buttonFunctionKeys = (Button)findViewById(R.id.buttonFunctionKeys);
+		buttonFunctionKeys = findViewById(R.id.buttonFunctionKeys);
 		buttonFunctionKeys.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {	
 				KeyboardSupport.getFunctionKeysDialog(RemoteActivity.this, mRemote, mModifiers, "Fn Keys").show();
 			}        	
         });	
 		
-		buttonMore = (Button)findViewById(R.id.buttonMore);
+		buttonMore = findViewById(R.id.buttonMore);
 		buttonMore.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {	
 				getMoreDialog().show();
 			}        	
         });	
 		
-		relativeLayoutMouse = (RelativeLayout)findViewById(R.id.relativeLayoutMouse);		
-		buttonMouseL = (Button)findViewById(R.id.buttonMouseL);		
-		buttonMouseM = (Button)findViewById(R.id.buttonMouseM);
-		buttonMouseR = (Button)findViewById(R.id.buttonMouseR);
-		viewMousePad = (MousePadView)findViewById(R.id.viewMousePad);	
-		viewMouseScroll = (MouseScrollView)findViewById(R.id.viewMouseScroll);
-		imageViewMouseConfigure = (ImageView)findViewById(R.id.imageViewMouseConfigure);			
+		relativeLayoutMouse = findViewById(R.id.relativeLayoutMouse);
+		buttonMouseL = findViewById(R.id.buttonMouseL);
+		buttonMouseM = findViewById(R.id.buttonMouseM);
+		buttonMouseR = findViewById(R.id.buttonMouseR);
+		viewMousePad = findViewById(R.id.viewMousePad);
+		viewMouseScroll = findViewById(R.id.viewMouseScroll);
+		imageViewMouseConfigure = findViewById(R.id.imageViewMouseConfigure);
 		
-		linearLayoutModifiers = (LinearLayout)findViewById(R.id.linearLayoutModifiers);		
-		toggleButtonCtrl = (ToggleButton)findViewById(R.id.toggleButtonCtrl);
-		toggleButtonShift = (ToggleButton)findViewById(R.id.toggleButtonShift);
-		toggleButtonAlt = (ToggleButton)findViewById(R.id.toggleButtonAlt);
-		toggleButtonGui = (ToggleButton)findViewById(R.id.toggleButtonGui);
-		toggleButtonAltGr = (ToggleButton)findViewById(R.id.toggleButtonAltGr);
-		buttonContext = (Button)findViewById(R.id.buttonContext);
+		linearLayoutModifiers = findViewById(R.id.linearLayoutModifiers);
+		toggleButtonCtrl = findViewById(R.id.toggleButtonCtrl);
+		toggleButtonShift = findViewById(R.id.toggleButtonShift);
+		toggleButtonAlt = findViewById(R.id.toggleButtonAlt);
+		toggleButtonGui = findViewById(R.id.toggleButtonGui);
+		toggleButtonAltGr = findViewById(R.id.toggleButtonAltGr);
+		buttonContext = findViewById(R.id.buttonContext);
 
 		mRemotePreferences = new KP2ARemotePreferences(); 
 		mRemote = new RemoteSupport(mRemotePreferences);

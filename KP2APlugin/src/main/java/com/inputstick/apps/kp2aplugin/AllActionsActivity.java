@@ -49,8 +49,7 @@ public class AllActionsActivity extends PluginDialogActivity {
 	private boolean isSecondaryLayoutEnabled;
 	private String primaryLayoutCode;
 	private String secondaryLayoutCode;
-	
-	private ArrayList<String> list;
+
 	private ArrayAdapter<String> listAdapter;
 	private List<ActionId> actionsLUT;
 	
@@ -70,9 +69,9 @@ public class AllActionsActivity extends PluginDialogActivity {
 		final EntryData entryData = new EntryData(intent);
 
 		ListView listViewActions = findViewById(R.id.listViewActions);
-		list = new ArrayList<String>();
-		listAdapter = new ArrayAdapter<String>(this, R.layout.row, list);
-		actionsLUT = new ArrayList<ActionId>();
+		ArrayList<String> list = new ArrayList<>();
+		listAdapter = new ArrayAdapter<>(this, R.layout.row, list);
+		actionsLUT = new ArrayList<>();
 		
 		addAction(getActionString(R.string.action_open_settings, Const.LAYOUT_NONE), ActionId.OPEN_SETTINGS);
 		addAction(getActionString(R.string.action_connect, Const.LAYOUT_NONE), ActionId.CONNECT);

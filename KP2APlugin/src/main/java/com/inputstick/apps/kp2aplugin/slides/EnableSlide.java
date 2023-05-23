@@ -4,14 +4,15 @@ import keepass2android.pluginsdk.Strings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.inputstick.apps.kp2aplugin.PluginHelper;
 import com.inputstick.apps.kp2aplugin.PreferencesHelper;

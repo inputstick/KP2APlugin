@@ -9,8 +9,8 @@ public class TypingParams {
 	private static final String KEY_LAYOUT_CODE = "_PARAM_LAYOUT_CODE";
 	private static final String KEY_TYPING_SPEED = "_PARAM_TYPING_SPEED";
 	
-	private String mLayoutCode;
-	private int mTypingSpeed;
+	private final String mLayoutCode;
+	private final int mTypingSpeed;
 	
 	public TypingParams(String layoutCode, int typingSpeed) {
 		mLayoutCode = layoutCode;

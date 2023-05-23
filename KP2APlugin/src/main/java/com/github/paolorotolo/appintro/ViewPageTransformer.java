@@ -1,8 +1,10 @@
 package com.github.paolorotolo.appintro;
 
 import android.annotation.SuppressLint;
-import android.support.v4.view.ViewPager;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 class ViewPageTransformer implements ViewPager.PageTransformer {
 
@@ -27,7 +29,7 @@ class ViewPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_ALPHA_SLIDE = 0.35f;
 
     @SuppressLint("NewApi")
-    public void transformPage(View page, float position) {
+    public void transformPage(@NonNull View page, float position) {
         final float alpha;
         final float scale;
         final float translationX;

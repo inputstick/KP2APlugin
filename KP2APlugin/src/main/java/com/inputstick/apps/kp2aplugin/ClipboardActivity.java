@@ -24,7 +24,7 @@ public class ClipboardActivity extends Activity {
     private Button buttonClipboardType;
     private Button buttonClipboardTypeEnter;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
 
     private final BroadcastReceiver clipboardRemainingTimeReceiver = new BroadcastReceiver() {

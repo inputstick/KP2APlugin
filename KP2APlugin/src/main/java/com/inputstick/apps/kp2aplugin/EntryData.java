@@ -36,7 +36,7 @@ public class EntryData {
 			} else if (intent.hasExtra(Strings.EXTRA_ENTRY_ID)) {
 				//from broadcast receiver
 				entryId = intent.getStringExtra(Strings.EXTRA_ENTRY_ID);
-				HashMap<String, String> res = new HashMap<String, String>();
+				HashMap<String, String> res = new HashMap<>();
 				try {
 					JSONObject json = new JSONObject(intent.getStringExtra(Strings.EXTRA_ENTRY_OUTPUT_DATA));
 					for(Iterator<String> iter = json.keys();iter.hasNext();) {

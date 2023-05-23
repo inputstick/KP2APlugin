@@ -142,7 +142,7 @@ public class MacroActivity extends Activity {
 		buttonAddFromField = findViewById(R.id.buttonAddFromField);
 		buttonAddFromField.setOnClickListener(new OnClickListener() {			
 			public void onClick(View v) {							
-				CharSequence options[] = new CharSequence[] {MacroActivity.this.getString(R.string.user_name), 
+				CharSequence[] options = new CharSequence[] {MacroActivity.this.getString(R.string.user_name),
 															MacroActivity.this.getString(R.string.password), 
 															MacroActivity.this.getString(R.string.url),
 															MacroActivity.this.getString(R.string.password_masked), 															
@@ -383,8 +383,8 @@ public class MacroActivity extends Activity {
 		builder.setItems(TemplateHelper.getTemplateNames(prefs), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				String tmp = TemplateHelper.loadTemplate(prefs, which);				
-				if ((tmp != null) && ( !tmp.equals(""))) {						
+				String tmp = TemplateHelper.loadTemplate(prefs, which);
+				if ( !tmp.equals("")) {
 					editTextMacro.setText(tmp);
 					macro = tmp;
 					manageUI();
@@ -478,7 +478,7 @@ public class MacroActivity extends Activity {
 				alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						saveMacro();
-						finish();			
+						finish();
 					}
 				});
 			}			
@@ -488,7 +488,7 @@ public class MacroActivity extends Activity {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					finish();
 				}
-			});		
+			});
 			alert.setNeutralButton(R.string.cancel, null);
 			alert.show();
 		} else {
@@ -516,11 +516,11 @@ public class MacroActivity extends Activity {
 				//use default name if no name was provided
 				if ("".equals(name)) {
 					name = TemplateHelper.getTemplateDefaultName(id);
-				}	
+				}
 				templateId = id; //just in case it is manually changed
 				savedTemplate = editTextMacro.getText().toString();
 				TemplateHelper.saveTemplate(prefs, id, name, savedTemplate);
-				Toast.makeText(MacroActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();				
+				Toast.makeText(MacroActivity.this, R.string.saved_toast, Toast.LENGTH_SHORT).show();
 			}
 		});
 		alert.setNegativeButton(R.string.cancel, null);

@@ -6,11 +6,12 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.inputstick.apps.kp2aplugin.R;
 
@@ -63,11 +64,13 @@ class DefaultIndicatorController implements IndicatorController {
         for (int i = 0; i < mSlideCount; i++) {
             int drawableId = (i == index) ? (R.drawable.indicator_dot_white) : (R.drawable.indicator_dot_grey);
             Drawable drawable = ContextCompat.getDrawable(mContext, drawableId);
-            if (selectedDotColor != DEFAULT_COLOR && i == index)
-                drawable.mutate().setColorFilter(selectedDotColor, PorterDuff.Mode.SRC_IN);
-            if (unselectedDotColor != DEFAULT_COLOR && i != index)
-                drawable.mutate().setColorFilter(unselectedDotColor, PorterDuff.Mode.SRC_IN);
-            mDots.get(i).setImageDrawable(drawable);
+            if (drawable != null) {
+                if (selectedDotColor != DEFAULT_COLOR && i == index)
+                    drawable.mutate().setColorFilter(selectedDotColor, PorterDuff.Mode.SRC_IN);
+                if (unselectedDotColor != DEFAULT_COLOR && i != index)
+                    drawable.mutate().setColorFilter(unselectedDotColor, PorterDuff.Mode.SRC_IN);
+                mDots.get(i).setImageDrawable(drawable);
+            }
         }
     }
 

@@ -20,7 +20,7 @@ public class MaskedPasswordActivity extends PluginDialogActivity {
 	private boolean[] wasClicked;
 	private int offset;
 	
-	private MyButtonOnClickListener listener = new MyButtonOnClickListener();
+	private final MyButtonOnClickListener listener = new MyButtonOnClickListener();
 	
 	private String password;
 	private TypingParams params;
@@ -30,7 +30,7 @@ public class MaskedPasswordActivity extends PluginDialogActivity {
 	
 	private CheckBox checkBoxShowPassword;
 	private Button[] buttons;
-	private int[] buttonIds = {
+	private final int[] buttonIds = {
 			R.id.buttonChar1,
 			R.id.buttonChar2,
 			R.id.buttonChar3,
