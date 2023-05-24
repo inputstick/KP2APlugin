@@ -19,6 +19,9 @@
     </style>
   </head>
   <body>
+$ 1.45
+  % Version 1.45
+  	* optimized for Android 13
 $ 1.44
   % Version 1.44
   	_ <a href="http://blog.inputstick.com/2020/03/kp2a-plugin-v144.html">(More info)</a>

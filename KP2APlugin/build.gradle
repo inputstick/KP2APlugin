@@ -6,8 +6,8 @@ android {
         applicationId "com.inputstick.apps.kp2aplugin"
         minSdkVersion 14
         targetSdkVersion 33
-        versionCode 31
-        versionName "1.44"
+        versionCode 32
+        versionName "1.45"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
