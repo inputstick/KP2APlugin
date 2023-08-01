@@ -90,13 +90,12 @@ public class InputStickService extends Service implements InputStickStateListene
 
 	private static long lastCapsLockWarningTime;	
 
-	private static int pendingIntentFlags;
 	private static NotificationManager mNotificationManager;
 	private static NotificationCompat.Builder mPluginNotificationBuilder;
 	private static NotificationCompat.Builder mSMSNotificationBuilder;
 	private static NotificationCompat.Builder mClipboardNotificationBuilder;
-	
-	
+
+
 	//************************************************************************************
 	//************************************************************************************
 	//stopping plugin / terminating InputStick connection:
@@ -270,11 +269,11 @@ public class InputStickService extends Service implements InputStickStateListene
 				smsIntent.setAction(Const.SERVICE_ENTRY_ACTION);
 				smsIntent.putExtra(Const.EXTRA_ACTION, Const.ACTION_SMS);
 				smsIntent.putExtra(Const.EXTRA_LAYOUT, PreferencesHelper.getPrimaryLayoutCode(prefs));
-				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, pendingIntentFlags));
+				mSMSNotificationBuilder.setContentIntent(PendingIntent.getService(InputStickService.this, 0, smsIntent, getPendingIntentFlags()));
 
 				Intent dismissIntent = new Intent(InputStickService.this, InputStickService.class);
 				dismissIntent.setAction(Const.SERVICE_DISMISS_SMS);
-				mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, pendingIntentFlags));
+				mSMSNotificationBuilder.setDeleteIntent(PendingIntent.getService(InputStickService.this, 0, dismissIntent, getPendingIntentFlags()));
 
 				mSMSNotificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
 				mNotificationManager.notify(Const.SMS_NOTIFICATION_ID, mSMSNotificationBuilder.build());
@@ -404,17 +403,17 @@ public class InputStickService extends Service implements InputStickStateListene
 		PendingIntent disableActionPendingIntent;
 		Intent disableActionIntent = new Intent(this, InputStickService.class);
 		disableActionIntent.setAction(Const.ACTION_CLIPBOARD_STOP);
-		disableActionPendingIntent = PendingIntent.getService(this, 0, disableActionIntent, pendingIntentFlags);
+		disableActionPendingIntent = PendingIntent.getService(this, 0, disableActionIntent, getPendingIntentFlags());
 
 		PendingIntent extendActionPendingIntent;
 		Intent extendActionIntent = new Intent(this, InputStickService.class);
 		extendActionIntent.setAction(Const.ACTION_CLIPBOARD_EXTEND);
-		extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, pendingIntentFlags);
+		extendActionPendingIntent = PendingIntent.getService(this, 0, extendActionIntent, getPendingIntentFlags());
 
 
 		Intent clipboardIntent = new Intent(InputStickService.this, ClipboardActivity.class);
 		clipboardIntent.putExtras(mClipboardTypingParams.getBundle());
-		mClipboardNotificationBuilder.setContentIntent(PendingIntent.getActivity(InputStickService.this, 0, clipboardIntent, pendingIntentFlags));
+		mClipboardNotificationBuilder.setContentIntent(PendingIntent.getActivity(InputStickService.this, 0, clipboardIntent, getPendingIntentFlags()));
 		
 		mClipboardNotificationBuilder.addAction(0, getString(R.string.disable), disableActionPendingIntent);
 		mClipboardNotificationBuilder.addAction(0, "+3min", extendActionPendingIntent);
@@ -700,11 +699,6 @@ public class InputStickService extends Service implements InputStickStateListene
 
 		//notification:
 		mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-		if (Build.VERSION.SDK_INT >= 23) {
-			pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-		} else {
-			pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
-		}
 
 		//notification channel
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -724,11 +718,11 @@ public class InputStickService extends Service implements InputStickStateListene
 		mPluginNotificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);	
 
 		Intent openServiceIntent = new Intent(this, SettingsActivity.class);
-		mPluginNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, pendingIntentFlags));
+		mPluginNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, openServiceIntent, getPendingIntentFlags()));
 
 		Intent forceStopIntent = new Intent(this, InputStickService.class);
 		forceStopIntent.setAction(Const.SERVICE_FORCE_STOP);
-		mPluginNotificationBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, pendingIntentFlags));
+		mPluginNotificationBuilder.addAction(0, getString(R.string.text_stop_plugin), PendingIntent.getService(this, 0, forceStopIntent, getPendingIntentFlags()));
 					
 		startForeground(Const.INPUTSTICK_SERVICE_NOTIFICATION_ID, mPluginNotificationBuilder.build());		
 		
@@ -1018,12 +1012,20 @@ public class InputStickService extends Service implements InputStickStateListene
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
             Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-			builder.setContentIntent(PendingIntent.getActivity(this, 0, permissionIntent, pendingIntentFlags));
+			builder.setContentIntent(PendingIntent.getActivity(this, 0, permissionIntent, getPendingIntentFlags()));
 
             mNotificationManager.notify(Const.PERMISSION_NOTIFICATION_ID, builder.build());
 
             Toast.makeText(this, R.string.toast_permission, Toast.LENGTH_LONG).show();
         }
+	}
+
+	private static int getPendingIntentFlags() {
+		if (Build.VERSION.SDK_INT >= 23) {
+			return PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+		} else {
+			return PendingIntent.FLAG_UPDATE_CURRENT;
+		}
 	}
 
 }
