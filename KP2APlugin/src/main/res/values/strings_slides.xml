@@ -12,6 +12,7 @@
     <string name="slide_button_uninstall">Uninstall&#160;</string>
     <string name="slide_button_enable">Enable&#160;</string>
     <string name="slide_button_test">Test</string>
+    <string name="slide_button_request_permission">Request permission</string>
     <string name="slide_text_host_layout">Host (PC) keyboard layout:</string>
     <string name="slide_text_test_layout">Test selected layout:</string>
     <string name="slide_text_wait1">Please wait another:&#160;</string>
@@ -41,5 +42,12 @@
     <string name="slide_mac_text">Use \"macOS setup\" from Entry options when macOS wants to identify keyboard.\nFor macOS may need to use macOS-specific keyboard layout, example: German (Mac)</string>
     <string name="slide_done_title">Done!</string>
     <string name="slide_done_text">You are now ready to type from Keepass2Android.\nNeed more help? Click link below:\nhttp://www.inputstick.com/help</string>
+
+    <string name="slide_notifications_title">Notifications</string>
+    <string name="slide_notifications_text">The plugin requires permission to post notifications. Without this permission Android OS will not allow the plugin to run its background service</string>
+
+    <string name="slide_alert_window_title">Display over other apps</string>
+    <string name="slide_alert_window_text">The plugin requires permission to display its interface over other apps. This allows display interface while Keepass2Android app is in the foreground</string>
+
 
 </resources>

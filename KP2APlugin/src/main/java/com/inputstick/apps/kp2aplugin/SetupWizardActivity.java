@@ -1,15 +1,21 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 import com.github.paolorotolo.appintro.AppIntro2;
+import com.inputstick.apps.kp2aplugin.slides.AlertWindowSlide;
 import com.inputstick.apps.kp2aplugin.slides.DownloadSlide;
 import com.inputstick.apps.kp2aplugin.slides.EnableSlide;
 import com.inputstick.apps.kp2aplugin.slides.InfoSlide;
 import com.inputstick.apps.kp2aplugin.slides.LayoutSlide;
+import com.inputstick.apps.kp2aplugin.slides.NotificationsSlide;
 import com.inputstick.apps.kp2aplugin.slides.UninstallSlide;
 
 public class SetupWizardActivity extends AppIntro2 {
@@ -29,6 +35,18 @@ public class SetupWizardActivity extends AppIntro2 {
         }
         if ( !PluginHelper.isPluginEnabled(this)) {
         	addSlide(new EnableSlide());	
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            if ( !notificationManager.areNotificationsEnabled()) {
+                addSlide(new NotificationsSlide());
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if ( !Settings.canDrawOverlays(this)) {
+                addSlide(new AlertWindowSlide());
+            }
         }
                 
         addSlide(new LayoutSlide());
