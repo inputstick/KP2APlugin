@@ -117,6 +117,10 @@
             android:excludeFromRecents="true"
             android:label="@string/title_activity_sms"
             android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".PermissionsActivity"
+            android:label="@string/title_activity_permissions"
+            android:theme="@style/Theme.AppCompat.DayNight" />
     </application>
 
 </manifest>

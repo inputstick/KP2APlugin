@@ -26,16 +26,12 @@
     </PreferenceCategory>   
     
     <PreferenceCategory
-        android:key="category_general"
-        android:title="@string/general_settings_title" >
+        android:key="category_config"
+        android:title="@string/config_settings_title" >
         
 	    <Preference
-	        android:key="enable_plugin_pref"
-	        android:title="@string/configure_plugin" />
-
-        <Preference
-            android:key="alert_window_permission_pref"
-            android:title="@string/alert_window_permission" />
+	        android:key="permissions_pref"
+	        android:title="@string/app_permissions" />
 
     </PreferenceCategory>     
 

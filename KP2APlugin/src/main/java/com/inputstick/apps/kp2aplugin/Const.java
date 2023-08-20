@@ -23,6 +23,7 @@ public class Const {
 	public static final int REQUEST_CODE_ENABLE_PLUGIN = 123;
 	public static final int REQUEST_CODE_SELECT_APP = 124;
 	public static final int REQUEST_CODE_SMS_PROXY_ACTIVATE = 125;
+	public static final int REQUEST_CODE_NOTIFICATIONS_PERMISSION = 126;
 
 	
 	public static final String PACKAGE_PLUGIN_OLD = "keepass2android.plugin.inputstick";
@@ -273,15 +274,17 @@ public class Const {
 	public static final boolean PREF_SHOW_RELOAD_WARNING_VALUE = true;		
 	
 	public static final String PREF_SETUP_COMPLETED = "setup_completed";
-	public static final String PREF_ENABLE_PLUGIN = "enable_plugin_pref";
-	public static final String PREF_ALERT_WINDOW_PERMISSION = "alert_window_permission_pref";
+	//public static final String PREF_ENABLE_PLUGIN = "enable_plugin_pref";
+	//public static final String PREF_ALERT_WINDOW_PERMISSION = "alert_window_permission_pref";
+	public static final String PREF_PERMISSIONS = "permissions_pref";
 	public static final String PREF_SHOW_ABOUT_KEY = "show_about_key";
 	public static final String PREF_SHOW_HELP_WEBPAGE_KEY = "show_help_webpage_key";
 	public static final String PREF_SHOW_CHANGELOG_PREFERENCE_KEY = "show_changelog_preference_key";
 	public static final String PREF_RUN_REMOTE = "run_remote_key";
 
 	public static final String CATEGORY_HELP_AND_INFO = "category_help_and_info";
-    public static final String CATEGORY_GENERAL = "category_general";
+    //public static final String CATEGORY_GENERAL = "category_general";
+	public static final String CATEGORY_CONFIG = "category_config";
     public static final String CATEGORY_TYPING = "category_typing";
     public static final String CATEGORY_CONNECTION = "category_connection";
     public static final String CATEGORY_SMS = "category_sms";

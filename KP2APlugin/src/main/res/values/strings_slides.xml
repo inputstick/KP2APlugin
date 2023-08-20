@@ -30,7 +30,7 @@
     <string name="slide_uninstall_text">Uninstall previous version of the plugin to avoid duplicated actions in Keepass2Android.\nYou can do this manually later.</string>
     <string name="slide_layout_title">Set keyboard layout</string>
     <string name="slide_layout_text">Set keyboard layout used by your PC.\nTest: plug InputStick into USB port, open text editor, make sure all characters were typed correctly.</string>
-    <string name="slide_enable_title">Enable plugin</string>
+    <string name="slide_enable_title">Enable as plugin</string>
     <string name="slide_enable_text">Plugin must be enabled in Keepass2Android to access data when entry is opened.</string>
     <string name="slide_field_title">Field actions</string>
     <string name="slide_field_text">Click on a field (password, user name, etc.) and select \"Type\"</string>

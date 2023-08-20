@@ -1,6 +1,7 @@
 package com.inputstick.apps.kp2aplugin;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -72,6 +73,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
+
+	private NotificationManager notificationManager;
 	
 	private final OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
 		@Override
@@ -93,6 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			displayReloadInfo = savedInstanceState.getBoolean(DISPLAY_RELOAD_INFO_KEY);
 		}
 
+		notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		ChangeLog cl = new ChangeLog(this);
 		setupCompleted = prefs.getBoolean(Const.PREF_SETUP_COMPLETED, false);
@@ -178,30 +182,14 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
 		setListSummary(Const.PREF_ENABLED_QUICK_SHORTCUTS);
         		
-		pref = findPreference(Const.PREF_ENABLE_PLUGIN);
+		pref = findPreference(Const.PREF_PERMISSIONS);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				enableAsPlugin();
+				startActivity(new Intent(SettingsActivity.this, PermissionsActivity.class));
 				return true;
 			}
 		});
-
-		pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
-		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-					startActivity(permissionIntent);
-					return true;
-				}
-			});
-		} else {
-		    //do not show on Android 9 and earlier
-			PreferenceCategory prefCategory = (PreferenceCategory) findPreference(Const.CATEGORY_GENERAL);
-			prefCategory.removePreference(pref);
-		}
 
 		pref = findPreference(Const.PREF_RUN_REMOTE);
 		pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -430,30 +418,24 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);		
 		displayReloadInfo = false;
-		pref = findPreference(Const.PREF_ENABLE_PLUGIN);
-		if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
-			pref.setSummary(R.string.not_configured);
-		} else {
-			pref.setSummary(R.string.enabled);
-			if ( !setupCompleted) {
-				setupCompleted = true;				
-				PreferencesHelper.setSetupCompleted(prefs);
-			}
-		}
+		pref = findPreference(Const.PREF_PERMISSIONS);
+		pref.setSummary(R.string.status_permissions_ok);
 
-		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			pref = findPreference(Const.PREF_ALERT_WINDOW_PERMISSION);
-			//pref will be null on devices running on Android 9 or earlier!
-			if (pref != null) {
-				if (Settings.canDrawOverlays(this)) {
-					pref.setSummary(R.string.has_permission);
-				} else {
-					pref.setSummary(R.string.no_permission);
+		if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
+			pref.setSummary(R.string.status_permissions_kp2a);
+		} else {
+			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+				if ( !Settings.canDrawOverlays(this)) {
+					pref.setSummary(R.string.status_permissions_alert_window);
+				}
+			}
+			//higher priority:
+			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				if ( !notificationManager.areNotificationsEnabled()) {
+					pref.setSummary(R.string.status_permissions_notifications);
 				}
 			}
 		}
-
-
 
 		
 		//handle layout change made in setup wizard
