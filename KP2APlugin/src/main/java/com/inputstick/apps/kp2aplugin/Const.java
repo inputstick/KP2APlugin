@@ -202,6 +202,9 @@ public class Const {
 	public static final String ACTION_CLIPBOARD_EXTEND = "com.inputstick.apps.kp2aplugin.clipboard_extend";	
 	public static final String ACTION_CLIPBOARD_STOP = "com.inputstick.apps.kp2aplugin.clipboard_stop";
 
+	//POST_NOTIFICATIONS permission
+	public static final String ACTION_NOTIFICATIONS_PERMISSION = "com.inputstick.apps.kp2aplugin.notifications_permission";
+
 
 	//PREFERENCES:	
 	

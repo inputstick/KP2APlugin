@@ -1,11 +1,13 @@
 package com.inputstick.apps.kp2aplugin;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import com.inputstick.api.hid.HIDKeycodes;
@@ -36,11 +38,43 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	
 	@Override
 	protected void openEntry(OpenEntryAction oe) {
-		Context ctx = null;		
+		Context ctx = oe.getContext();
 		String scope = null;
-		SharedPreferences prefs = null; 
-		try {			
-			ctx = oe.getContext();
+		SharedPreferences prefs = null;
+
+		//special case for Android 33+ and no POST_NOTIFICATIONS permission (it is not possible to startForegroundService)
+		if ( !canStartService(ctx)) {
+			try {
+				String token = oe.getAccessTokenForCurrentEntryScope();
+				Bundle b;
+				if (canDisplayActivity(ctx)) {
+					//it is possible to open PermissionsActivity
+					for (String field : oe.getEntryFields().keySet()) {
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION, Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_config), R.drawable.ic_config, null, token);
+					}
+					//b = new Bundle();
+					//b.putString(Const.EXTRA_ACTION, Const.ACTION_NOTIFICATIONS_PERMISSION);
+					oe.addEntryAction(ctx.getString(R.string.permissions_message_config), R.drawable.ic_config, null, token);
+				} else {
+					//not possible to start PermissionsActivity - as a workaround ask user to open the app manually. Text must be split into multiple actions to show entire message
+					for (String field : oe.getEntryFields().keySet()) {
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "1", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "2", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "3", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "4", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line4), R.drawable.ic_step_4, null, token);
+					}
+					oe.addEntryAction(ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
+					oe.addEntryAction(ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
+					oe.addEntryAction(ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
+					oe.addEntryAction(ctx.getString(R.string.permissions_message_line4), R.drawable.ic_step_4, null, token);
+				}
+			} catch (PluginAccessException e) {
+				e.printStackTrace();
+			}
+			return; //IMPORTANT! startForegroundService() will throw an exception
+		}
+
+		try {
 			prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 			scope = oe.getScope();
 			String tmp, tmpSecondary;			
@@ -190,6 +224,7 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 			e.printStackTrace();
 		}				
 
+
 		if (ctx != null) {					
 			if ( !InputStickService.isRunning) {
 				Intent serviceIntent = new Intent(ctx, InputStickService.class);
@@ -204,12 +239,12 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 
 			ChangeLog cl = new ChangeLog(ctx.getApplicationContext());
 			if (cl.firstRun()) {				
-				/*if ( !cl.getThisVersion().equals(Const.SKIP_CHANGELOG_APP_VERSION)) {
+				if ( !cl.getThisVersion().equals(Const.SKIP_CHANGELOG_APP_VERSION)) {
 					Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
 					i.putExtra(Const.EXTRA_SHOW_CHANGELOG, true);
 					i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 					ctx.getApplicationContext().startActivity(i);			
-				}*/
+				}
 				//show changelog only for Android 9 &  10
 				if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 					Intent i = new Intent(ctx.getApplicationContext(), SettingsActivity.class);
@@ -226,11 +261,9 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 						ctx.getApplicationContext().startActivity(i);	
 		    		}
-		    		
-	
 		    	}
 		    }
-		}		
+		}
 	}	
 	
 	private String getTextForClipboardAction(Context ctx, SharedPreferences prefs) {
@@ -315,15 +348,24 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 	
 	@Override
 	protected void actionSelected(ActionSelectedAction actionSelected) {
-		//in case service was stopped after opening entry but before selecting an action
 		//Log.d(_TAG, "actionSelected");
-		if ( !InputStickService.isRunning) {
-			Intent serviceIntent = new Intent(actionSelected.getContext(), InputStickService.class);
-			serviceIntent.setAction(Const.SERVICE_RESTART);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				actionSelected.getContext().startForegroundService(serviceIntent);
-			} else {
-				actionSelected.getContext().startService(serviceIntent);
+		Context ctx = actionSelected.getContext();
+		if (canStartService(ctx)) {
+			if ( !InputStickService.isRunning) {
+				Intent serviceIntent = new Intent(actionSelected.getContext(), InputStickService.class);
+				serviceIntent.setAction(Const.SERVICE_RESTART);
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+					ctx.startForegroundService(serviceIntent);
+				} else {
+					ctx.startService(serviceIntent);
+				}
+			}
+		} else {
+			//if possible, show activity to request POST_NOTIFICATIONS permission, otherwise nothing can be done
+			if (canDisplayActivity(ctx)) {
+				Intent i = new Intent(ctx.getApplicationContext(), PermissionsActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				ctx.getApplicationContext().startActivity(i);
 			}
 		}
 	}		
@@ -380,5 +422,21 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 		}
 	}
 
+
+
+	private boolean canStartService(Context ctx) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+			return notificationManager.areNotificationsEnabled();
+		}
+		return true;
+	}
+
+	private boolean canDisplayActivity(Context ctx) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			return Settings.canDrawOverlays(ctx);
+		}
+		return true;
+	}
 
 }

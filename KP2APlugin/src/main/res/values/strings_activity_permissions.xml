@@ -13,4 +13,10 @@
     <string name="status_permissions_notifications">*** Plugin requires permission to post notifications ***</string>
     <string name="status_permissions_alert_window">*** Plugin requires permission to display over other apps ***</string>
 
+    <string name="permissions_message_config">InputStick: config required</string>
+    <string name="permissions_message_line1">KP2A InputStick Settings</string>
+    <string name="permissions_message_line2">app config required</string>
+    <string name="permissions_message_line3">App must be launched manually!</string>
+    <string name="permissions_message_line4">These actions will NOT work</string>
+
 </resources>
