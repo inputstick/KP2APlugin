@@ -9,7 +9,13 @@
     <string name="changelog_full_title">Historia zmian</string>
     <string name="changelog_title">Ostatnie zmiany</string>
     <string name="changelog_show_full">więcej&#8230;</string>    
-         
+
+
+
+
+
+
+
     <string name="title_activity_init">Plugin Init</string>
 	<string name="title_activity_all_actions">Wybierz akcję:</string>
 	<string name="title_activity_select_app">Wybierz aplikację:</string>	
@@ -67,6 +73,7 @@
     <string name="add">Dodaj</string>
     <string name="save">Zapisz</string>    
     <string name="disable">Wyłącz</string>
+    <string name="enable">Włącz</string>
     <string name="important_title">Ważne!</string>   
 	<string name="configuration_title">Konfiguracja</string>  	
     <string name="later">Później</string>

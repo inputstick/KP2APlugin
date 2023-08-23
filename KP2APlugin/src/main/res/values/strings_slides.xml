@@ -47,7 +47,7 @@
     <string name="slide_notifications_text">The plugin requires permission to post notifications. Without this permission Android OS will not allow the plugin to run its background service</string>
 
     <string name="slide_alert_window_title">Display over other apps</string>
-    <string name="slide_alert_window_text">The plugin requires permission to display its interface over other apps. This allows display interface while Keepass2Android app is in the foreground</string>
+    <string name="slide_alert_window_text">The plugin requires permission to display its interface over other apps. This allows display interface while Keepass2Android app is in the foreground. Once you click the button, select \"KP2A InputStick Plugin\" from the list and allow it to display over other apps</string>
 
 
 </resources>

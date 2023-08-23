@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="title_activity_permissions">App permissions</string>
+    <string name="title_activity_permissions">App\'s permissions</string>
 
     <string name="status_enabled">Status: enabled</string>
     <string name="status_disabled">Status: disabled</string>

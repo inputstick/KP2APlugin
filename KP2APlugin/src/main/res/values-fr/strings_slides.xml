@@ -12,6 +12,7 @@
     <string name="slide_button_uninstall">Désinstaller&#160;</string>
     <string name="slide_button_enable">Activer&#160;</string>
     <string name="slide_button_test">Test</string>
+    <string name="slide_button_request_permission">Demander la permission</string>
     <string name="slide_text_host_layout">Disposition du clavier de l\'hôte (PC) :</string>
     <string name="slide_text_test_layout">Tester la mise en page sélectionnée :</string>
     <string name="slide_text_wait1">Veuillez en attendez un autre :&#160;</string>
@@ -41,5 +42,12 @@
     <string name="slide_mac_text">Utilisez \"Configuration macOS\" à partir des options d\'entrée quand OS X veut identifier le clavier.\nIl se peut que vous ayez besoin d\'utiliser une disposition de clavier différente, par exemple : Français (Mac)</string>
     <string name="slide_done_title">Terminé !</string>
     <string name="slide_done_text">Vous êtes maintenant prêt à saisir à partir de Keepass2Android.\nBesoin d\'aide supplémentaire ? Cliquez sur le lien ci-dessous :\nhttp://www.inputstick.com/help</string>
+
+    <string name="slide_notifications_title">Notifications</string>
+    <string name="slide_notifications_text">Le plugin nécessite une autorisation pour publier des notifications. Sans cette autorisation, Android ne permettra pas au plugin d\'exécuter son service en arrière-plan</string>
+
+    <string name="slide_alert_window_title">Afficher sur d\'autres applications</string>
+    <string name="slide_alert_window_text">Le plugin nécessite une autorisation pour superposition sur d\'autres applis. Cela permet d\'afficher l\'interface lorsque l\'application Keepass2Android est au premier plan. Une fois que vous avez cliqué sur le bouton, sélectionnez \"KP2A InputStick Plugin\" dans la liste et autorisez-le à superposition sur d\'autres applis</string>
+
 
 </resources>

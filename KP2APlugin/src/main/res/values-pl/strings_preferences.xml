@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <string name="app_permissions">Uprawnienia</string>
+
     <string name="missing_access_scope_title">Zakres dostępu do KP2A</string>
     <string name="missing_access_scope_message">Plugin może rozłączyć się automatycznie gdy baza Keepass2Android zostanie zablokowana lub zamknięta. Wymagamy jest dostęp do zadrzeń związanych z bazą danych KP2A. Zapytać o dostęp teraz?</string>          	
 
@@ -11,6 +14,7 @@
   	<string name="show_about_app_title">O aplikacji</string>    	
   	
   	<string name="help_and_info_settings_title">Pomoc i info</string>
+    <string name="config_settings_title">Konfiguracja aplikacji</string>
     
     <string name="typing_settings_title">Układ klawiatury hosta USB</string>
     <string name="connection_settings_title">Połączenie z InputStick</string>    

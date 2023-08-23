@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <string name="app_permissions">Autorisations</string>
+
     <string name="missing_access_scope_title">Portée d\'accès de KP2A</string>
     <string name="missing_access_scope_message">Le plugin peut se déconnecter automatiquement lorsque la base de données Keepass2Android est verrouillée ou fermée. Pour ce faire, il faut avoir accès aux événements de la base de données du KP2A. Demander l\'accès maintenant ?</string>
 
@@ -11,6 +14,7 @@
     <string name="show_about_app_title">A propos de l\'application</string>
 
     <string name="help_and_info_settings_title">Aide et informations</string>
+    <string name="config_settings_title">Configuration de l\'application</string>
 
     <string name="typing_settings_title">Paramètres de saisie</string>
     <string name="connection_settings_title">Paramètres de connexion InputStick</string>

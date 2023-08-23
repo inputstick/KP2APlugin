@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_permissions">Autorisations de l\'application</string>
+
+    <string name="status_enabled">Statut : activé</string>
+    <string name="status_disabled">Statut : désactivé</string>
+    <string name="status_allowed">Statut : autorisées</string>
+    <string name="status_denied">Statut : non autorisées</string>
+
+    <string name="status_permissions_ok">Le plugin est configuré</string>
+    <string name="status_permissions_kp2a">*** Le plugin n\'est PAS activé dans l\'application KP2A ***</string>
+    <string name="status_permissions_notifications">*** Le plugin nécessite l\'autorisation de publier des notifications ***</string>
+    <string name="status_permissions_alert_window">*** Le plugin nécessite une autorisation pour s\'afficher sur d'autres applis ***</string>
+
+    <string name="permissions_message_config">InputStick: configuration requise</string>
+    <string name="permissions_message_line1">KP2A InputStick Settings</string>
+    <string name="permissions_message_line2">config. de l\'application requise</string>
+    <string name="permissions_message_line3">L\'applis doit être lancée manuellement!</string>
+    <string name="permissions_message_line4">Ces actions ne fonctionneront PAS</string>
+
+</resources>

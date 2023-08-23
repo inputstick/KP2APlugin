@@ -12,6 +12,7 @@
     <string name="slide_button_uninstall">Usuń&#160;</string>
     <string name="slide_button_enable">Włącz&#160;</string>
     <string name="slide_button_test">Test</string>
+    <string name="slide_button_request_permission">Uzyskaj uprawnienia</string>
     <string name="slide_text_host_layout">Układ klawiatury hosta (PC):</string>
     <string name="slide_text_test_layout">Testuj wybrany układ klaw.:</string>
     <string name="slide_text_wait1">Zaczekaj jeszcze:&#160;</string>
@@ -41,5 +42,12 @@
     <string name="slide_mac_text">Wybierz \"macOS konfiguracja\" (akcja wpisu) gdy macOS zechce zidentyfikować klawiaturę.</string>
     <string name="slide_done_title">Zrobione!</string>
     <string name="slide_done_text">Urządzenie jest gotowe aby pisać tekst z Keepass2Android.\nPotrzebujesz pomocy? Kliknij link poniżej:\nhttp://www.inputstick.com/help</string>
+
+    <string name="slide_notifications_title">Powiadomienia</string>
+    <string name="slide_notifications_text">Plugin wymaga uprawnień do wyświetlania powiadomień. Bez tych uprawnień Android nie pozwoli aplikacji na uruchomienie serwisu działającego w tle</string>
+
+    <string name="slide_alert_window_title">Wyświetlanie nad innymi aplikacjami</string>
+    <string name="slide_alert_window_text">Plugin wymaga uprawnień do wyświetlania interfejsu nad innymi aplikacjami. Pozwala to na wyświetlanie interfejsu podczas gdy aplikacja Keepass2Android app jest na pierwszym planie. Gdy klikniesz przycisk, wybierz \"KP2A InputStick Plugin\" z listy aplikacji i zezwól na wyświetlanie nad innymi aplikacjami</string>
+
 
 </resources>
