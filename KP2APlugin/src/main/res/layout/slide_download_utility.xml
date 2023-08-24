@@ -30,12 +30,13 @@
             android:id="@+id/buttonDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableRight="@drawable/ic_download"
+            android:background="@drawable/button_slide"
+            android:drawableEnd="@drawable/ic_download"
+            android:padding="8dp"
             android:singleLine="true"
             android:text="@string/slide_button_download"
             android:textColor="#ffffff"
-            android:textSize="28sp" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <TextView
