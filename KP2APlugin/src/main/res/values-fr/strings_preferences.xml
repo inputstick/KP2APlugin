@@ -41,6 +41,8 @@
 
     <string name="entry_reload_message">Les modifications apportées à l\'interface utilisateur seront visibles après le rechargement de l\'entrée ou après l\'ouverture d\'une nouvelle entrée.</string>
 
+    <string name="app_config_message">Le plugin ne dispose pas des autorisations nécessaires, il ne fonctionnera pas correctement. Voulez-vous ouvrir l’écran de configuration et d’autorisations maintenant ?</string>
+
     <string name="uninstall_title">Désinstaller</string>
     <string name="uninstall_message">Désinstaller la version précédente du plugin maintenant ?\n\nN\'oubliez pas de configurer la version actuelle : \"Configurer en tant que plugin\", configurer la disposition du clavier, etc.\n\n\"Ouvrir la page d\'aide\" pour en savoir plus sur les nouvelles fonctionnalités.</string>
     <string name="uninstall_toast">Désinstaller l\'ancienne version du plugin</string>

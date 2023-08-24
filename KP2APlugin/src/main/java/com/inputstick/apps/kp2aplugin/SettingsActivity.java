@@ -51,11 +51,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private static final String DISMISSED_KEY = "dismissed";	
 	private static final String DISPLAY_RELOAD_INFO_KEY = "displayReloadInfo";
+	private static final String CONFIG_DIALOG_DISPLAYED = "configDialogDisplayed";
 	
 	private static final int TIP_TYPING_SPEED = 1;	
 	
-	private SharedPreferences prefs;	
-	private boolean setupCompleted;	
+	private SharedPreferences prefs;
 	private Preference prefShowSecondary;
 	private Preference prefSecondaryKbdLayout;	
 	private Preference prefUiEntrySecondary;
@@ -74,8 +74,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private boolean dismissed;	
 	private boolean displayReloadInfo;
 
-	private NotificationManager notificationManager;
-	
+	private boolean configDialogDisplayed; //prevents showing config dialog multiple times
+
 	private final OnPreferenceClickListener reloadInfoListener = new OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
@@ -94,38 +94,43 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		if (savedInstanceState != null) {
 			dismissed = savedInstanceState.getBoolean(DISMISSED_KEY);
 			displayReloadInfo = savedInstanceState.getBoolean(DISPLAY_RELOAD_INFO_KEY);
+			configDialogDisplayed = savedInstanceState.getBoolean(CONFIG_DIALOG_DISPLAYED);
 		}
-
-		notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		ChangeLog cl = new ChangeLog(this);
-		setupCompleted = prefs.getBoolean(Const.PREF_SETUP_COMPLETED, false);
+		boolean setupCompleted = prefs.getBoolean(Const.PREF_SETUP_COMPLETED, false);
 		if ( !setupCompleted) {
 			//start setup only if the plugin is not enabled in kp2a; otherwise assume it was already completed manually somehow
 			if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) { 
 				Intent intent = new Intent(this, SetupWizardActivity.class);
 				startActivity(intent);
 			}
-		} else {	
-			Intent intent = getIntent();
-			try {
-				// this version launched for the very first time, from kp2a
-				if (intent.getBooleanExtra(Const.EXTRA_SHOW_CHANGELOG, false)) {
-					cl.getLogDialog().show();
-				} else {
-					// this version launched for the very first time, from launcher					
-					if (( !cl.firstRunEver()) && (cl.firstRun())) {
+		} else {
+			int configState = PluginHelper.checkPluginConfig(this);
+			if (configState != Const.CONFIG_OK && !configDialogDisplayed) {
+				//do not show Changelog etc. if there is plugin config problem
+				showConfigDialog();
+			} else {
+				Intent intent = getIntent();
+				try {
+					// this version launched for the very first time, from kp2a
+					if (intent.getBooleanExtra(Const.EXTRA_SHOW_CHANGELOG, false)) {
 						cl.getLogDialog().show();
+					} else {
+						// this version launched for the very first time, from launcher
+						if (( !cl.firstRunEver()) && (cl.firstRun())) {
+							cl.getLogDialog().show();
+						}
 					}
+					cl.updateVersionInPreferences();
+				} catch (Exception e) {
+					Toast.makeText(this, "Couldn't show changelog!", Toast.LENGTH_LONG).show();
 				}
-				cl.updateVersionInPreferences();
-			} catch (Exception e) {
-				Toast.makeText(this, "Couldn't show changelog!", Toast.LENGTH_LONG).show();
+
+				if ((intent.getBooleanExtra(Const.EXTRA_SHOW_SCOPE, false)) && ( !dismissed)) {
+					showRequestDbScopeDialog();
+				}
 			}
-			
-			if ((intent.getBooleanExtra(Const.EXTRA_SHOW_SCOPE, false)) && ( !dismissed)) {
-				showRequestDbScopeDialog();
-			}								
 		}
 	}
 	
@@ -133,6 +138,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 	    savedInstanceState.putBoolean(DISMISSED_KEY, dismissed);
 	    savedInstanceState.putBoolean(DISPLAY_RELOAD_INFO_KEY, displayReloadInfo);
+		savedInstanceState.putBoolean(CONFIG_DIALOG_DISPLAYED, configDialogDisplayed);
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
@@ -418,25 +424,23 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);		
 		displayReloadInfo = false;
+
 		pref = findPreference(Const.PREF_PERMISSIONS);
-		pref.setSummary(R.string.status_permissions_ok);
-
-		if (AccessManager.getAllHostPackages(SettingsActivity.this).isEmpty()) {
-			pref.setSummary(R.string.status_permissions_kp2a);
-		} else {
-			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-				if ( !Settings.canDrawOverlays(this)) {
-					pref.setSummary(R.string.status_permissions_alert_window);
-				}
-			}
-			//higher priority:
-			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-				if ( !notificationManager.areNotificationsEnabled()) {
-					pref.setSummary(R.string.status_permissions_notifications);
-				}
-			}
+		int configState = PluginHelper.checkPluginConfig(this);
+		switch (configState) {
+			case Const.CONFIG_OK:
+				pref.setSummary(R.string.status_permissions_ok);
+				break;
+			case Const.CONFIG_PLUGIN_NOT_ENABLED:
+				pref.setSummary(R.string.status_permissions_kp2a);
+				break;
+			case Const.CONFIG_PERMISSION_ALERT_WINDOW:
+				pref.setSummary(R.string.status_permissions_alert_window);
+				break;
+			case Const.CONFIG_PERMISSION_NOTIFICATIONS:
+				pref.setSummary(R.string.status_permissions_notifications);
+				break;
 		}
-
 		
 		//handle layout change made in setup wizard
 		String layoutCode = PreferencesHelper.getPrimaryLayoutCode(prefs);
@@ -659,9 +663,24 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			}
 		});
 		alert.show();		
-	}	
-	
-	
+	}
+
+	private void showConfigDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle(R.string.config_settings_title);
+		alert.setMessage(R.string.app_config_message);
+		alert.setPositiveButton(R.string.ok, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				startActivity(new Intent(SettingsActivity.this, PermissionsActivity.class));
+			}
+		});
+		alert.setNegativeButton(R.string.cancel, null);
+		alert.show();
+		configDialogDisplayed = true;
+	}
+
+
 	private void displayTip(int tipId) {
 		//String key = "show_tip_" + tipId; 		
 		int resId = R.string.tip_empty;

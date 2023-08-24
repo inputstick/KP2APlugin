@@ -50,6 +50,8 @@
 
     <string name="entry_reload_message">UI changes will be visible after entry is reloaded or new entry is opened</string>
 
+    <string name="app_config_message">The plugin does not have necessary permissions, it will not work properly. Do you want to open config and permissions screen now?</string>
+
     <string name="uninstall_title">Uninstall</string>
     <string name="uninstall_message">Uninstall previous release of the plugin now?\n\nRemember to configure current release: \"Configure as plugin\", set keyboard layout, etc.\n\n\"Open help webpage\" to learn about new features.</string>
     <string name="uninstall_toast">Uninstall old release of the plugin</string>

@@ -4,8 +4,11 @@ package com.inputstick.apps.kp2aplugin;
 public class Const {
 	
 	public static final String SHOW_CHANGELOG_APP_VERSION = "0.00"; //set version only if there are some major changes and changelog should be displayed
-	
-	//public static final int IC = R.drawable.ic_launcher;
+
+	public static final int CONFIG_OK = 0;
+	public static final int CONFIG_PLUGIN_NOT_ENABLED = 1;
+	public static final int CONFIG_PERMISSION_ALERT_WINDOW = 2;
+	public static final int CONFIG_PERMISSION_NOTIFICATIONS = 3;
 
 	public static final String NOTIFICATION_STATUS_CHANNEL_ID = "KP2AInputStickPluginChannelID";
 	public static final CharSequence NOTIFICATION_STATUS_CHANNEL_NAME = "Status notifications";

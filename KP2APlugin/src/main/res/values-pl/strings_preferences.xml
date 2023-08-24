@@ -49,6 +49,8 @@
 	
 	
     <string name="entry_reload_message">Zmiany ustawień interfejsu będą widoczne po przeładowaniu wpisu lub po załadowaniu nowego wpisu</string>
+
+    <string name="app_config_message">Plugin nie ma wymaganych uprawnień i nie będzie działał prawidłowo. Czy chcesz teraz przejść do ekranu konfiguracji i uprawnień?</string>
         
 	<string name="uninstall_title">Odinstaluj</string>  
 	<string name="uninstall_message">Odinstalować poprzednią wersję plugin-u?\n\nPamiętaj o konfiguracji nowej wersji: \"Ustaw jako plugin\", wybierz układ klawiatury, itp.\n\n\"Otwórz stronę z pomocą\" aby dowiedzieć się więcej o nowych funkcjach.</string>  
