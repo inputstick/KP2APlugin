@@ -3,6 +3,8 @@
 
     <string name="title_activity_permissions">App\'s permissions</string>
 
+    <string name="permissions_notifications_inputstickutility">Important: make sure that \"InputStickUtility\" app has permissions to display notifications</string>
+
     <string name="status_enabled">Status: enabled</string>
     <string name="status_disabled">Status: disabled</string>
     <string name="status_allowed">Status: allowed</string>

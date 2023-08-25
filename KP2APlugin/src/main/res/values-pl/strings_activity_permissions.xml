@@ -3,6 +3,8 @@
 
     <string name="title_activity_permissions">Uprawnienia aplikacji</string>
 
+    <string name="permissions_notifications_inputstickutility">Ważne: upewnij się, że aplikacja \"InputStickUtility\" ma uprawnienia do wyświetlania powiadomień</string>
+
     <string name="status_enabled">Status: włączone</string>
     <string name="status_disabled">Status: wyłączone</string>
     <string name="status_allowed">Status: uzyskano dostęp</string>
