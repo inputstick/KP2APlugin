@@ -61,12 +61,10 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "1", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
 						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "2", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
 						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "3", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
-						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "4", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line4), R.drawable.ic_step_4, null, token);
 					}
 					oe.addEntryAction(ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
 					oe.addEntryAction(ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
 					oe.addEntryAction(ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
-					oe.addEntryAction(ctx.getString(R.string.permissions_message_line4), R.drawable.ic_step_4, null, token);
 				}
 			} catch (PluginAccessException e) {
 				e.printStackTrace();

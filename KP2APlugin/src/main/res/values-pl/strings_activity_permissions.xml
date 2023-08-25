@@ -13,10 +13,9 @@
     <string name="status_permissions_notifications">*** Plugin wymaga uprawnień do wyświetlania powiadomień ***</string>
     <string name="status_permissions_alert_window">*** Plugin wymaga uprawnień do wyświetlania nad innymi aplikacjami ***</string>
 
-    <string name="permissions_message_config">InputStick: wymagana konfiguracja</string>
-    <string name="permissions_message_line1">KP2A InputStick Settings</string>
-    <string name="permissions_message_line2">wymagana konfiguracja aplikacji</string>
-    <string name="permissions_message_line3">Uruchom aplikację ręcznie!</string>
-    <string name="permissions_message_line4">Te akcje NIE zadziałają</string>
+    <string name="permissions_message_config">InputStick: potrzebna konfiguracja</string>
+    <string name="permissions_message_line1">Potrzebna konfiguracja!</string>
+    <string name="permissions_message_line2">Uruchom aplikację:</string>
+    <string name="permissions_message_line3">KP2A InputStick Settings</string>
 
 </resources>
