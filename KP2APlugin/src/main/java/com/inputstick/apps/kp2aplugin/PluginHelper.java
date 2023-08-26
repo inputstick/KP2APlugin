@@ -29,16 +29,16 @@ public class PluginHelper {
 		if (AccessManager.getAllHostPackages(ctx).isEmpty()) {
 			return Const.CONFIG_PLUGIN_NOT_ENABLED;
 		} else {
-			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-				if ( !Settings.canDrawOverlays(ctx)) {
-					return Const.CONFIG_PERMISSION_ALERT_WINDOW;
-				}
-			}
 			//higher priority:
 			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				NotificationManager notificationManager = (NotificationManager)ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 				if ( !notificationManager.areNotificationsEnabled()) {
 					return Const.CONFIG_PERMISSION_NOTIFICATIONS;
+				}
+			}
+			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+				if ( !Settings.canDrawOverlays(ctx)) {
+					return Const.CONFIG_PERMISSION_ALERT_WINDOW;
 				}
 			}
 		}
