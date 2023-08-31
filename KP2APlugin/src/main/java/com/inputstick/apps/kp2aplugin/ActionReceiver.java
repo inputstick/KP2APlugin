@@ -56,13 +56,15 @@ public class ActionReceiver extends keepass2android.pluginsdk.PluginActionBroadc
 				} else {
 					//not possible to start PermissionsActivity - as a workaround ask user to open the app manually. Text must be split into multiple actions to show entire message
 					for (String field : oe.getEntryFields().keySet()) {
-						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "1", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
-						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "2", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
-						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "3", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "0", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line0), R.drawable.ic_line0, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "1", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line1), R.drawable.ic_line1, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "2", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line2), R.drawable.ic_line2, null, token);
+						oe.addEntryFieldAction(Const.ACTION_NOTIFICATIONS_PERMISSION + "3", Strings.PREFIX_STRING + field, ctx.getString(R.string.permissions_message_line3), R.drawable.ic_line3, null, token);
 					}
-					oe.addEntryAction("(1) " + ctx.getString(R.string.permissions_message_line1), R.drawable.ic_step_1, null, token);
-					oe.addEntryAction("(2) " + ctx.getString(R.string.permissions_message_line2), R.drawable.ic_step_2, null, token);
-					oe.addEntryAction("(3) " + ctx.getString(R.string.permissions_message_line3), R.drawable.ic_step_3, null, token);
+					oe.addEntryAction("(!) " + ctx.getString(R.string.permissions_message_line0), R.drawable.ic_line0, null, token);
+					oe.addEntryAction("(1) " + ctx.getString(R.string.permissions_message_line1), R.drawable.ic_line1, null, token);
+					oe.addEntryAction("(2) " + ctx.getString(R.string.permissions_message_line2), R.drawable.ic_line2, null, token);
+					oe.addEntryAction("(3) " + ctx.getString(R.string.permissions_message_line3), R.drawable.ic_line3, null, token);
 				}
 			} catch (PluginAccessException e) {
 				e.printStackTrace();

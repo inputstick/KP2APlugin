@@ -16,8 +16,9 @@
     <string name="status_permissions_alert_window">*** Le plugin nécessite une autorisation pour s\'afficher sur d\'autres applis ***</string>
 
     <string name="permissions_message_config">InputStick: configuration requise</string>
-    <string name="permissions_message_line1">Configuration requise:</string>
-    <string name="permissions_message_line2">lancer l\'applis:</string>
-    <string name="permissions_message_line3">KP2A InputStick Settings</string>
+    <string name="permissions_message_line0">***InputStick Plugin***</string>
+    <string name="permissions_message_line1">lancer l\'applis:</string>
+    <string name="permissions_message_line2">KP2A InputStick Settings</string>
+    <string name="permissions_message_line3">pour terminer la configuration</string>
 
 </resources>
